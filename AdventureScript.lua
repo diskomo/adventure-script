@@ -3,7 +3,7 @@
 util.require_natives(1676318796)
 util.keep_running()
 
-local SCRIPT_VERSION = '0.8.1'
+local SCRIPT_VERSION = '0.8.2'
 local AUTO_UPDATE_BRANCHES = {{'main', {}, 'More stable, but updated less often.', 'main'},
                               {'dev', {}, 'Cutting edge updates, but less stable.', 'dev'}}
 local SELECTED_BRANCH_INDEX = 1
@@ -74,9 +74,23 @@ local auto_update_config = {
         check_interval = default_check_interval,
         is_required = true
     }, {
+        name = 'controls',
+        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/controls.lua',
+        script_relpath = 'lib/AdventureScript/controls.lua',
+        verify_file_begins_with = '--',
+        check_interval = default_check_interval,
+        is_required = true
+    }, {
+        name = 'gridspawn',
+        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/gridspawn.lua',
+        script_relpath = 'lib/AdventureScript/gridspawn.lua',
+        verify_file_begins_with = '--',
+        check_interval = default_check_interval,
+        is_required = true
+    }, {
         name = 'helpers',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/helpers.lua',
-        script_relpath = 'lib/AdventureScript/helpers.lua',
+        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/HELPERS.lua',
+        script_relpath = 'lib/AdventureScript/HELPERS.lua',
         verify_file_begins_with = '--',
         check_interval = default_check_interval,
         is_required = true
@@ -127,13 +141,14 @@ end
 ---
 --- AdventureScript begins here
 ---
-
-local adventure_data = require_dependency('lib/AdventureScript/data')
-local helpers = require_dependency('lib/AdventureScript/helpers')
+local DATA = require_dependency('lib/AdventureScript/data')
+local CONTROLS = require_dependency('lib/AdventureScript/controls')
+local HELPERS = require_dependency('lib/AdventureScript/helpers')
+local GRID_SPAWN = require_dependency('lib/AdventureScript/gridspawn')
 local passengers = {}
 local spawn_mode_enabled = false
 local spawn_target_hash = util.joaat('manchez2')
-local spawn_target_dimensions = helpers.get_model_dimensions(spawn_target_hash)
+local spawn_target_dimensions = GRID_SPAWN.get_model_dimensions(spawn_target_hash)
 local spawn_target_options = {
     drift = false,
     f1_wheels = false,
@@ -145,7 +160,7 @@ local spawn_target_options = {
 local function set_vehicle(hash, options)
     spawn_mode_enabled = true -- automatically enable spawn mode when setting a vehicle
     spawn_target_hash = hash
-    spawn_target_dimensions = helpers.get_model_dimensions(hash)
+    spawn_target_dimensions = GRID_SPAWN.get_model_dimensions(hash)
     if not options then
         spawn_target_options = {
             drift = false,
@@ -172,7 +187,7 @@ local function make_adventure_vehicle(veh)
     }
     local wheel_colour = math.random(0, 80)
     if not spawn_target_options.random_colour then
-        colour = adventure_data.brand_colour
+        colour = DATA.brand_colour
         wheel_colour = 37
     end
 
@@ -187,7 +202,7 @@ local function make_adventure_vehicle(veh)
     ENTITY.SET_ENTITY_INVINCIBLE(veh, true)
     VEHICLE.SET_VEHICLE_MOD_KIT(veh, 0)
     -- This loop will set all of the vehicle modifications defined in default_mods to their highest possible value
-    for _, type in pairs(adventure_data.default_mods) do
+    for _, type in pairs(DATA.default_mods) do
         VEHICLE.SET_VEHICLE_MOD(veh, type, VEHICLE.GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
     end
     -- low-grip drift tyres
@@ -219,17 +234,10 @@ local function make_adventure_vehicle(veh)
     VEHICLE.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, colour.r, colour.g, colour.b)
     VEHICLE.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, colour.r + 20, colour.g + 20, colour.b + 20)
     VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(veh, 5) -- yankton plate
-    VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(veh, adventure_data.license_plate)
+    VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(veh, DATA.license_plate)
     VEHICLE.SET_VEHICLE_MOD(veh, 14, math.random(16, 23), true) -- horn (high note)
     VEHICLE.TOGGLE_VEHICLE_MOD(veh, 22, true) -- xenon headlights
     VEHICLE.SET_VEHICLE_XENON_LIGHT_COLOR_INDEX(veh, 6) -- gold tint headlights
-end
-
--- Keep the fuckin cops off a passenger and keep 'em healthy
-local function assist_passenger(passenger)
-    menu.trigger_commands('bail' .. passenger .. ' on')
-    menu.trigger_commands('autoheal' .. passenger .. ' on')
-    util.yield()
 end
 
 local function update_passengers()
@@ -245,8 +253,8 @@ local function update_passengers()
         --     HUD.SET_BLIP_AS_FRIENDLY(blip, true)
         --     HUD.SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
         --     HUD.SET_BLIP_COLOUR(blip, 81) -- Gold colour
-        --     HUD.SET_BLIP_SECONDARY_COLOUR(blip, adventure_data.brand_colour.r, adventure_data.brand_colour.g,
-        --         adventure_data.brand_colour.b)
+        --     HUD.SET_BLIP_SECONDARY_COLOUR(blip, DATA.brand_colour.r, DATA.brand_colour.g,
+        --         DATA.brand_colour.b)
         --     HUD.SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
         -- end
 
@@ -257,7 +265,7 @@ local function update_passengers()
                 local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
                 if (passengerName ~= '**Invalid**') then
                     table.insert(passengerList, passengerName)
-                    assist_passenger(passengerName)
+                    HELPERS.assist_passenger(passengerName)
                 end
             end
             util.yield()
@@ -293,7 +301,7 @@ local function get_the_bus()
 
         make_adventure_vehicle(bus)
         PED.SET_PED_INTO_VEHICLE(playerPed, bus, -1)
-        helpers.set_super_drive('on')
+        HELPERS.set_super_drive('on')
         util.yield(1000)
     end
     update_passengers()
@@ -321,7 +329,7 @@ menu.divider(menu.my_root(), #passengers == 0 and 'Tour Stops' or tostring(#pass
     (#passengers == 1 and '' or 's'))
 
 -- Add the tour stops to the menu
-for _, ts in pairs(adventure_data.tour_stops) do
+for _, ts in pairs(DATA.tour_stops) do
     local eventList = menu.list(menu.my_root(), ts.name, {}, ts.description)
     menu.divider(eventList, 'Locations')
     for _, location in pairs(ts.locations) do
@@ -339,10 +347,10 @@ menu.divider(menu.my_root(), 'Other Settings')
 local actionsMenu = menu.list(menu.my_root(), 'Actions', {}, 'Fun animations for the Tour Guide')
 menu.action(actionsMenu, 'Cancel', {},
     'Cancels any actions being performed by the Tour Guide and clears away props (except vehicles)', function()
-        helpers.clear_objects()
+        HELPERS.clear_objects()
     end)
 menu.divider(actionsMenu, 'Animations')
-for _, action in pairs(adventure_data.actions) do
+for _, action in pairs(DATA.actions) do
     local action_label = action.id:gsub('^%l', string.upper)
     menu.action(actionsMenu, action_label, {}, action.name, function()
         local variant = ''
@@ -354,14 +362,14 @@ for _, action in pairs(adventure_data.actions) do
 end
 
 local chatMenu = menu.list(menu.my_root(), 'Chat', {}, 'Handy chat messages')
-menu.action(chatMenu, 'Welcome', {}, adventure_data.welcome_message, function()
-    chat.send_message(adventure_data.welcome_message, false, true, true)
+menu.action(chatMenu, 'Welcome', {}, DATA.welcome_message, function()
+    chat.send_message(DATA.welcome_message, false, true, true)
 end)
-menu.action(chatMenu, 'Thank you', {}, adventure_data.thank_you_message, function()
-    chat.send_message(adventure_data.thank_you_message, false, true, true)
+menu.action(chatMenu, 'Thank you', {}, DATA.thank_you_message, function()
+    chat.send_message(DATA.thank_you_message, false, true, true)
 end)
 menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
-    for _, rule in pairs(adventure_data.tour_rules) do
+    for _, rule in pairs(DATA.tour_rules) do
         chat.send_message(rule, false, true, true)
         util.yield(1000)
     end
@@ -375,216 +383,32 @@ menu.divider(helpMenu, 'DPAD-U to undo last grid spawn')
 menu.divider(helpMenu, 'DPAD-D to spawn bus/update passengers')
 
 menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbrake', function()
-    helpers.toggle_super_drive()
+    HELPERS.toggle_super_drive()
 end, true)
 
 menu.divider(menu.my_root(), 'Version ' .. SCRIPT_VERSION)
 
----
---- Parts of the code below have been adapted from GridSpawn by NotTonk
---- https://discord.com/channels/956618713157763072/1037454538921214082
----
-local function left_click_down()
-    return PAD.IS_DISABLED_CONTROL_JUST_PRESSED(2, 24)
-end
-
-local function left_click_up()
-    return PAD.IS_DISABLED_CONTROL_JUST_RELEASED(2, 24)
-end
-
-local function left_click_hold()
-    return PAD.IS_DISABLED_CONTROL_PRESSED(2, 24)
-end
-
-local function r3_hold()
-    return PAD.IS_DISABLED_CONTROL_PRESSED(2, 26)
-end
-
-local function dpad_up_press()
-    return PAD.IS_DISABLED_CONTROL_JUST_PRESSED(2, 27)
-end
-
-local function dpad_right_press()
-    return PAD.IS_DISABLED_CONTROL_JUST_PRESSED(2, 74)
-end
-
-local function dpad_down_press()
-    return PAD.IS_DISABLED_CONTROL_JUST_PRESSED(2, 48)
-end
-
-local function dpad_left_press()
-    return PAD.IS_DISABLED_CONTROL_JUST_PRESSED(2, 85)
-end
-
-local preview_cars = {{}}
-local undo_record = {}
-local up<const> = v3.new(0, 0, 1)
-local is_placing = false
-local start_pos
-local cam_start_heading
-local start_forward
-local start_right
-local arrow_rot = 0
-local x_padding = 0.5
-local y_padding = 0.5
-
 util.create_tick_handler(function()
-    if r3_hold() and dpad_down_press() then
+    if CONTROLS.r3_hold() and CONTROLS.dpad_down_press() then
         get_the_bus()
     end
-    if r3_hold() and dpad_right_press() then
+    if CONTROLS.r3_hold() and CONTROLS.dpad_right_press() then
         spawn_mode_enabled = not spawn_mode_enabled
     end
-    if r3_hold() and dpad_left_press() then
-        helpers.clear_vehicles()
+    if CONTROLS.r3_hold() and CONTROLS.dpad_left_press() then
+        HELPERS.clear_vehicles()
     end
-    if r3_hold() and dpad_up_press() and spawn_mode_enabled == false then
+    if CONTROLS.r3_hold() and CONTROLS.dpad_up_press() and spawn_mode_enabled == false then
         -- TODO hide mobile phone after pressing dpad up
-        helpers.clear_objects()
+        HELPERS.clear_objects()
     end
     if spawn_mode_enabled == true then
-        arrow_rot = arrow_rot + MISC.GET_FRAME_TIME() * 45
-        local camPos = v3.new(CAM.GET_FINAL_RENDERED_CAM_COORD())
-        local camRot = v3.new(CAM.GET_FINAL_RENDERED_CAM_ROT())
-        local dir = v3.toDir(camRot)
-        v3.mul(dir, 200)
-        v3.add(dir, camPos)
-        local handle = SHAPETEST.START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE(camPos.x, camPos.y, camPos.z, dir.x,
-            dir.y, dir.z, 1, 0, 4)
-
-        local hit = memory.alloc(8)
-        local end_pos = memory.alloc()
-        local surfaceNormal = memory.alloc()
-        local ent = memory.alloc_int()
-        SHAPETEST.GET_SHAPE_TEST_RESULT(handle, hit, end_pos, surfaceNormal, ent)
-
-        if memory.read_byte(hit) ~= 0 then
-            end_pos = v3.new(end_pos)
-            helpers.arrow_indicator(end_pos, math.rad(arrow_rot), 1, {
-                r = 204,
-                g = 132,
-                b = 0,
-                a = 255
-            })
-
-            if left_click_down() then
-                is_placing = true
-                start_pos = v3.new(end_pos)
-                local cam_start_rot = v3.new(CAM.GET_FINAL_RENDERED_CAM_ROT(2))
-                cam_start_rot.x = 0
-                cam_start_heading = v3.getHeading(cam_start_rot)
-                start_forward = v3.toDir(cam_start_rot)
-                start_right = v3.crossProduct(start_forward, up)
-            elseif left_click_up() then
-                is_placing = false
-                undo_record[#undo_record + 1] = {}
-                local new_record = undo_record[#undo_record]
-                for _, tbl in pairs(preview_cars) do
-                    for _, car in pairs(tbl) do
-                        local pos = ENTITY.GET_ENTITY_COORDS(car, false)
-                        entities.delete_by_handle(car)
-                        local new_car = VEHICLE.CREATE_VEHICLE(spawn_target_hash, pos.x, pos.y, pos.z,
-                            cam_start_heading, true, false, false)
-                        new_record[#new_record + 1] = new_car
-                        make_adventure_vehicle(new_car)
-                        util.yield()
-                    end
-                end
-                preview_cars = {{}}
-            end
-
-            if r3_hold() and dpad_up_press() and #undo_record > 0 then
-                for _, car in pairs(undo_record[#undo_record]) do
-                    if ENTITY.DOES_ENTITY_EXIST(car) then
-                        entities.delete_by_handle(car)
-                    end
-                end
-                undo_record[#undo_record] = nil
-            end
-
-            if is_placing then
-                helpers.arrow_indicator(start_pos, math.rad(arrow_rot), 1, {
-                    r = 255,
-                    g = 50,
-                    b = 50,
-                    a = 255
-                })
-                local angle = -math.rad(cam_start_heading)
-                local angle_cos = math.cos(angle)
-                local angle_sin = math.sin(angle)
-                end_pos = v3.new(start_pos.x +
-                                     (angle_cos * (end_pos.x - start_pos.x) - angle_sin * (end_pos.y - start_pos.y)),
-                    start_pos.y + (angle_sin * (end_pos.x - start_pos.x) + angle_cos * (end_pos.y - start_pos.y)),
-                    end_pos.z)
-                local spawn_target_x_plus_pad = spawn_target_dimensions.x + x_padding
-                local spawn_target_y_plus_pad = spawn_target_dimensions.y + y_padding
-
-                local x_count = math.min(math.floor(math.abs((start_pos.x - end_pos.x) / spawn_target_x_plus_pad)), 9)
-                local y_count = math.min(math.floor(math.abs((start_pos.y - end_pos.y) / spawn_target_y_plus_pad)), 9)
-                for x = 0, x_count, 1 do
-                    for y = 0, y_count, 1 do
-                        local mult_x = start_pos.x > end_pos.x and -1 or 1
-                        local mult_y = start_pos.y > end_pos.y and -1 or 1
-                        local temp_forward = v3.new(start_forward)
-                        local temp_right = v3.new(start_right)
-                        v3.mul(temp_forward, (spawn_target_y_plus_pad * y) * mult_y)
-                        v3.mul(temp_right, (spawn_target_x_plus_pad * x) * mult_x)
-                        v3.add(temp_forward, temp_right)
-                        v3.add(temp_forward, start_pos)
-                        local coords = temp_forward
-
-                        local z_found, z_coord = util.get_ground_z(coords.x, coords.y)
-                        if z_found then
-                            coords.z = z_coord
-                        else
-                            coords.z = start_pos.z
-                        end
-                        local car
-                        if preview_cars[x] then
-                            if preview_cars[x][y] then
-                                car = preview_cars[x][y]
-                            end
-                        else
-                            preview_cars[x] = {}
-                        end
-                        if not car then
-                            car = VEHICLE.CREATE_VEHICLE(spawn_target_hash, coords.x, coords.y, coords.z,
-                                cam_start_heading, false, false, false)
-                            ENTITY.SET_ENTITY_ALPHA(car, 51, false)
-                            ENTITY.SET_ENTITY_COLLISION(car, false, false)
-                            ENTITY.FREEZE_ENTITY_POSITION(car, true)
-                            make_adventure_vehicle(car)
-                            preview_cars[x][y] = car
-                        end
-                        ENTITY.SET_ENTITY_COORDS_NO_OFFSET(car, coords.x, coords.y,
-                            coords.z + spawn_target_dimensions.z * 0.5, false, false, false)
-                        helpers.draw_bounding_box(car, {
-                            r = 204,
-                            g = 132,
-                            b = 0,
-                            a = 100
-                        })
-                    end
-                end
-                for x, tbl in pairs(preview_cars) do
-                    for y, car in pairs(tbl) do
-                        if x > x_count or y > y_count then
-                            entities.delete_by_handle(car)
-                            preview_cars[x][y] = nil
-                        end
-                    end
-                end
-            end
-        end
+        GRID_SPAWN.handle_spawn(spawn_target_hash, spawn_target_dimensions, make_adventure_vehicle)
     end
 end)
 
 util.on_stop(function()
-    for _, tbl in pairs(preview_cars) do
-        for _, car in pairs(tbl) do
-            entities.delete_by_handle(car)
-        end
-    end
+    GRID_SPAWN.handle_cleanup()
 end)
 
 ---

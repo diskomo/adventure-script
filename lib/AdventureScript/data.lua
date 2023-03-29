@@ -234,7 +234,7 @@ local adventure_data = {
                 livery = 6
             }
         }, {
-            name = 'Skyline R32',
+            name = 'Skyline',
             id = 'elegy',
             options = {
                 drift = true
@@ -308,7 +308,10 @@ local adventure_data = {
             name = 'Hilux',
             id = 'everon'
         }, {
-            name = 'Go-Kart',
+            name = 'Cherokee',
+            id = 'seminole2'
+        }, {
+            name = 'Go-Kart (for descent)',
             id = 'veto',
             options = {
                 livery = 9,
