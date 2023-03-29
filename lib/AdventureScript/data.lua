@@ -1,5 +1,5 @@
 -- Vehicle mods reference from https://pastebin.com/QzEAn02v
-local vehicle_mods = {
+local vehicleMods = {
     SPOILERS = 0,
     FRONT_BUMPER = 1,
     REAR_BUMPER = 2,
@@ -51,9 +51,9 @@ local vehicle_mods = {
     LIVERY = 48
 }
 
-local adventure_data = {
+local adventureData = {
     -- Official AdventureTours Bus Stops: teleport locations and vehicles
-    tour_stops = {{
+    tourStops = {{
         name = 'Offroad',
         description = 'Race around the Redwood Lights motocross track using dirtbikes and quads, or try the kart track with go-karts!',
         locations = {{
@@ -92,7 +92,7 @@ local adventure_data = {
             id = 'veto',
             options = {
                 livery = 9,
-                random_colour = true
+                randomColor = true
             }
         }, {
             name = 'Mountain Bike',
@@ -150,7 +150,7 @@ local adventure_data = {
             name = 'F250',
             id = 'sandking',
             options = {
-                f1_wheels = true
+                f1Wheels = true
             }
         }, {
             name = 'Mini Tank',
@@ -181,28 +181,28 @@ local adventure_data = {
             id = 'openwheel1',
             options = {
                 livery = 5,
-                random_colour = true
+                randomColor = true
             }
         }, {
             name = 'DR1',
             id = 'openwheel2',
             options = {
                 livery = 5,
-                random_colour = true
+                randomColor = true
             }
         }, {
             name = 'PR4',
             id = 'formula',
             options = {
                 livery = 5,
-                random_colour = true
+                randomColor = true
             }
         }, {
             name = 'R88',
             id = 'formula2',
             options = {
                 livery = 5,
-                random_colour = true
+                randomColor = true
             }
         }}
     }, {
@@ -230,7 +230,7 @@ local adventure_data = {
             id = 'futo2',
             options = {
                 drift = true,
-                f1_wheels = true,
+                f1Wheels = true,
                 livery = 6
             }
         }, {
@@ -267,7 +267,7 @@ local adventure_data = {
             name = 'Go-Kart',
             id = 'veto2',
             options = {
-                f1_wheels = true
+                f1Wheels = true
             }
         }, {
             name = 'Lawnmower',
@@ -315,7 +315,7 @@ local adventure_data = {
             id = 'veto',
             options = {
                 livery = 9,
-                random_colour = true
+                randomColor = true
             }
         }}
     }, {
@@ -357,21 +357,21 @@ local adventure_data = {
             id = 'pyro'
         }}
     }},
-    license_plate = 'ADVTOURS',
-    brand_colour = { -- official AdventureTours yellow
+    licensePlate = 'ADVTOURS',
+    brandColor = { -- official AdventureTours yellow
         r = 204,
         g = 132,
         b = 0
     },
     -- These mods will be applied to all spawned vehicles
-    default_mods = {vehicle_mods.TANK, vehicle_mods.ARCH_COVER, vehicle_mods.ARMOR, vehicle_mods.TRUNK,
-                    vehicle_mods.BRAKES, vehicle_mods.STRUTS, vehicle_mods.TRANSMISSION, vehicle_mods.TRIM,
-                    vehicle_mods.AERIALS, vehicle_mods.AIR_FILTER, vehicle_mods.ENGINE_BLOCK, vehicle_mods.ENGINE,
-                    vehicle_mods.GRILLE, vehicle_mods.SIDE_SKIRT, vehicle_mods.REAR_BUMPER, vehicle_mods.FRONT_BUMPER},
-    tour_rules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
-                  'No shooting out of the bus windows'},
-    welcome_message = 'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.',
-    thank_you_message = 'Thank you all so much for joining the tour!',
+    defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
+                   vehicleMods.STRUTS, vehicleMods.TRANSMISSION, vehicleMods.TRIM, vehicleMods.AERIALS,
+                   vehicleMods.AIR_FILTER, vehicleMods.ENGINE_BLOCK, vehicleMods.ENGINE, vehicleMods.GRILLE,
+                   vehicleMods.SIDE_SKIRT, vehicleMods.REAR_BUMPER, vehicleMods.FRONT_BUMPER},
+    tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
+                 'No shooting out of the bus windows'},
+    welcomeMessage = 'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.',
+    thankYouMessage = 'Thank you all so much for joining the tour!',
     -- Tour guide animations
     actions = {{
         id = 'bong',
@@ -414,4 +414,4 @@ local adventure_data = {
     }}
 }
 
-return adventure_data
+return adventureData

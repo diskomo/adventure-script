@@ -154,11 +154,11 @@ local draw_bounding_box = function(entity, colour)
         bottom_right.z, colour.r, colour.g, colour.b, colour.a)
 end
 
-local GRID_SPAWN = {
+local GRIDSPAWN = {
     get_model_dimensions = get_model_dimensions,
     arrow_indicator = arrow_indicator,
     draw_bounding_box = draw_bounding_box,
-    handle_spawn = function(spawn_target_hash, spawn_target_dimensions, manipulate_vehicle)
+    handleSpawn = function(spawnTargetHash, spawnTargetDimensions, manipulate_vehicle)
         arrow_rot = arrow_rot + MISC.GET_FRAME_TIME() * 45
         local camPos = v3.new(CAM.GET_FINAL_RENDERED_CAM_COORD())
         local camRot = v3.new(CAM.GET_FINAL_RENDERED_CAM_ROT())
@@ -183,7 +183,7 @@ local GRID_SPAWN = {
                 a = 255
             })
 
-            if CONTROLS.left_click_down() then
+            if CONTROLS.leftClickDown() then
                 is_placing = true
                 start_pos = v3.new(end_pos)
                 local cam_start_rot = v3.new(CAM.GET_FINAL_RENDERED_CAM_ROT(2))
@@ -191,7 +191,7 @@ local GRID_SPAWN = {
                 cam_start_heading = v3.getHeading(cam_start_rot)
                 start_forward = v3.toDir(cam_start_rot)
                 start_right = v3.crossProduct(start_forward, up)
-            elseif CONTROLS.left_click_up() then
+            elseif CONTROLS.leftClickUp() then
                 is_placing = false
                 undo_record[#undo_record + 1] = {}
                 local new_record = undo_record[#undo_record]
@@ -199,8 +199,8 @@ local GRID_SPAWN = {
                     for _, car in pairs(tbl) do
                         local pos = ENTITY.GET_ENTITY_COORDS(car, false)
                         entities.delete_by_handle(car)
-                        local new_car = VEHICLE.CREATE_VEHICLE(spawn_target_hash, pos.x, pos.y, pos.z,
-                            cam_start_heading, true, false, false)
+                        local new_car = VEHICLE.CREATE_VEHICLE(spawnTargetHash, pos.x, pos.y, pos.z, cam_start_heading,
+                            true, false, false)
                         new_record[#new_record + 1] = new_car
                         manipulate_vehicle(new_car)
                         util.yield()
@@ -209,7 +209,7 @@ local GRID_SPAWN = {
                 preview_cars = {{}}
             end
 
-            if CONTROLS.r3_hold() and CONTROLS.dpad_up_press() and #undo_record > 0 then
+            if CONTROLS.r3Hold() and CONTROLS.dpadUpPress() and #undo_record > 0 then
                 for _, car in pairs(undo_record[#undo_record]) do
                     if ENTITY.DOES_ENTITY_EXIST(car) then
                         entities.delete_by_handle(car)
@@ -232,8 +232,8 @@ local GRID_SPAWN = {
                                      (angle_cos * (end_pos.x - start_pos.x) - angle_sin * (end_pos.y - start_pos.y)),
                     start_pos.y + (angle_sin * (end_pos.x - start_pos.x) + angle_cos * (end_pos.y - start_pos.y)),
                     end_pos.z)
-                local spawn_target_x_plus_pad = spawn_target_dimensions.x + x_padding
-                local spawn_target_y_plus_pad = spawn_target_dimensions.y + y_padding
+                local spawn_target_x_plus_pad = spawnTargetDimensions.x + x_padding
+                local spawn_target_y_plus_pad = spawnTargetDimensions.y + y_padding
 
                 local x_count = math.min(math.floor(math.abs((start_pos.x - end_pos.x) / spawn_target_x_plus_pad)), 9)
                 local y_count = math.min(math.floor(math.abs((start_pos.y - end_pos.y) / spawn_target_y_plus_pad)), 9)
@@ -264,7 +264,7 @@ local GRID_SPAWN = {
                             preview_cars[x] = {}
                         end
                         if not car then
-                            car = VEHICLE.CREATE_VEHICLE(spawn_target_hash, coords.x, coords.y, coords.z,
+                            car = VEHICLE.CREATE_VEHICLE(spawnTargetHash, coords.x, coords.y, coords.z,
                                 cam_start_heading, false, false, false)
                             ENTITY.SET_ENTITY_ALPHA(car, 51, false)
                             ENTITY.SET_ENTITY_COLLISION(car, false, false)
@@ -273,7 +273,7 @@ local GRID_SPAWN = {
                             preview_cars[x][y] = car
                         end
                         ENTITY.SET_ENTITY_COORDS_NO_OFFSET(car, coords.x, coords.y,
-                            coords.z + spawn_target_dimensions.z * 0.5, false, false, false)
+                            coords.z + spawnTargetDimensions.z * 0.5, false, false, false)
                         draw_bounding_box(car, {
                             r = 204,
                             g = 132,
@@ -293,7 +293,7 @@ local GRID_SPAWN = {
             end
         end
     end,
-    handle_cleanup = function()
+    handleCleanup = function()
         for _, tbl in pairs(preview_cars) do
             for _, car in pairs(tbl) do
                 entities.delete_by_handle(car)
@@ -302,4 +302,4 @@ local GRID_SPAWN = {
     end
 }
 
-return GRID_SPAWN
+return GRIDSPAWN
