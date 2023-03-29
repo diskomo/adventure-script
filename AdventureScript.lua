@@ -3,11 +3,11 @@
 util.require_natives(1676318796)
 util.keep_running()
 
-local SCRIPT_VERSION = '0.8.3'
+local SCRIPT_VERSION = '0.8.4'
 local AUTO_UPDATE_BRANCHES = {{'main', {}, 'More stable, but updated less often.', 'main'},
                               {'dev', {}, 'Cutting edge updates, but less stable.', 'dev'}}
 local SELECTED_BRANCH_INDEX = 1
-local selectedBranch = AUTO_UPDATE_BRANCHES[SELECTED_BRANCH_INDEX][1]
+local SELECTED_BRANCH = AUTO_UPDATE_BRANCHES[SELECTED_BRANCH_INDEX][1]
 
 ---
 --- Auto-Updater
@@ -63,7 +63,7 @@ local DEFAULT_CHECK_INTERVAL = 604800
 local auto_update_config = {
     source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/AdventureScript.lua',
     script_relpath = SCRIPT_RELPATH,
-    switch_to_branch = selectedBranch,
+    switch_to_branch = SELECTED_BRANCH,
     verify_file_begins_with = '--',
     check_interval = DEFAULT_CHECK_INTERVAL,
     dependencies = {{
@@ -102,7 +102,7 @@ local auto_update_config = {
     }}
 }
 local update_success = auto_updater.run_auto_update(auto_update_config)
-local function require_dependency(path)
+local function requireDependency(path)
     local dep_status, required_dep = pcall(require, path)
     if not dep_status then
         error('Could not load ' .. path .. ': ' .. required_dep)
@@ -141,14 +141,14 @@ end
 ---
 --- AdventureScript begins here
 ---
-local DATA = require_dependency('lib/AdventureScript/data')
-local CONTROLS = require_dependency('lib/AdventureScript/controls')
-local HELPERS = require_dependency('lib/AdventureScript/helpers')
-local GRIDSPAWN = require_dependency('lib/AdventureScript/gridspawn')
+local DATA = requireDependency('lib/AdventureScript/data')
+local CONTROLS = requireDependency('lib/AdventureScript/controls')
+local HELPERS = requireDependency('lib/AdventureScript/helpers')
+local GRIDSPAWN = requireDependency('lib/AdventureScript/gridspawn')
 local passengers = {}
 local spawnModeEnabled = false
 local spawnTargetHash = util.joaat('manchez2')
-local spawnTargetDimensions = GRIDSPAWN.get_model_dimensions(spawnTargetHash)
+local spawnTargetDimensions = GRIDSPAWN.getModelDimensions(spawnTargetHash)
 local spawnTargetOptions = {
     drift = false,
     f1Wheels = false,
@@ -160,7 +160,7 @@ local spawnTargetOptions = {
 local function setVehicle(hash, options)
     spawnModeEnabled = true -- automatically enable spawn mode when setting a vehicle
     spawnTargetHash = hash
-    spawnTargetDimensions = GRIDSPAWN.get_model_dimensions(hash)
+    spawnTargetDimensions = GRIDSPAWN.getModelDimensions(hash)
     if not options then
         spawnTargetOptions = {
             drift = false,
@@ -180,14 +180,14 @@ end
 
 -- Converts any old vehicle into an AdventureToy
 local function makeAdventureVehicle(veh)
-    local colour = {
+    local color = {
         r = math.random(0, 255),
         g = math.random(0, 255),
         b = math.random(0, 255)
     }
     local wheelColor = math.random(0, 80)
     if not spawnTargetOptions.randomColor then
-        colour = DATA.brandColor
+        color = DATA.brandColor
         wheelColor = 37
     end
 
@@ -231,8 +231,8 @@ local function makeAdventureVehicle(veh)
 
     -- Branding
     VEHICLE.SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
-    VEHICLE.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, colour.r, colour.g, colour.b)
-    VEHICLE.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, colour.r + 20, colour.g + 20, colour.b + 20)
+    VEHICLE.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, color.r, color.g, color.b)
+    VEHICLE.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, color.r + 20, color.g + 20, color.b + 20)
     VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(veh, 5) -- yankton plate
     VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(veh, DATA.licensePlate)
     VEHICLE.SET_VEHICLE_MOD(veh, 14, math.random(16, 23), true) -- horn (high note)
@@ -240,7 +240,7 @@ local function makeAdventureVehicle(veh)
     VEHICLE.SET_VEHICLE_XENON_LIGHT_COLOR_INDEX(veh, 6) -- gold tint headlights
 end
 
-local function update_passengers()
+local function updatePassengers()
     local player = PLAYER.GET_PLAYER_INDEX()
     local playerPed = PLAYER.PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
@@ -252,7 +252,7 @@ local function update_passengers()
         -- if blip ~= nil then
         --     HUD.SET_BLIP_AS_FRIENDLY(blip, true)
         --     HUD.SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
-        --     HUD.SET_BLIP_COLOUR(blip, 81) -- Gold colour
+        --     HUD.SET_BLIP_COLOUR(blip, 81) -- Gold color
         --     HUD.SET_BLIP_SECONDARY_COLOUR(blip, DATA.brandColor.r, DATA.brandColor.g,
         --         DATA.brandColor.b)
         --     HUD.SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
@@ -265,7 +265,7 @@ local function update_passengers()
                 local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
                 if (passengerName ~= '**Invalid**') then
                     table.insert(passengerList, passengerName)
-                    HELPERS.assist_passenger(passengerName)
+                    HELPERS.assistPassenger(passengerName)
                 end
             end
             util.yield()
@@ -304,7 +304,7 @@ local function getTheBus()
         HELPERS.setSuperDrive('on')
         util.yield(1000)
     end
-    update_passengers()
+    updatePassengers()
 end
 
 local function addEventVehicle(listRef, vehicleName, vehicleModel, vehicleOptions)

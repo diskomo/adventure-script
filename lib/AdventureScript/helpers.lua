@@ -21,7 +21,7 @@ local HELPERS = {
         menu.trigger_commands('superhandbrake')
     end,
     -- Keep the fuckin cops off a passenger and keep 'em healthy
-    assist_passenger = function(passenger)
+    assistPassenger = function(passenger)
         menu.trigger_commands('bail' .. passenger .. ' on')
         menu.trigger_commands('autoheal' .. passenger .. ' on')
     end
