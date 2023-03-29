@@ -3,7 +3,7 @@
 util.require_natives(1676318796)
 util.keep_running()
 
-local SCRIPT_VERSION = '0.8.0'
+local SCRIPT_VERSION = '0.8.1'
 local AUTO_UPDATE_BRANCHES = {{'main', {}, 'More stable, but updated less often.', 'main'},
                               {'dev', {}, 'Cutting edge updates, but less stable.', 'dev'}}
 local SELECTED_BRANCH_INDEX = 1
@@ -377,6 +377,8 @@ menu.divider(helpMenu, 'DPAD-D to spawn bus/update passengers')
 menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbrake', function()
     helpers.toggle_super_drive()
 end, true)
+
+menu.divider(menu.my_root(), 'Version ' .. SCRIPT_VERSION)
 
 ---
 --- Parts of the code below have been adapted from GridSpawn by NotTonk
