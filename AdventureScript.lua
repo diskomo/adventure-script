@@ -3,7 +3,7 @@
 util.require_natives(1676318796)
 util.keep_running()
 
-local SCRIPT_VERSION = '0.8.4'
+local SCRIPT_VERSION = '0.8.5'
 local AUTO_UPDATE_BRANCHES = {{'main', {}, 'More stable, but updated less often.', 'main'},
                               {'dev', {}, 'Cutting edge updates, but less stable.', 'dev'}}
 local SELECTED_BRANCH_INDEX = 1
@@ -203,7 +203,7 @@ local function makeAdventureVehicle(veh)
     VEHICLE.SET_VEHICLE_MOD_KIT(veh, 0)
     -- This loop will set all of the vehicle modifications defined in defaultMods to their highest possible value
     for _, type in pairs(DATA.defaultMods) do
-        VEHICLE.SET_VEHICLE_MOD(veh, type, VEHICLE.GET_NUM_vehicleMods(veh, type) - 1, true)
+        VEHICLE.SET_VEHICLE_MOD(veh, type, VEHICLE.GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
     end
     -- low-grip drift tyres
     if spawnTargetOptions.drift then

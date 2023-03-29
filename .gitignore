@@ -1,11 +1,3 @@
-resources/**/*
-store/**/*
-lib/auto-updater*
-lib/natives*
-lib/translations*
-Actions.lua
-Heist Control.lua
-
 # Compiled Lua sources
 luac.out
 

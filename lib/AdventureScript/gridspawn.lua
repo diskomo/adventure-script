@@ -28,7 +28,7 @@ local getModelDimensions = function(model)
         STREAMING.REQUEST_MODEL(model)
         util.yield()
     end
-    MISC.getModelDimensions(model, modelMinimum, modelMaximum)
+    MISC.GET_MODEL_DIMENSIONS(model, modelMinimum, modelMaximum)
     local minimumVec = v3.new(modelMinimum)
     local maximumVec = v3.new(modelMaximum)
     local dimensions = {
@@ -83,7 +83,7 @@ local drawBoundingBox = function(entity, color)
     local forwardVector = v3.new(forwardVectorPointer)
     local rightVector = v3.new(rightVectorPointer)
     local upVector = v3.new(upVectorPointer)
-    MISC.getModelDimensions(ENTITY.GET_ENTITY_MODEL(entity), boundingBoxMinimum, boundingBoxMaximum)
+    MISC.GET_MODEL_DIMENSIONS(ENTITY.GET_ENTITY_MODEL(entity), boundingBoxMinimum, boundingBoxMaximum)
     local minimumVec = v3.new(boundingBoxMinimum)
     local maximumVec = v3.new(boundingBoxMaximum)
     local dimensions = {
