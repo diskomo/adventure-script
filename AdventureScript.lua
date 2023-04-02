@@ -109,7 +109,10 @@ local function updatePassengers()
     local player = PLAYER.GET_PLAYER_INDEX()
     local playerPed = PLAYER.PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
-    if PED.IS_PED_IN_ANY_VEHICLE(playerPed, false) then
+    local inVehicle = PED.IS_PED_IN_ANY_VEHICLE(playerPed, false)
+    local isBus = VEHICLE.GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(ENTITY.GET_ENTITY_MODEL(
+        VEHICLE.GET_VEHICLE_PED_IS_IN(playerPed, false))) == 'BUS'
+    if inVehicle and isBus then
         local vehicle = PED.GET_VEHICLE_PED_IS_IN(playerPed, false)
 
         -- -- Set the bus' map blip to a yellow tour bus sprite
@@ -142,7 +145,7 @@ local function updatePassengers()
     else
         local passengerList = HELPERS.getLocalPlayers()
         passengers = passengerList
-        util.toast('')
+        util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
     end
 end
 
