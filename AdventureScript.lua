@@ -109,39 +109,43 @@ local function updatePassengers()
     local player = PLAYER.GET_PLAYER_INDEX()
     local playerPed = PLAYER.PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
-    local inVehicle = PED.IS_PED_IN_ANY_VEHICLE(playerPed, false)
-    local isBus = VEHICLE.GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(ENTITY.GET_ENTITY_MODEL(
-        VEHICLE.GET_VEHICLE_PED_IS_IN(playerPed, false))) == 'BUS'
-    if inVehicle and isBus then
+    local isInVehicle = PED.IS_PED_IN_ANY_VEHICLE(playerPed, false)
+    if isInVehicle then
         local vehicle = PED.GET_VEHICLE_PED_IS_IN(playerPed, false)
+        local isBus = VEHICLE.GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(ENTITY.GET_ENTITY_MODEL(vehicle)) == 'BUS'
 
-        -- -- Set the bus' map blip to a yellow tour bus sprite
-        -- local blip = HUD.ADD_BLIP_FOR_ENTITY(vehicle)
-        -- if blip ~= nil then
-        --     HUD.SET_BLIP_AS_FRIENDLY(blip, true)
-        --     HUD.SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
-        --     HUD.SET_BLIP_COLOUR(blip, 81) -- Gold color
-        --     HUD.SET_BLIP_SECONDARY_COLOUR(blip, DATA.brandColor.r, DATA.brandColor.g,
-        --         DATA.brandColor.b)
-        --     HUD.SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
-        -- end
+        if isBus then
+            -- Set the bus' map blip to a yellow tour bus sprite
+            local blip = HUD.ADD_BLIP_FOR_ENTITY(vehicle)
+            if blip ~= nil then
+                HUD.SET_BLIP_AS_FRIENDLY(blip, true)
+                HUD.SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
+                HUD.SET_BLIP_COLOUR(blip, 81) -- Gold color
+                HUD.SET_BLIP_SECONDARY_COLOUR(blip, DATA.brandColor.r, DATA.brandColor.g, DATA.brandColor.b)
+                HUD.SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
+            end
 
-        local passengerList = {}
-        for i = 0, VEHICLE.GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
-            local passenger = VEHICLE.GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
-            if passenger ~= nil then
-                local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
-                if (passengerName ~= '**Invalid**') then
-                    table.insert(passengerList, passengerName)
-                    HELPERS.assistPassenger(passengerName)
+            local passengerList = {}
+            for i = 0, VEHICLE.GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
+                local passenger = VEHICLE.GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
+                if passenger ~= nil then
+                    local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
+                    if (passengerName ~= '**Invalid**') then
+                        table.insert(passengerList, passengerName)
+                        HELPERS.assistPassenger(passengerName)
+                    end
                 end
             end
+            passengers = passengerList
+            VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
+                ((#passengerList > 0 and #passengerList < 10) and tostring(#passengerList) or 'S'))
+            util.toast((#passengerList > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#passengerList) ..
+                           ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
+        else
+            local passengerList = HELPERS.getLocalPlayers()
+            passengers = passengerList
+            util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
         end
-        passengers = passengerList
-        VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
-            ((#passengerList > 0 and #passengerList < 10) and tostring(#passengerList) or 'S'))
-        util.toast((#passengerList > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#passengerList) ..
-                       ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
     else
         local passengerList = HELPERS.getLocalPlayers()
         passengers = passengerList
