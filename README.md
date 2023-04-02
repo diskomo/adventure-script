@@ -1,6 +1,6 @@
 <!-- add image from lib/AdventureScript/banner.png -->
 
-![Banner](lib/AdventureScript/banner.jpg)
+![Adventure Tours Banner](lib/AdventureScript/banner.jpg)
 
 # AdventureScript
 

@@ -2,7 +2,7 @@
 --- Auto-Updater
 --- from https://github.com/hexarobi/stand-lua-auto-updater
 ---
-local currentVersion = '0.9.4'
+local currentVersion = '0.9.5'
 local status, auto_updater = pcall(require, 'auto-updater')
 
 local function requireDependency(path)
@@ -63,7 +63,7 @@ local UPDATER = {
             error('Invalid auto-updater lib. Please delete your Stand/Lua Scripts/lib/auto-updater.lua and try again')
         end
 
-        local DEFAULT_CHECK_INTERVAL = 604800
+        local DEFAULT_CHECK_INTERVAL = 21600
         local auto_update_config = {
             source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/AdventureScript.lua',
             script_relpath = SCRIPT_RELPATH,

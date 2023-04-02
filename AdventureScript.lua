@@ -143,11 +143,13 @@ local function updatePassengers()
                            ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
         else
             local passengerList = HELPERS.getLocalPlayers()
+            HELPERS.assistPassengers(passengerList)
             passengers = passengerList
             util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
         end
     else
         local passengerList = HELPERS.getLocalPlayers()
+        HELPERS.assistPassengers(passengerList)
         passengers = passengerList
         util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
     end
