@@ -2,7 +2,7 @@
 --- Auto-Updater
 --- from https://github.com/hexarobi/stand-lua-auto-updater
 ---
-local currentVersion = '0.9.1'
+local currentVersion = '0.9.2'
 local status, auto_updater = pcall(require, 'auto-updater')
 
 local function requireDependency(path)

@@ -272,6 +272,7 @@ util.create_tick_handler(function()
         HELPERS.clearObjects()
     end
     if spawnModeEnabled == true then
+        PAD.DISABLE_CONTROL_ACTION(0, 142, true)
         GRIDSPAWN.handleSpawn(spawnTargetHash, spawnTargetDimensions, makeAdventureVehicle)
     end
 end)
