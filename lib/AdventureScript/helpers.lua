@@ -24,6 +24,25 @@ local HELPERS = {
     assistPassenger = function(passenger)
         menu.trigger_commands('bail' .. passenger .. ' on')
         menu.trigger_commands('autoheal' .. passenger .. ' on')
+    end,
+    getLocalPlayers = function()
+        local playerPed = PLAYER.PLAYER_PED_ID()
+        local playerPos = ENTITY.GET_ENTITY_COORDS(playerPed)
+        local radius = 100
+        local playersList = {}
+        for i = 0, 31 do
+            if NETWORK.NETWORK_IS_PLAYER_ACTIVE(i) and i ~= PLAYER.PLAYER_ID() then
+                local ped = PLAYER.GET_PLAYER_PED(i)
+                local pedPos = ENTITY.GET_ENTITY_COORDS(ped)
+                local distance = #(playerPos - pedPos)
+                if distance <= radius then
+                    local playerName = PLAYER.GET_PLAYER_NAME(i)
+                    table.insert(playersList, playerName)
+                    util.toast("Player " .. playerName .. " is " .. distance .. " units away.")
+                end
+            end
+        end
+        return playersList
     end
 }
 

@@ -3,148 +3,13 @@
 util.require_natives(1676318796)
 util.keep_running()
 
-local SCRIPT_VERSION = '0.8.5'
-local AUTO_UPDATE_BRANCHES = {{'main', {}, 'More stable, but updated less often.', 'main'},
-                              {'dev', {}, 'Cutting edge updates, but less stable.', 'dev'}}
-local SELECTED_BRANCH_INDEX = 1
-local SELECTED_BRANCH = AUTO_UPDATE_BRANCHES[SELECTED_BRANCH_INDEX][1]
+local UPDATER = require('lib.AdventureScript.autoupdate')
+UPDATER.runAutoUpdate()
+local DATA = require('lib.AdventureScript.data')
+local CONTROLS = require('lib.AdventureScript.controls')
+local HELPERS = require('lib.AdventureScript.helpers')
+local GRIDSPAWN = require('lib.AdventureScript.gridspawn')
 
----
---- Auto-Updater
---- from https://github.com/hexarobi/stand-lua-auto-updater
----
-local status, auto_updater = pcall(require, 'auto-updater')
-if not status then
-    local auto_update_complete = nil
-    util.toast('Installing auto-updater...', TOAST_ALL)
-    async_http.init('raw.githubusercontent.com', '/hexarobi/stand-lua-auto-updater/main/auto-updater.lua',
-        function(result, headers, status_code)
-            local function parse_auto_update_result(result, headers, status_code)
-                local error_prefix = 'Error downloading auto-updater: '
-                if status_code ~= 200 then
-                    util.toast(error_prefix .. status_code, TOAST_ALL)
-                    return false
-                end
-                if not result or result == '' then
-                    util.toast(error_prefix .. 'Found empty file.', TOAST_ALL)
-                    return false
-                end
-                filesystem.mkdir(filesystem.scripts_dir() .. 'lib')
-                local file = io.open(filesystem.scripts_dir() .. 'lib\\auto-updater.lua', 'wb')
-                if file == nil then
-                    util.toast(error_prefix .. 'Could not open file for writing.', TOAST_ALL)
-                    return false
-                end
-                file:write(result)
-                file:close()
-                util.toast('Successfully installed auto-updater lib', TOAST_ALL)
-                return true
-            end
-            auto_update_complete = parse_auto_update_result(result, headers, status_code)
-        end, function()
-            util.toast('Error downloading auto-updater lib. Update failed to download.', TOAST_ALL)
-        end)
-    async_http.dispatch()
-    local i = 1
-    while (auto_update_complete == nil and i < 40) do
-        util.yield(250)
-        i = i + 1
-    end
-    if auto_update_complete == nil then
-        error('Error downloading auto-updater lib. HTTP Request timeout')
-    end
-    auto_updater = require('auto-updater')
-end
-if auto_updater == true then
-    error('Invalid auto-updater lib. Please delete your Stand/Lua Scripts/lib/auto-updater.lua and try again')
-end
-
-local DEFAULT_CHECK_INTERVAL = 604800
-local auto_update_config = {
-    source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/AdventureScript.lua',
-    script_relpath = SCRIPT_RELPATH,
-    switch_to_branch = SELECTED_BRANCH,
-    verify_file_begins_with = '--',
-    check_interval = DEFAULT_CHECK_INTERVAL,
-    dependencies = {{
-        name = 'data',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/data.lua',
-        script_relpath = 'lib/AdventureScript/data.lua',
-        verify_file_begins_with = '--',
-        check_interval = DEFAULT_CHECK_INTERVAL,
-        is_required = true
-    }, {
-        name = 'controls',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/controls.lua',
-        script_relpath = 'lib/AdventureScript/controls.lua',
-        verify_file_begins_with = '--',
-        check_interval = DEFAULT_CHECK_INTERVAL,
-        is_required = true
-    }, {
-        name = 'gridspawn',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/gridspawn.lua',
-        script_relpath = 'lib/AdventureScript/gridspawn.lua',
-        verify_file_begins_with = '--',
-        check_interval = DEFAULT_CHECK_INTERVAL,
-        is_required = true
-    }, {
-        name = 'helpers',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/HELPERS.lua',
-        script_relpath = 'lib/AdventureScript/HELPERS.lua',
-        verify_file_begins_with = '--',
-        check_interval = DEFAULT_CHECK_INTERVAL,
-        is_required = true
-    }, {
-        name = 'logo',
-        source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/logo.png',
-        script_relpath = 'lib/AdventureScript/logo.png',
-        check_interval = DEFAULT_CHECK_INTERVAL
-    }}
-}
-local update_success = auto_updater.run_auto_update(auto_update_config)
-local function requireDependency(path)
-    local dep_status, required_dep = pcall(require, path)
-    if not dep_status then
-        error('Could not load ' .. path .. ': ' .. required_dep)
-    else
-        return required_dep
-    end
-end
-local missing_required_dependencies = {}
-for _, dependency in pairs(auto_update_config.dependencies) do
-    if dependency.is_required then
-        local var_name = dependency.name
-        if dependency.loaded_lib ~= nil then
-            _G[var_name] = dependency.loaded_lib
-        else
-            local lib_require_status, loaded_lib = pcall(require, dependency.script_relpath:gsub('[.]lua$', ''))
-            if lib_require_status then
-                _G[var_name] = loaded_lib
-            else
-                table.insert(missing_required_dependencies, dependency.name)
-            end
-        end
-    end
-end
-if #missing_required_dependencies > 0 then
-    local missing_files = table.concat(missing_required_dependencies, ', ')
-    if not update_success then
-        error('Error: Install Failed. Auto-update failed and required files are missing (' .. missing_files ..
-                  ') Please re-install from the project zip file @ https://github.com/diskomo/adventure-script')
-    else
-        menu.readonly(menu.my_root(), 'Error: Load Failed', 'Required files are missing. (' .. missing_files .. ')')
-        error(
-            'Error: Load Failed. Auto-update successful but required files are missing. This is likely a bug. Please report this issue on Discord @ https://discord.gg/2u5HbHPB9y')
-    end
-end
-
----
---- AdventureScript begins here
----
-local DATA = requireDependency('lib/AdventureScript/data')
-local CONTROLS = requireDependency('lib/AdventureScript/controls')
-local HELPERS = requireDependency('lib/AdventureScript/helpers')
-local GRIDSPAWN = requireDependency('lib/AdventureScript/gridspawn')
 local passengers = {}
 local spawnModeEnabled = false
 local spawnTargetHash = util.joaat('manchez2')
@@ -244,7 +109,7 @@ local function updatePassengers()
     local player = PLAYER.GET_PLAYER_INDEX()
     local playerPed = PLAYER.PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
-    if PED.IS_PED_SITTING_IN_ANY_VEHICLE(playerPed) then
+    if PED.IS_PED_IN_ANY_VEHICLE(playerPed, false) then
         local vehicle = PED.GET_VEHICLE_PED_IS_IN(playerPed, false)
 
         -- -- Set the bus' map blip to a yellow tour bus sprite
@@ -259,7 +124,7 @@ local function updatePassengers()
         -- end
 
         local passengerList = {}
-        for i = 0, VEHICLE.GET_VEHICLE_NUMBER_OF_PASSENGERS(vehicle, false, false) do
+        for i = 0, VEHICLE.GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
             local passenger = VEHICLE.GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
             if passenger ~= nil then
                 local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
@@ -268,7 +133,6 @@ local function updatePassengers()
                     HELPERS.assistPassenger(passengerName)
                 end
             end
-            util.yield()
         end
         passengers = passengerList
         VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
@@ -276,7 +140,9 @@ local function updatePassengers()
         util.toast((#passengerList > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#passengerList) ..
                        ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
     else
-        util.toast('Must be in a vehicle to update passenger list.')
+        local passengerList = HELPERS.getLocalPlayers()
+        passengers = passengerList
+        util.toast('')
     end
 end
 
@@ -386,7 +252,7 @@ menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbr
     HELPERS.toggleSuperDrive()
 end, true)
 
-menu.divider(menu.my_root(), 'Version ' .. SCRIPT_VERSION)
+menu.divider(menu.my_root(), 'Version ' .. UPDATER.currentVersion)
 
 util.create_tick_handler(function()
     if CONTROLS.r3Hold() and CONTROLS.dpadDownPress() then
