@@ -1,8 +1,8 @@
 -- Small helper functions for the menu
 local HELPERS = {
     clearObjects = function()
-        local ped = PLAYER.GET_PLAYER_PED_SCRIPT_INDEX(players.user())
-        TASK.CLEAR_PED_TASKS_IMMEDIATELY(ped)
+        local ped = GET_PLAYER_PED_SCRIPT_INDEX(players.user())
+        CLEAR_PED_TASKS_IMMEDIATELY(ped)
         menu.trigger_commands('clearobjects on')
         menu.trigger_commands('clearvehicles off')
         menu.trigger_commands('cleararea')
@@ -32,17 +32,17 @@ local HELPERS = {
         end
     end,
     getLocalPlayers = function()
-        local playerPed = PLAYER.PLAYER_PED_ID()
-        local playerPos = ENTITY.GET_ENTITY_COORDS(playerPed)
+        local playerPed = PLAYER_PED_ID()
+        local playerPos = GET_ENTITY_COORDS(playerPed)
         local radius = 3000
         local playersList = {}
         for i = 0, 31 do
-            if NETWORK.NETWORK_IS_PLAYER_ACTIVE(i) and i ~= PLAYER.PLAYER_ID() then
-                local ped = PLAYER.GET_PLAYER_PED(i)
-                local pedPos = ENTITY.GET_ENTITY_COORDS(ped)
-                local distance = SYSTEM.VDIST2(playerPos.x, playerPos.y, playerPos.z, pedPos.x, pedPos.y, pedPos.z)
+            if NETWORK_IS_PLAYER_ACTIVE(i) and i ~= PLAYER_ID() then
+                local ped = GET_PLAYER_PED(i)
+                local pedPos = GET_ENTITY_COORDS(ped)
+                local distance = VDIST2(playerPos.x, playerPos.y, playerPos.z, pedPos.x, pedPos.y, pedPos.z)
                 if distance <= radius then
-                    local playerName = PLAYER.GET_PLAYER_NAME(i)
+                    local playerName = GET_PLAYER_NAME(i)
                     if (playerName ~= '**Invalid**') then
                         table.insert(playersList, playerName)
                     end

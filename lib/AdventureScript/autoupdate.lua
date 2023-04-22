@@ -2,7 +2,7 @@
 --- Auto-Updater
 --- from https://github.com/hexarobi/stand-lua-auto-updater
 ---
-local currentVersion = '0.9.5'
+local currentVersion = '0.9.6'
 local status, auto_updater = pcall(require, 'auto-updater')
 
 local function requireDependency(path)
@@ -78,16 +78,21 @@ local UPDATER = {
                 check_interval = DEFAULT_CHECK_INTERVAL,
                 is_required = true
             }, {
-                name = 'data',
-                source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/data.lua',
-                script_relpath = 'lib/AdventureScript/data.lua',
-                verify_file_begins_with = '--',
-                check_interval = DEFAULT_CHECK_INTERVAL,
-                is_required = true
+                name = 'banner',
+                source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/banner.jpg',
+                script_relpath = 'lib/AdventureScript/banner.jpg',
+                check_interval = DEFAULT_CHECK_INTERVAL
             }, {
                 name = 'controls',
                 source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/controls.lua',
                 script_relpath = 'lib/AdventureScript/controls.lua',
+                verify_file_begins_with = '--',
+                check_interval = DEFAULT_CHECK_INTERVAL,
+                is_required = true
+            }, {
+                name = 'data',
+                source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/data.lua',
+                script_relpath = 'lib/AdventureScript/data.lua',
                 verify_file_begins_with = '--',
                 check_interval = DEFAULT_CHECK_INTERVAL,
                 is_required = true
@@ -100,8 +105,8 @@ local UPDATER = {
                 is_required = true
             }, {
                 name = 'helpers',
-                source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/HELPERS.lua',
-                script_relpath = 'lib/AdventureScript/HELPERS.lua',
+                source_url = 'https://raw.githubusercontent.com/diskomo/adventure-script/main/lib/AdventureScript/helpers.lua',
+                script_relpath = 'lib/AdventureScript/helpers.lua',
                 verify_file_begins_with = '--',
                 check_interval = DEFAULT_CHECK_INTERVAL,
                 is_required = true

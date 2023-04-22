@@ -1,19 +1,19 @@
 -- AdventureScript
 -- by META IIII (aka AdventureTours)
-util.require_natives(1676318796)
+util.require_natives("1681379138.g")
 util.keep_running()
 
-local UPDATER = require('lib.AdventureScript.autoupdate')
-UPDATER.runAutoUpdate()
-local DATA = require('lib.AdventureScript.data')
-local CONTROLS = require('lib.AdventureScript.controls')
-local HELPERS = require('lib.AdventureScript.helpers')
-local GRIDSPAWN = require('lib.AdventureScript.gridspawn')
+local updater = require('lib.AdventureScript.autoupdate')
+updater.runAutoUpdate()
+local data = require('lib.AdventureScript.data')
+local controls = require('lib.AdventureScript.controls')
+local helpers = require('lib.AdventureScript.helpers')
+local gridSpawn = require('lib.AdventureScript.gridspawn')
 
 local passengers = {}
 local spawnModeEnabled = false
 local spawnTargetHash = util.joaat('manchez2')
-local spawnTargetDimensions = GRIDSPAWN.getModelDimensions(spawnTargetHash)
+local spawnTargetDimensions = gridSpawn.getModelDimensions(spawnTargetHash)
 local spawnTargetOptions = {
     drift = false,
     f1Wheels = false,
@@ -25,7 +25,7 @@ local spawnTargetOptions = {
 local function setVehicle(hash, options)
     spawnModeEnabled = true -- automatically enable spawn mode when setting a vehicle
     spawnTargetHash = hash
-    spawnTargetDimensions = GRIDSPAWN.getModelDimensions(hash)
+    spawnTargetDimensions = gridSpawn.getModelDimensions(hash)
     if not options then
         spawnTargetOptions = {
             drift = false,
@@ -52,7 +52,7 @@ local function makeAdventureVehicle(veh)
     }
     local wheelColor = math.random(0, 80)
     if not spawnTargetOptions.randomColor then
-        color = DATA.brandColor
+        color = data.brandColor
         wheelColor = 37
     end
 
@@ -61,95 +61,95 @@ local function makeAdventureVehicle(veh)
         livery = math.random(0, spawnTargetOptions.livery)
     end
 
-    if not ENTITY.DOES_ENTITY_EXIST(veh) then
+    if not DOES_ENTITY_EXIST(veh) then
         return
     end
-    ENTITY.SET_ENTITY_INVINCIBLE(veh, true)
-    VEHICLE.SET_VEHICLE_MOD_KIT(veh, 0)
+    SET_ENTITY_INVINCIBLE(veh, true)
+    SET_VEHICLE_MOD_KIT(veh, 0)
     -- This loop will set all of the vehicle modifications defined in defaultMods to their highest possible value
-    for _, type in pairs(DATA.defaultMods) do
-        VEHICLE.SET_VEHICLE_MOD(veh, type, VEHICLE.GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
+    for _, type in pairs(data.defaultMods) do
+        SET_VEHICLE_MOD(veh, type, GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
     end
     -- low-grip drift tyres
     if spawnTargetOptions.drift then
-        VEHICLE.SET_DRIFT_TYRES(veh, true)
+        SET_DRIFT_TYRES(veh, true)
     else
-        VEHICLE.SET_DRIFT_TYRES(veh, false)
+        SET_DRIFT_TYRES(veh, false)
     end
     -- set wheels to f1 wheels
     if spawnTargetOptions.f1Wheels then
-        VEHICLE.SET_VEHICLE_WHEEL_TYPE(veh, 10)
-        VEHICLE.SET_VEHICLE_MOD(veh, 23, 3, true)
-        VEHICLE.SET_VEHICLE_MOD(veh, 24, 3, true)
+        SET_VEHICLE_WHEEL_TYPE(veh, 10)
+        SET_VEHICLE_MOD(veh, 23, 3, true)
+        SET_VEHICLE_MOD(veh, 24, 3, true)
     else
         -- default to offroad wheels
-        VEHICLE.SET_VEHICLE_WHEEL_TYPE(veh, 4)
-        VEHICLE.SET_VEHICLE_MOD(veh, 23, 8, false)
-        VEHICLE.SET_VEHICLE_MOD(veh, 24, 8, false)
+        SET_VEHICLE_WHEEL_TYPE(veh, 4)
+        SET_VEHICLE_MOD(veh, 23, 8, false)
+        SET_VEHICLE_MOD(veh, 24, 8, false)
     end
 
     -- set livery
     if livery ~= -1 then
-        VEHICLE.SET_VEHICLE_LIVERY(veh, livery)
-        VEHICLE.SET_VEHICLE_MOD(veh, 48, livery, true)
+        SET_VEHICLE_LIVERY(veh, livery)
+        SET_VEHICLE_MOD(veh, 48, livery, true)
     end
 
     -- Branding
-    VEHICLE.SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
-    VEHICLE.SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, color.r, color.g, color.b)
-    VEHICLE.SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, color.r + 20, color.g + 20, color.b + 20)
-    VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(veh, 5) -- yankton plate
-    VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(veh, DATA.licensePlate)
-    VEHICLE.SET_VEHICLE_MOD(veh, 14, math.random(16, 23), true) -- horn (high note)
-    VEHICLE.TOGGLE_VEHICLE_MOD(veh, 22, true) -- xenon headlights
-    VEHICLE.SET_VEHICLE_XENON_LIGHT_COLOR_INDEX(veh, 6) -- gold tint headlights
+    SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
+    SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, color.r, color.g, color.b)
+    SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, color.r + 20, color.g + 20, color.b + 20)
+    SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(veh, 5) -- yankton plate
+    SET_VEHICLE_NUMBER_PLATE_TEXT(veh, data.licensePlate)
+    SET_VEHICLE_MOD(veh, 14, math.random(16, 23), true) -- horn (high note)
+    TOGGLE_VEHICLE_MOD(veh, 22, true) -- xenon headlights
+    SET_VEHICLE_XENON_LIGHT_COLOR_INDEX(veh, 6) -- gold tint headlights
 end
 
 local function updatePassengers()
-    local player = PLAYER.GET_PLAYER_INDEX()
-    local playerPed = PLAYER.PLAYER_PED_ID()
+    local player = GET_PLAYER_INDEX()
+    local playerPed = PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
-    local isInVehicle = PED.IS_PED_IN_ANY_VEHICLE(playerPed, false)
+    local isInVehicle = IS_PED_IN_ANY_VEHICLE(playerPed, false)
     if isInVehicle then
-        local vehicle = PED.GET_VEHICLE_PED_IS_IN(playerPed, false)
-        local isBus = VEHICLE.GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(ENTITY.GET_ENTITY_MODEL(vehicle)) == 'BUS'
+        local vehicle = GET_VEHICLE_PED_IS_IN(playerPed, false)
+        local isBus = GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(GET_ENTITY_MODEL(vehicle)) == 'BUS'
 
         if isBus then
             -- Set the bus' map blip to a yellow tour bus sprite
-            local blip = HUD.ADD_BLIP_FOR_ENTITY(vehicle)
+            local blip = ADD_BLIP_FOR_ENTITY(vehicle)
             if blip ~= nil then
-                HUD.SET_BLIP_AS_FRIENDLY(blip, true)
-                HUD.SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
-                HUD.SET_BLIP_COLOUR(blip, 81) -- Gold color
-                HUD.SET_BLIP_SECONDARY_COLOUR(blip, DATA.brandColor.r, DATA.brandColor.g, DATA.brandColor.b)
-                HUD.SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
+                SET_BLIP_AS_FRIENDLY(blip, true)
+                SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
+                SET_BLIP_COLOUR(blip, 81) -- Gold color
+                SET_BLIP_SECONDARY_COLOUR(blip, data.brandColor.r, data.brandColor.g, data.brandColor.b)
+                SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
             end
 
             local passengerList = {}
-            for i = 0, VEHICLE.GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
-                local passenger = VEHICLE.GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
+            for i = 0, GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
+                local passenger = GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
                 if passenger ~= nil then
-                    local passengerName = PLAYER.GET_PLAYER_NAME(NETWORK.NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
+                    local passengerName = GET_PLAYER_NAME(NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
                     if (passengerName ~= '**Invalid**') then
                         table.insert(passengerList, passengerName)
-                        HELPERS.assistPassenger(passengerName)
+                        helpers.assistPassenger(passengerName)
                     end
                 end
             end
             passengers = passengerList
-            VEHICLE.SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
+            SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
                 ((#passengerList > 0 and #passengerList < 10) and tostring(#passengerList) or 'S'))
             util.toast((#passengerList > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#passengerList) ..
                            ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
         else
-            local passengerList = HELPERS.getLocalPlayers()
-            HELPERS.assistPassengers(passengerList)
+            local passengerList = helpers.getLocalPlayers()
+            helpers.assistPassengers(passengerList)
             passengers = passengerList
             util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
         end
     else
-        local passengerList = HELPERS.getLocalPlayers()
-        HELPERS.assistPassengers(passengerList)
+        local passengerList = helpers.getLocalPlayers()
+        helpers.assistPassengers(passengerList)
         passengers = passengerList
         util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
     end
@@ -163,20 +163,20 @@ local function getTheBus()
         livery = -1,
         randomColor = false
     }
-    local playerPed = PLAYER.PLAYER_PED_ID()
-    if not PED.IS_PED_IN_ANY_VEHICLE(playerPed, false) then
+    local playerPed = PLAYER_PED_ID()
+    if not IS_PED_IN_ANY_VEHICLE(playerPed, false) then
         local busModel = util.joaat('bus')
-        STREAMING.REQUEST_MODEL(busModel)
-        while not STREAMING.HAS_MODEL_LOADED(busModel) do
+        REQUEST_MODEL(busModel)
+        while not HAS_MODEL_LOADED(busModel) do
             util.yield(1000)
         end
-        local playerPos = ENTITY.GET_ENTITY_COORDS(playerPed, false)
-        local bus = VEHICLE.CREATE_VEHICLE(busModel, playerPos.x + 5.0, playerPos.y + 5.0, playerPos.z,
-            ENTITY.GET_ENTITY_HEADING(playerPed), true, false)
+        local playerPos = GET_ENTITY_COORDS(playerPed, false)
+        local bus = CREATE_VEHICLE(busModel, playerPos.x + 5.0, playerPos.y + 5.0, playerPos.z,
+            GET_ENTITY_HEADING(playerPed), true, false)
 
         makeAdventureVehicle(bus)
-        PED.SET_PED_INTO_VEHICLE(playerPed, bus, -1)
-        HELPERS.setSuperDrive('on')
+        SET_PED_INTO_VEHICLE(playerPed, bus, -1)
+        helpers.setSuperDrive('on')
         util.yield(1000)
     end
     updatePassengers()
@@ -184,7 +184,7 @@ end
 
 local function addEventVehicle(listRef, vehicleName, vehicleModel, vehicleOptions)
     local hash = util.joaat(vehicleModel)
-    if STREAMING.IS_MODEL_A_VEHICLE(hash) then
+    if IS_MODEL_A_VEHICLE(hash) then
         menu.action(listRef, vehicleName, {}, 'Set spawn vehicle to ' .. vehicleName, function()
             setVehicle(hash, vehicleOptions)
         end)
@@ -195,8 +195,8 @@ end
 
 local function addEventLocation(listRef, locationName, locationCoords)
     menu.action(listRef, locationName, {}, 'Go to the location', function()
-        local playerPed = PLAYER.PLAYER_PED_ID()
-        PED.SET_PED_COORDS_KEEP_VEHICLE(playerPed, locationCoords.x, locationCoords.y, locationCoords.z)
+        local playerPed = PLAYER_PED_ID()
+        SET_PED_COORDS_KEEP_VEHICLE(playerPed, locationCoords.x, locationCoords.y, locationCoords.z)
     end)
 end
 
@@ -204,7 +204,7 @@ menu.divider(menu.my_root(), #passengers == 0 and 'Tour Stops' or tostring(#pass
     (#passengers == 1 and '' or 's'))
 
 -- Add the tour stops to the menu
-for _, ts in pairs(DATA.tourStops) do
+for _, ts in pairs(data.tourStops) do
     local eventList = menu.list(menu.my_root(), ts.name, {}, ts.description)
     menu.divider(eventList, 'Locations')
     for _, location in pairs(ts.locations) do
@@ -222,10 +222,10 @@ menu.divider(menu.my_root(), 'Other Settings')
 local actionsMenu = menu.list(menu.my_root(), 'Actions', {}, 'Fun animations for the Tour Guide')
 menu.action(actionsMenu, 'Cancel', {},
     'Cancels any actions being performed by the Tour Guide and clears away props (except vehicles)', function()
-        HELPERS.clearObjects()
+        helpers.clearObjects()
     end)
 menu.divider(actionsMenu, 'Animations')
-for _, action in pairs(DATA.actions) do
+for _, action in pairs(data.actions) do
     local action_label = action.id:gsub('^%l', string.upper)
     menu.action(actionsMenu, action_label, {}, action.name, function()
         local variant = ''
@@ -237,14 +237,14 @@ for _, action in pairs(DATA.actions) do
 end
 
 local chatMenu = menu.list(menu.my_root(), 'Chat', {}, 'Handy chat messages')
-menu.action(chatMenu, 'Welcome', {}, DATA.welcomeMessage, function()
-    chat.send_message(DATA.welcomeMessage, false, true, true)
+menu.action(chatMenu, 'Welcome', {}, data.welcomeMessage, function()
+    chat.send_message(data.welcomeMessage, false, true, true)
 end)
-menu.action(chatMenu, 'Thank you', {}, DATA.thankYouMessage, function()
-    chat.send_message(DATA.thankYouMessage, false, true, true)
+menu.action(chatMenu, 'Thank you', {}, data.thankYouMessage, function()
+    chat.send_message(data.thankYouMessage, false, true, true)
 end)
 menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
-    for _, rule in pairs(DATA.tourRules) do
+    for _, rule in pairs(data.tourRules) do
         chat.send_message(rule, false, true, true)
         util.yield(1000)
     end
@@ -258,33 +258,33 @@ menu.divider(helpMenu, 'DPAD-U to undo last grid spawn')
 menu.divider(helpMenu, 'DPAD-D to spawn bus/update passengers')
 
 menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbrake', function()
-    HELPERS.toggleSuperDrive()
+    helpers.toggleSuperDrive()
 end, true)
 
-menu.divider(menu.my_root(), 'Version ' .. UPDATER.currentVersion)
+menu.divider(menu.my_root(), 'Version ' .. updater.currentVersion)
 
 util.create_tick_handler(function()
-    if CONTROLS.r3Hold() and CONTROLS.dpadDownPress() then
+    if controls.r3Hold() and controls.dpadDownPress() then
         getTheBus()
     end
-    if CONTROLS.r3Hold() and CONTROLS.dpadRightPress() then
+    if controls.r3Hold() and controls.dpadRightPress() then
         spawnModeEnabled = not spawnModeEnabled
     end
-    if CONTROLS.r3Hold() and CONTROLS.dpadLeftPress() then
-        HELPERS.clearVehicles()
+    if controls.r3Hold() and controls.dpadLeftPress() then
+        helpers.clearVehicles()
     end
-    if CONTROLS.r3Hold() and CONTROLS.dpadUpPress() and spawnModeEnabled == false then
+    if controls.r3Hold() and controls.dpadUpPress() and spawnModeEnabled == false then
         -- TODO hide mobile phone after pressing dpad up
-        HELPERS.clearObjects()
+        helpers.clearObjects()
     end
     if spawnModeEnabled == true then
-        PAD.DISABLE_CONTROL_ACTION(0, 142, true)
-        GRIDSPAWN.handleSpawn(spawnTargetHash, spawnTargetDimensions, makeAdventureVehicle)
+        DISABLE_CONTROL_ACTION(0, 142, true)
+        gridSpawn.handleSpawn(spawnTargetHash, spawnTargetDimensions, makeAdventureVehicle)
     end
 end)
 
 util.on_stop(function()
-    GRIDSPAWN.handleCleanup()
+    gridSpawn.handleCleanup()
 end)
 
 ---
