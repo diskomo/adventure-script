@@ -11,7 +11,7 @@ local HELPERS = {
             end
             file:close()
         else
-            local file = io.open(filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt', 'w')
+            local file = io.write(filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt', 'w')
             if file then
                 file:write('')
                 file:close()
