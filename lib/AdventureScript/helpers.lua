@@ -10,6 +10,14 @@ local HELPERS = {
                 passengersTable[line] = true
             end
             file:close()
+        else
+            local file = io.open(filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt', 'w')
+            if file then
+                file:write('')
+                file:close()
+            else
+                util.toast('Error: Could not open passengers.txt file for writing.')
+            end
         end
         return passengersTable
     end,

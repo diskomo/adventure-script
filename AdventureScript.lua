@@ -261,7 +261,7 @@ menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
         util.yield(1000)
     end
 end)
-menu.action(chatMenu, 'Boast', {}, 'Boast about the tour', function()
+menu.action(chatMenu, 'Boast', {}, data.boastMessage(#historicPassengers), function()
     chat.send_message(data.boastMessage(#historicPassengers), false, true, true)
 end)
 
