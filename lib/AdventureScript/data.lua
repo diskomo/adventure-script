@@ -372,6 +372,10 @@ local adventureData = {
                  'No shooting out of the bus windows'},
     welcomeMessage = 'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.',
     thankYouMessage = 'Thank you all so much for joining the tour!',
+    boastMessage = function(passengerCount)
+        return 'I wrote a custom lua script for these tours. I have hosted over ' .. tostring(passengerCount) ..
+                   ' passengers so far!'
+    end,
     -- Tour guide animations
     actions = {{
         id = 'bong',

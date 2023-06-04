@@ -1,16 +1,23 @@
 -- AdventureScript
 -- by META IIII (aka AdventureTours)
-util.require_natives("1681379138.g")
+util.require_natives('1681379138.g')
 util.keep_running()
 
-local updater = require('lib.AdventureScript.autoupdate')
-updater.runAutoUpdate()
+local scriptVersion = '0.9.8'
+
 local data = require('lib.AdventureScript.data')
 local controls = require('lib.AdventureScript.controls')
 local helpers = require('lib.AdventureScript.helpers')
 local gridSpawn = require('lib.AdventureScript.gridspawn')
 
-local passengers = {}
+-- A list of all passengers that have ever been on the tour (stored in lib/AdventureTours/passengers.txt)
+local historicPassengers = helpers.loadPassengers()
+-- Adventure Tours are supposed to be a passive affair, so this takes away the guide's weapons
+helpers.removeWeapons()
+
+-- Used as a list of passengers that are currently on the tour
+local currentPassengers = {}
+
 local spawnModeEnabled = false
 local spawnTargetHash = util.joaat('manchez2')
 local spawnTargetDimensions = gridSpawn.getModelDimensions(spawnTargetHash)
@@ -22,6 +29,8 @@ local spawnTargetOptions = {
 }
 
 -- Sets the vehicle used for the grid spawner
+-- @param hash: Hash of the vehicle
+-- @param options: Options for the vehicle
 local function setVehicle(hash, options)
     spawnModeEnabled = true -- automatically enable spawn mode when setting a vehicle
     spawnTargetHash = hash
@@ -44,6 +53,7 @@ local function setVehicle(hash, options)
 end
 
 -- Converts any old vehicle into an AdventureToy
+-- @param veh: The vehicle entity
 local function makeAdventureVehicle(veh)
     local color = {
         r = math.random(0, 255),
@@ -116,47 +126,49 @@ local function updatePassengers()
 
         if isBus then
             -- Set the bus' map blip to a yellow tour bus sprite
-            local blip = ADD_BLIP_FOR_ENTITY(vehicle)
-            if blip ~= nil then
-                SET_BLIP_AS_FRIENDLY(blip, true)
-                SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
-                SET_BLIP_COLOUR(blip, 81) -- Gold color
-                SET_BLIP_SECONDARY_COLOUR(blip, data.brandColor.r, data.brandColor.g, data.brandColor.b)
-                SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
-            end
+            -- local blip = ADD_BLIP_FOR_ENTITY(vehicle)
+            -- if blip ~= nil then
+            --     SET_BLIP_AS_FRIENDLY(blip, true)
+            --     SET_BLIP_SPRITE(blip, 85) -- Tour bus sprite
+            --     SET_BLIP_COLOUR(blip, 81) -- Gold color
+            --     SET_BLIP_SECONDARY_COLOUR(blip, data.brandColor.r, data.brandColor.g, data.brandColor.b)
+            --     SET_BLIP_NAME_TO_PLAYER_NAME(blip, player)
+            -- end
 
-            local passengerList = {}
+            local busPassengers = {}
+
             for i = 0, GET_VEHICLE_MAX_NUMBER_OF_PASSENGERS(vehicle, false, false) do
                 local passenger = GET_PED_IN_VEHICLE_SEAT(vehicle, i, false)
                 if passenger ~= nil then
                     local passengerName = GET_PLAYER_NAME(NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
-                    if (passengerName ~= '**Invalid**') then
-                        table.insert(passengerList, passengerName)
+                    if (passengerName ~= '**Invalid**' and passengerName ~= nil) then
+                        table.insert(busPassengers, passengerName)
                         helpers.assistPassenger(passengerName)
                     end
                 end
             end
-            passengers = passengerList
+
+            currentPassengers = busPassengers
+
+            for i, passengerName in ipairs(busPassengers) do
+                helpers.addPassengerToTable(passengerName)
+            end
+
             SET_VEHICLE_NUMBER_PLATE_TEXT(vehicle, 'ADVTOUR' ..
-                ((#passengerList > 0 and #passengerList < 10) and tostring(#passengerList) or 'S'))
-            util.toast((#passengerList > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#passengerList) ..
+                ((#busPassengers > 0 and #busPassengers < 10) and tostring(#busPassengers) or 'S'))
+            util.toast((#busPassengers > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#busPassengers) ..
                            ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
-        else
-            local passengerList = helpers.getLocalPlayers()
-            helpers.assistPassengers(passengerList)
-            passengers = passengerList
-            util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
         end
     else
-        local passengerList = helpers.getLocalPlayers()
-        helpers.assistPassengers(passengerList)
-        passengers = passengerList
-        util.toast('Found ' .. tostring(#passengerList) .. ' local players.')
+        local localPlayers = helpers.getLocalPlayers()
+        helpers.assistPassengers(localPlayers)
+        currentPassengers = localPlayers
+        util.toast('Found ' .. tostring(#localPlayers) .. ' local players.')
     end
 end
 
--- Spawn the official Adventure Tours bus
-local function getTheBus()
+-- Spawns the official Adventure Tours bus
+local function spawnAdventureToursBus()
     spawnTargetOptions = {
         drift = false,
         f1Wheels = false,
@@ -200,8 +212,8 @@ local function addEventLocation(listRef, locationName, locationCoords)
     end)
 end
 
-menu.divider(menu.my_root(), #passengers == 0 and 'Tour Stops' or tostring(#passengers) .. ' passenger' ..
-    (#passengers == 1 and '' or 's'))
+menu.divider(menu.my_root(), #currentPassengers == 0 and 'Tour Stops' or tostring(#currentPassengers) .. ' passenger' ..
+    (#currentPassengers == 1 and '' or 's'))
 
 -- Add the tour stops to the menu
 for _, ts in pairs(data.tourStops) do
@@ -249,6 +261,9 @@ menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
         util.yield(1000)
     end
 end)
+menu.action(chatMenu, 'Boast', {}, 'Boast about the tour', function()
+    chat.send_message(data.boastMessage(#historicPassengers), false, true, true)
+end)
 
 local helpMenu = menu.list(menu.my_root(), 'Help', {}, 'Helpful commands')
 menu.divider(helpMenu, 'Hold R3 and press:')
@@ -261,11 +276,11 @@ menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbr
     helpers.toggleSuperDrive()
 end, true)
 
-menu.divider(menu.my_root(), 'Version ' .. updater.currentVersion)
+menu.divider(menu.my_root(), 'Version ' .. scriptVersion)
 
 util.create_tick_handler(function()
     if controls.r3Hold() and controls.dpadDownPress() then
-        getTheBus()
+        spawnAdventureToursBus()
     end
     if controls.r3Hold() and controls.dpadRightPress() then
         spawnModeEnabled = not spawnModeEnabled
