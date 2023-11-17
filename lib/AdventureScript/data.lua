@@ -54,7 +54,40 @@ local vehicleMods = {
 local adventureData = {
     -- Official AdventureTours Bus Stops: teleport locations and vehicles
     tourStops = {{
-        name = 'Offroad',
+        name = 'Skatepark',
+        description = 'Ride the halfpipes',
+        locations = {{
+            name = 'Vespucci Halfpipe',
+            id = 'skatepark1',
+            coords = {
+                x = -917.7622,
+                y = -807.44653,
+                z = 15.9212
+            }
+        }, {
+            name = 'Underpass Skatepark',
+            id = 'skatepark2',
+            coords = {
+                x = 725.3054,
+                y = -1226.8306,
+                z = 24.691328
+            }
+        }},
+        vehicles = {{
+            name = 'BMX',
+            id = 'bmx'
+        }, {
+            name = 'Go-Kart',
+            id = 'veto2',
+            options = {
+                f1Wheels = true
+            }
+        }, {
+            name = 'Lawnmower',
+            id = 'mower'
+        }}
+    }, {
+        name = 'Offroad Racing',
         description = 'Race around the Redwood Lights motocross track using dirtbikes and quads, or try the kart track with go-karts!',
         locations = {{
             name = 'Redwood Lights Track',
@@ -63,14 +96,6 @@ local adventureData = {
                 x = 1093.9911,
                 y = 2108.692,
                 z = 53.391186
-            }
-        }, {
-            name = 'Scenic Gorge',
-            id = 'gorge',
-            coords = {
-                x = -437.8671,
-                y = 4306.5737,
-                z = 60.261143
             }
         }, {
             name = 'Kart Dirt Track',
@@ -91,7 +116,7 @@ local adventureData = {
             name = 'Go-Kart',
             id = 'veto',
             options = {
-                livery = 9,
+                livery = 1,
                 randomColor = true
             }
         }, {
@@ -105,104 +130,39 @@ local adventureData = {
             id = 'vagrant'
         }}
     }, {
-        name = 'Aquatic',
-        description = 'Jetski down the rapids and onto the Swamp Swim event',
+        name = 'River Ride',
+        description = 'Jetski down the rapids and find some fat F250s to swim through the river',
         locations = {{
-            name = 'Rapids',
-            id = 'rapids',
+            name = 'Rapids (-> Swamp Swim)',
+            id = 'riverrapids',
             coords = {
-                x = 135.1977,
-                y = 3461.7512,
-                z = 31.482462
-            }
-        }, {
-            name = 'Pond Derby',
-            id = 'jetskiderby',
-            coords = {
-                x = 1048.6045,
-                y = 3.0761833,
-                z = 80.855774
+                x = -47.31711,
+                y = 3089.3042,
+                z = 27.836765
             }
         }},
         vehicles = {{
             name = 'Jetski',
             id = 'seashark'
         }, {
-            name = 'Boat',
-            id = 'dinghy'
-        }, {
-            name = 'Mini-Sub',
-            id = 'avisa'
-        }}
-    }, {
-        name = 'Swamp Swim',
-        description = 'Swampy offroading/swimming in the Zancudo River',
-        locations = {{
-            name = 'Zancudo River',
-            id = 'swampswim',
-            coords = {
-                x = -1447.9856,
-                y = 2571.5137,
-                z = 3.9270356
-            }
-        }},
-        vehicles = {{
             name = 'F250',
             id = 'sandking',
             options = {
                 f1Wheels = true
             }
         }, {
-            name = 'Mini Tank',
-            id = 'zhaba'
-        }}
-    }, {
-        name = 'F1 Race',
-        description = 'Formula 1 racing events',
-        locations = {{
-            name = 'Arena Rooftop',
-            id = 'f1ring',
+            name = 'Dinghy',
+            id = 'dinghy'
+        }, {
+            name = 'Mini-Sub',
+            id = 'avisa'
+        }, {
+            name = 'Swamp Swim',
+            id = 'swampswim',
             coords = {
-                x = -311.61465,
-                y = -1922.4286,
-                z = 51.293106
-            }
-        }, {
-            name = 'Raceway',
-            id = 'raceway',
-            coords = {
-                x = 1178.46,
-                y = 302.3174,
-                z = 81.98781
-            }
-        }},
-        vehicles = {{
-            name = 'BR8',
-            id = 'openwheel1',
-            options = {
-                livery = 5,
-                randomColor = true
-            }
-        }, {
-            name = 'DR1',
-            id = 'openwheel2',
-            options = {
-                livery = 5,
-                randomColor = true
-            }
-        }, {
-            name = 'PR4',
-            id = 'formula',
-            options = {
-                livery = 5,
-                randomColor = true
-            }
-        }, {
-            name = 'R88',
-            id = 'formula2',
-            options = {
-                livery = 5,
-                randomColor = true
+                x = -1447.9856,
+                y = 2571.5137,
+                z = 3.9270356
             }
         }}
     }, {
@@ -238,46 +198,21 @@ local adventureData = {
             id = 'elegy',
             options = {
                 drift = true
+            },
+            mods = {
+                [vehicleMods.ARCH_COVER] = 4,
+                [vehicleMods.EXHAUST] = 2,
+                [vehicleMods.REAR_BUMPER] = -1,
+                [vehicleMods.FRONT_BUMPER] = 2,
+                [vehicleMods.PLATEHOLDER] = 1,
+                [vehicleMods.WINDOWS] = 1
             }
-        }}
-    }, {
-        name = 'Skatepark',
-        description = 'Ride the halfpipes',
-        locations = {{
-            name = 'Underpass Skatepark',
-            id = 'skatepark1',
-            coords = {
-                x = 725.3054,
-                y = -1226.8306,
-                z = 24.691328
-            }
-        }, {
-            name = 'Vespucci Halfpipe',
-            id = 'skatepark2',
-            coords = {
-                x = -917.7622,
-                y = -807.44653,
-                z = 15.9212
-            }
-        }},
-        vehicles = {{
-            name = 'BMX',
-            id = 'bmx'
-        }, {
-            name = 'Go-Kart',
-            id = 'veto2',
-            options = {
-                f1Wheels = true
-            }
-        }, {
-            name = 'Lawnmower',
-            id = 'mower'
         }}
     }, {
         name = 'Mountain',
         description = 'Mt Chiliad or Mt Gordo 4WD climbs and go-kart descent',
         locations = {{
-            name = 'Mt. Chiliad',
+            name = 'Chiliad Climb',
             id = 'chiliadclimb',
             coords = {
                 x = -367.6046,
@@ -285,12 +220,36 @@ local adventureData = {
                 z = 196.70187
             }
         }, {
-            name = 'Mt. Chiliad (Top)',
-            id = 'chiliaddescent',
+            name = 'Rocky Descent',
+            id = 'rockydescent',
             coords = {
                 x = 505.47202,
                 y = 5539.428,
                 z = 778.25977
+            }
+        }, {
+            name = 'Rally Descent',
+            id = 'rallydescent',
+            coords = {
+                x = 642.8843,
+                y = 5629.7363,
+                z = 726.7645
+            }
+        }, {
+            name = 'Bike Trail (-> Jetpack Bridge)',
+            id = 'biketrail',
+            coords = {
+                x = -1139.7003,
+                y = 4610.722,
+                z = 146.11864
+            }
+        }, {
+            name = 'Jetpack Bridge (-> Rocky Descent)',
+            id = 'biketrail',
+            coords = {
+                x = -1139.7003,
+                y = 4610.722,
+                z = 146.11864
             }
         }, {
             name = 'Mt. Gordo',
@@ -303,19 +262,84 @@ local adventureData = {
         }},
         vehicles = {{
             name = 'Patrol',
-            id = 'hellion'
+            id = 'hellion',
+            mods = {
+                [vehicleMods.EXHAUST] = 2,
+                [vehicleMods.FENDER] = 7
+            }
         }, {
             name = 'Hilux',
             id = 'everon'
         }, {
-            name = 'Cherokee',
-            id = 'seminole2'
+            name = 'Mini (for descent)',
+            id = 'issi4',
+            options = {
+                livery = 1
+            },
+            mods = {
+                [vehicleMods.AERIALS] = -1,
+                [vehicleMods.ARCH_COVER] = -1,
+                [vehicleMods.TANK] = -1,
+                [vehicleMods.FRONT_BUMPER] = 2,
+                [vehicleMods.SIDE_SKIRT] = 1,
+                [vehicleMods.EXHAUST] = 3,
+                [vehicleMods.HOOD] = 6,
+                [vehicleMods.FENDER] = 2,
+                [vehicleMods.GRILLE] = 1
+            }
         }, {
             name = 'Go-Kart (for descent)',
             id = 'veto',
             options = {
                 livery = 9,
                 randomColor = true
+            }
+        }}
+    }, {
+        name = 'F1 Race',
+        description = 'Formula 1 racing events',
+        locations = {{
+            name = 'Arena Rooftop',
+            id = 'f1ring',
+            coords = {
+                x = -311.61465,
+                y = -1922.4286,
+                z = 51.293106
+            }
+        }, {
+            name = 'Raceway',
+            id = 'raceway',
+            coords = {
+                x = 1178.46,
+                y = 302.3174,
+                z = 81.98781
+            }
+        }},
+        vehicles = {{
+            name = 'BR8',
+            id = 'openwheel1',
+            options = {
+                livery = 1,
+                randomColor = true
+            }
+        }, {
+            name = 'DR1',
+            id = 'openwheel2',
+            options = {
+                livery = 1,
+                randomColor = true
+            }
+        }, {
+            name = 'PR4',
+            id = 'formula',
+            options = {
+                livery = 1
+            }
+        }, {
+            name = 'R88',
+            id = 'formula2',
+            options = {
+                livery = 1
             }
         }}
     }, {
@@ -371,10 +395,11 @@ local adventureData = {
     tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
                  'No shooting out of the bus windows'},
     welcomeMessage = 'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.',
+    callToActionMessage = 'Would anyone else like to join the tour?',
     thankYouMessage = 'Thank you all so much for joining the tour!',
-    boastMessage = function(passengerCount)
-        return 'I wrote a custom lua script for these tours. I have hosted over ' .. tostring(passengerCount) ..
-                   ' passengers so far!'
+    boastMessage = 'I wrote my own lua script to do these tours',
+    passengerCountMessage = function(passengerCount)
+        return 'I have hosted over ' .. tostring(passengerCount) .. ' passengers so far!'
     end,
     -- Tour guide animations
     actions = {{

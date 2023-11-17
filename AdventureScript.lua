@@ -3,7 +3,7 @@
 util.require_natives('1681379138.g')
 util.keep_running()
 
-local scriptVersion = '0.9.8'
+local scriptVersion = '0.9.9'
 
 local data = require('lib.AdventureScript.data')
 local controls = require('lib.AdventureScript.controls')
@@ -27,11 +27,13 @@ local spawnTargetOptions = {
     livery = -1,
     randomColor = false
 }
+local spawnTargetModOverrides = {}
 
 -- Sets the vehicle used for the grid spawner
 -- @param hash: Hash of the vehicle
 -- @param options: Options for the vehicle
-local function setVehicle(hash, options)
+-- @param modOverrides: Explicitly set vehicle mods
+local function setVehicle(hash, options, modOverrides)
     spawnModeEnabled = true -- automatically enable spawn mode when setting a vehicle
     spawnTargetHash = hash
     spawnTargetDimensions = gridSpawn.getModelDimensions(hash)
@@ -49,6 +51,12 @@ local function setVehicle(hash, options)
             livery = options.livery or -1,
             randomColor = options.randomColor or false
         }
+    end
+
+    if not modOverrides then
+        spawnTargetModOverrides = {}
+    else
+        spawnTargetModOverrides = modOverrides
     end
 end
 
@@ -80,6 +88,12 @@ local function makeAdventureVehicle(veh)
     for _, type in pairs(data.defaultMods) do
         SET_VEHICLE_MOD(veh, type, GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
     end
+
+    -- If the vehicle has explicit modifications defined
+    for type, value in pairs(spawnTargetModOverrides) do
+        SET_VEHICLE_MOD(veh, type, value, true)
+    end
+
     -- low-grip drift tyres
     if spawnTargetOptions.drift then
         SET_DRIFT_TYRES(veh, true)
@@ -194,11 +208,11 @@ local function spawnAdventureToursBus()
     updatePassengers()
 end
 
-local function addEventVehicle(listRef, vehicleName, vehicleModel, vehicleOptions)
+local function addEventVehicle(listRef, vehicleName, vehicleModel, vehicleOptions, vehicleMods)
     local hash = util.joaat(vehicleModel)
     if IS_MODEL_A_VEHICLE(hash) then
         menu.action(listRef, vehicleName, {}, 'Set spawn vehicle to ' .. vehicleName, function()
-            setVehicle(hash, vehicleOptions)
+            setVehicle(hash, vehicleOptions, vehicleMods)
         end)
     else
         util.log('Model ' .. vehicleModel .. ' is not a vehicle.')
@@ -224,7 +238,7 @@ for _, ts in pairs(data.tourStops) do
     end
     menu.divider(eventList, 'Vehicles')
     for _, vehicle in pairs(ts.vehicles) do
-        addEventVehicle(eventList, vehicle.name, vehicle.id, vehicle.options)
+        addEventVehicle(eventList, vehicle.name, vehicle.id, vehicle.options, vehicle.mods)
     end
     util.yield()
 end
@@ -252,17 +266,23 @@ local chatMenu = menu.list(menu.my_root(), 'Chat', {}, 'Handy chat messages')
 menu.action(chatMenu, 'Welcome', {}, data.welcomeMessage, function()
     chat.send_message(data.welcomeMessage, false, true, true)
 end)
-menu.action(chatMenu, 'Thank you', {}, data.thankYouMessage, function()
-    chat.send_message(data.thankYouMessage, false, true, true)
-end)
 menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
     for _, rule in pairs(data.tourRules) do
         chat.send_message(rule, false, true, true)
         util.yield(1000)
     end
 end)
-menu.action(chatMenu, 'Boast', {}, data.boastMessage(#historicPassengers), function()
-    chat.send_message(data.boastMessage(#historicPassengers), false, true, true)
+menu.action(chatMenu, 'Invite', {}, data.callToActionMessage, function()
+    chat.send_message(data.callToActionMessage, false, true, true)
+end)
+menu.action(chatMenu, 'Thank you', {}, data.thankYouMessage, function()
+    chat.send_message(data.thankYouMessage, false, true, true)
+end)
+menu.action(chatMenu, 'Boast', {}, data.boastMessage, function()
+    chat.send_message(data.boastMessage, false, true, true)
+end)
+menu.action(chatMenu, 'Passenger Count', {}, data.passengerCountMessage(historicPassengers), function()
+    chat.send_message(data.passengerCountMessage(historicPassengers), false, true, true)
 end)
 
 local helpMenu = menu.list(menu.my_root(), 'Help', {}, 'Helpful commands')

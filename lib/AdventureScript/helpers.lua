@@ -5,9 +5,11 @@ local passengersTable = {}
 local HELPERS = {
     loadPassengers = function()
         local file = io.open(filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt', 'r')
+        local count = 0
         if file then
             for line in file:lines() do
                 passengersTable[line] = true
+                count = count + 1
             end
             file:close()
         else
@@ -19,7 +21,7 @@ local HELPERS = {
                 util.toast('Error: Could not open passengers.txt file for writing.')
             end
         end
-        return passengersTable
+        return count
     end,
     addPassengerToTable = function(passengerName)
         if not passengersTable[passengerName] then
