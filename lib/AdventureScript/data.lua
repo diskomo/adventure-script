@@ -120,12 +120,6 @@ local adventureData = {
                 randomColor = true
             }
         }, {
-            name = 'Mountain Bike',
-            id = 'scorcher'
-        }, {
-            name = 'UTV',
-            id = 'outlaw'
-        }, {
             name = 'Buggy',
             id = 'vagrant'
         }}
@@ -139,6 +133,14 @@ local adventureData = {
                 x = -47.31711,
                 y = 3089.3042,
                 z = 27.836765
+            }
+        }, {
+            name = 'Swamp Swim',
+            id = 'swampswim',
+            coords = {
+                x = -1447.9856,
+                y = 2571.5137,
+                z = 3.9270356
             }
         }},
         vehicles = {{
@@ -156,14 +158,6 @@ local adventureData = {
         }, {
             name = 'Mini-Sub',
             id = 'avisa'
-        }, {
-            name = 'Swamp Swim',
-            id = 'swampswim',
-            coords = {
-                x = -1447.9856,
-                y = 2571.5137,
-                z = 3.9270356
-            }
         }}
     }, {
         name = 'Drift',
@@ -186,12 +180,30 @@ local adventureData = {
             }
         }},
         vehicles = {{
+            name = '65 Mustang',
+            id = 'drifttampa',
+            options = {
+                drift = true,
+                f1Wheels = true
+            }
+        }, {
             name = 'AE86',
             id = 'futo2',
             options = {
                 drift = true,
                 f1Wheels = true,
                 livery = 6
+            }
+        }, {
+            name = 'Supra',
+            id = 'jester4',
+            options = {
+                drift = true,
+                livery = 1
+            },
+            mods = {
+                [vehicleMods.SPOILERS] = 10,
+                [vehicleMods.WINDOWS] = 1
             }
         }, {
             name = 'Skyline',
@@ -271,6 +283,9 @@ local adventureData = {
             name = 'Hilux',
             id = 'everon'
         }, {
+            name = 'Mountain Bike',
+            id = 'scorcher'
+        }, {
             name = 'Mini (for descent)',
             id = 'issi4',
             options = {
@@ -316,24 +331,11 @@ local adventureData = {
             }
         }},
         vehicles = {{
-            name = 'BR8',
-            id = 'openwheel1',
-            options = {
-                livery = 1,
-                randomColor = true
-            }
-        }, {
             name = 'DR1',
             id = 'openwheel2',
             options = {
                 livery = 1,
                 randomColor = true
-            }
-        }, {
-            name = 'PR4',
-            id = 'formula',
-            options = {
-                livery = 1
             }
         }, {
             name = 'R88',
@@ -354,7 +356,7 @@ local adventureData = {
                 z = 41.166504
             }
         }, {
-            name = 'Runway Tarmac',
+            name = 'Runway LSX',
             id = 'runway2',
             coords = {
                 x = -1663.9249,
@@ -362,7 +364,7 @@ local adventureData = {
                 z = 13.944448
             }
         }, {
-            name = 'Runway Dirt',
+            name = 'Runway Mountain',
             id = 'runway3',
             coords = {
                 x = 2128.0996,
@@ -376,9 +378,6 @@ local adventureData = {
         }, {
             name = 'Jetpack',
             id = 'thruster'
-        }, {
-            name = 'Pyro',
-            id = 'pyro'
         }}
     }},
     licensePlate = 'ADVTOURS',
@@ -403,43 +402,61 @@ local adventureData = {
     end,
     -- Tour guide animations
     actions = {{
-        id = 'bong',
-        name = 'Rip a cone'
+        id = 'bendover',
+        name = 'Bend over'
     }, {
-        id = 'joint',
-        name = 'Put a joint in your mouth'
+        id = 'boxing',
+        name = 'Throw some fists'
     }, {
         id = 'guitar',
         name = 'Play guitar'
     }, {
-        id = 'map',
-        name = 'Look at a map'
+        id = 'buttwiggle',
+        name = 'Buttwiggle dance'
     }, {
-        id = 'bow',
-        name = 'Take a bow',
-        variants = {'2'}
+        id = 'stretch',
+        name = 'Stretch'
     }, {
         id = 'clap',
         name = 'Clap'
     }, {
-        id = 'celebrate',
-        name = 'Celebrate'
-    }, {
         id = 'flip',
-        variants = {'2'},
-        name = 'Flip'
+        name = 'Flip',
+        variants = {'1', '2'}
     }, {
         id = 'lapdance',
         name = 'Sexual dance',
-        variants = {'', '3', '4'}
+        variants = {'1', '3', '4'}
     }, {
-        id = 'stretch',
-        name = 'Stretches',
-        variants = {'', '2', '3', '4'}
+        id = 'blowkiss',
+        name = 'Blow kisses'
     }, {
-        id = 'whistle',
-        name = 'Over here!',
-        variants = {'2'}
+        id = 'armscrossed3',
+        name = 'Cross arms'
+    }, {
+        id = 'fallasleep',
+        name = 'Fall asleep'
+    }, {
+        id = 'pushup',
+        name = 'Pushups'
+    }, {
+        id = 'drinkbeer',
+        name = 'Drink beer'
+    }, {
+        id = 'carryboxofbeer',
+        name = 'Carry beer'
+    }, {
+        id = 'sweepwithbroom',
+        name = 'Broom sweep'
+    }, {
+        id = 'holdcamera',
+        name = 'Hold camera'
+    }, {
+        id = 'holdfreewaysign',
+        name = 'Hold freeway sign'
+    }, {
+        id = 'holdrose',
+        name = 'Hold rose'
     }}
 }
 

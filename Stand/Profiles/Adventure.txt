@@ -1,0 +1,109 @@
+Tree Compatibility Version: 54
+Self
+	Immortality: On
+	Glued To Seats: On
+	Lock Wanted Level: On
+Vehicle
+	Movement
+		Super Drive
+			Controller Button: A
+	Indestructible: On
+	Permanent Mint Condition: On
+	Leave Engine On When Exiting: On
+World
+	Places
+		Teleport To...
+			Auto Teleport To Waypoints: On
+Game
+	Disables
+		Disable Game Inputs
+			CHARACTER_WHEEL: On while Stand is open
+			MULTIPLAYER_INFO: On while Stand is open
+			ENTER: On while Stand is open
+			PHONE: On while Stand is open
+			COVER: On while Stand is open
+			VEH_ACCELERATE: On while Stand is open
+			VEH_BRAKE: On while Stand is open
+			VEH_HEADLIGHT: On while Stand is open
+			VEH_CIN_CAM: On while Stand is open
+			VEH_NEXT_RADIO: On while Stand is open
+			VEH_PREV_RADIO: On while Stand is open
+			VEH_RADIO_WHEEL: On while Stand is open
+			MELEE_ATTACK_LIGHT: On while Stand is open
+			MELEE_ATTACK_ALTERNATE: On while Stand is open
+			SELECT_CHARACTER_MICHAEL: On while Stand is open
+			SELECT_CHARACTER_FRANKLIN: On while Stand is open
+			SELECT_CHARACTER_TREVOR: On while Stand is open
+			SELECT_CHARACTER_MULTIPLAYER: On while Stand is open
+			MELEE_ATTACK1: On while Stand is open
+			MELEE_ATTACK2: On while Stand is open
+			MAP_POI: On while Stand is open
+		Straight To Voicemail: On
+Stand
+	Settings
+		Appearance
+			Colours
+				Primary Colour: 0D0A08FF
+				Background Colour: 0D0A08FF
+				Unfocused Text Colour: 53504EFF
+				Unfocused Right-Bound Text Colour: 53504EFF
+				Unfocused Texture Colour: 53504EFF
+				HUD Colour: EFCF46FF
+				AR Colour: EFCF46FF
+				Minigame Colour: EFCF46FF
+			Position: 2, 138
+			Header
+				Header: Custom
+				Frame Interval: 60
+			Address Bar
+				Root Name: Hidden
+				Address Separator: Stand/Online
+				Height: 18
+				Text
+					Scale: 8
+				Show Cursor Position: On
+			Cursor
+				Scroll Gap: 0
+				Rounded: On
+			Tabs
+				Width: 32
+				Height: 46
+				Text
+					Scale: 20
+					Y Offset: 6
+				Text Alignment: Centre
+				Show Icon Left: On
+				Show Name: Off
+			Scrollbar
+				Scrollbar: Disabled
+				Width: 4
+			Command Info Text
+				Position: Bottom
+			Notifications
+				Custom Position: 360, 1050
+				Border Colour: EFCF46FF
+				Flash Colour: EFCF46FF
+				Background Colour: 12171DF5
+			Border
+				Width: 2
+				Colour: EFCF46B4
+			Max Visible Commands: 23
+			List Width: 420
+			List Height: 26
+			Spacer Size: 1
+			Background Blur: 10
+			Font & Text
+				Command Box Input Text
+					Scale: 14
+				Small Text
+					Scale: 8
+		Info Text
+			Position: 1890, 214
+			Alignment: Bottom Right
+			Scale: 12
+		Notifications
+			Suppress Generic Responses
+				Command Box: On
+				Hotkey: On
+	Lua Scripts
+		AdventureScript: On

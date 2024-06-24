@@ -1,8 +1,12 @@
+local GRIDSPAWN = {}
+
 ---
 --- Much of the code for getModelDimensions, arrowIndicator and drawBoundingBox have been adapted from GridSpawn by NotTonk
 --- https://discord.com/channels/956618713157763072/1037454538921214082
 ---
+local state = require('lib.AdventureScript.state')
 local controls = require('lib.AdventureScript.controls')
+
 local modelMinimum = memory.alloc()
 local modelMaximum = memory.alloc()
 local boundingBoxMinimum = memory.alloc()
@@ -12,7 +16,6 @@ local rightVectorPointer = memory.alloc()
 local forwardVectorPointer = memory.alloc()
 local positionPointer = memory.alloc()
 local previewCars = {{}}
-local undoRecord = {}
 local up<const> = v3.new(0, 0, 1)
 local isPlacing = false
 local startPosition
@@ -23,7 +26,7 @@ local arrowRotation = 0
 local xPadding = 0.5
 local yPadding = 0.5
 
-local getModelDimensions = function(model)
+GRIDSPAWN.getModelDimensions = function(model)
     while not HAS_MODEL_LOADED(model) do
         REQUEST_MODEL(model)
         util.yield()
@@ -39,7 +42,11 @@ local getModelDimensions = function(model)
     return dimensions
 end
 
-local arrowIndicator = function(pos, angle, size, color)
+GRIDSPAWN.initialize = function()
+    state.spawnTargetDimensions = GRIDSPAWN.getModelDimensions(state.spawnTargetHash)
+end
+
+GRIDSPAWN.arrowIndicator = function(pos, angle, size, color)
     local colorSecondary = {
         r = color.r - 20,
         g = color.g - 20,
@@ -78,7 +85,7 @@ local arrowIndicator = function(pos, angle, size, color)
         pos.z + length, color.r, color.g, color.b, color.a)
 end
 
-local drawBoundingBox = function(entity, color)
+GRIDSPAWN.drawBoundingBox = function(entity, color)
     GET_ENTITY_MATRIX(entity, rightVectorPointer, forwardVectorPointer, upVectorPointer, positionPointer);
     local forwardVector = v3.new(forwardVectorPointer)
     local rightVector = v3.new(rightVectorPointer)
@@ -152,155 +159,138 @@ local drawBoundingBox = function(entity, color)
         color.r, color.g, color.b, color.a)
 end
 
-local GRIDSPAWN = {
-    getModelDimensions = getModelDimensions,
-    arrowIndicator = arrowIndicator,
-    drawBoundingBox = drawBoundingBox,
-    handleSpawn = function(spawnTargetHash, spawnTargetDimensions, manipulateVehicle)
-        arrowRotation = arrowRotation + GET_FRAME_TIME() * 45
-        local camPos = v3.new(GET_FINAL_RENDERED_CAM_COORD())
-        local camRot = v3.new(GET_FINAL_RENDERED_CAM_ROT())
-        local dir = v3.toDir(camRot)
-        v3.mul(dir, 200)
-        v3.add(dir, camPos)
-        local handle = START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE(camPos.x, camPos.y, camPos.z, dir.x, dir.y,
-            dir.z, 1, 0, 4)
+GRIDSPAWN.handleSpawn = function(spawnTargetHash, spawnTargetDimensions, manipulateVehicle)
+    arrowRotation = arrowRotation + GET_FRAME_TIME() * 45
+    local camPos = v3.new(GET_FINAL_RENDERED_CAM_COORD())
+    local camRot = v3.new(GET_FINAL_RENDERED_CAM_ROT(2))
+    local dir = v3.toDir(camRot)
+    v3.mul(dir, 200)
+    v3.add(dir, camPos)
+    local handle = START_EXPENSIVE_SYNCHRONOUS_SHAPE_TEST_LOS_PROBE(camPos.x, camPos.y, camPos.z, dir.x, dir.y, dir.z,
+        1, 0, 4)
 
-        local hit = memory.alloc(8)
-        local endPosition = memory.alloc()
-        local surfaceNormal = memory.alloc()
-        local ent = memory.alloc_int()
-        GET_SHAPE_TEST_RESULT(handle, hit, endPosition, surfaceNormal, ent)
+    local hit = memory.alloc(8)
+    local endPosition = memory.alloc()
+    local surfaceNormal = memory.alloc()
+    local ent = memory.alloc_int()
+    GET_SHAPE_TEST_RESULT(handle, hit, endPosition, surfaceNormal, ent)
 
-        if memory.read_byte(hit) ~= 0 then
-            endPosition = v3.new(endPosition)
-            arrowIndicator(endPosition, math.rad(arrowRotation), 1, {
-                r = 204,
-                g = 132,
-                b = 0,
+    if memory.read_byte(hit) ~= 0 then
+        endPosition = v3.new(endPosition)
+        GRIDSPAWN.arrowIndicator(endPosition, math.rad(arrowRotation), 1, {
+            r = 204,
+            g = 132,
+            b = 0,
+            a = 255
+        })
+
+        if controls.leftClickDown() then
+            isPlacing = true
+            startPosition = v3.new(endPosition)
+            local camStartRotation = v3.new(GET_FINAL_RENDERED_CAM_ROT(2))
+            camStartRotation.x = 0
+            camStartHeading = v3.getHeading(camStartRotation)
+            startForward = v3.toDir(camStartRotation)
+            startRight = v3.crossProduct(startForward, up)
+        elseif controls.leftClickUp() then
+            isPlacing = false
+            for _, tbl in pairs(previewCars) do
+                for _, car in pairs(tbl) do
+                    local pos = GET_ENTITY_COORDS(car, false)
+                    entities.delete_by_handle(car)
+                    local newCar = CREATE_VEHICLE(spawnTargetHash, pos.x, pos.y, pos.z, camStartHeading, true, false,
+                        false)
+                    table.insert(state.spawnedVehicles, newCar)
+                    manipulateVehicle(newCar)
+                    util.yield()
+                end
+            end
+            previewCars = {{}}
+        end
+
+        if isPlacing then
+            GRIDSPAWN.arrowIndicator(startPosition, math.rad(arrowRotation), 1, {
+                r = 255,
+                g = 50,
+                b = 50,
                 a = 255
             })
+            local angle = -math.rad(camStartHeading)
+            local angleCos = math.cos(angle)
+            local angleSin = math.sin(angle)
+            endPosition = v3.new(startPosition.x +
+                                     (angleCos * (endPosition.x - startPosition.x) - angleSin *
+                                         (endPosition.y - startPosition.y)), startPosition.y +
+                (angleSin * (endPosition.x - startPosition.x) + angleCos * (endPosition.y - startPosition.y)),
+                endPosition.z)
+            local spawnTargetXPlusPad = spawnTargetDimensions.x + xPadding
+            local spawnTargetYPlusPad = spawnTargetDimensions.y + yPadding
 
-            if controls.leftClickDown() then
-                isPlacing = true
-                startPosition = v3.new(endPosition)
-                local camStartRotation = v3.new(GET_FINAL_RENDERED_CAM_ROT(2))
-                camStartRotation.x = 0
-                camStartHeading = v3.getHeading(camStartRotation)
-                startForward = v3.toDir(camStartRotation)
-                startRight = v3.crossProduct(startForward, up)
-            elseif controls.leftClickUp() then
-                isPlacing = false
-                undoRecord[#undoRecord + 1] = {}
-                local newRecord = undoRecord[#undoRecord]
-                for _, tbl in pairs(previewCars) do
-                    for _, car in pairs(tbl) do
-                        local pos = GET_ENTITY_COORDS(car, false)
-                        entities.delete_by_handle(car)
-                        local newCar = CREATE_VEHICLE(spawnTargetHash, pos.x, pos.y, pos.z, camStartHeading, true,
+            local xCount = math.min(math.floor(math.abs((startPosition.x - endPosition.x) / spawnTargetXPlusPad)), 9)
+            local yCount = math.min(math.floor(math.abs((startPosition.y - endPosition.y) / spawnTargetYPlusPad)), 9)
+            for x = 0, xCount, 1 do
+                for y = 0, yCount, 1 do
+                    local multX = startPosition.x > endPosition.x and -1 or 1
+                    local multY = startPosition.y > endPosition.y and -1 or 1
+                    local tempForward = v3.new(startForward)
+                    local tempRight = v3.new(startRight)
+                    v3.mul(tempForward, (spawnTargetYPlusPad * y) * multY)
+                    v3.mul(tempRight, (spawnTargetXPlusPad * x) * multX)
+                    v3.add(tempForward, tempRight)
+                    v3.add(tempForward, startPosition)
+                    local coords = tempForward
+
+                    local zFound, zCoord = util.get_ground_z(coords.x, coords.y)
+                    if zFound then
+                        coords.z = zCoord
+                    else
+                        coords.z = startPosition.z
+                    end
+                    local car
+                    if previewCars[x] then
+                        if previewCars[x][y] then
+                            car = previewCars[x][y]
+                        end
+                    else
+                        previewCars[x] = {}
+                    end
+                    if not car then
+                        car = CREATE_VEHICLE(spawnTargetHash, coords.x, coords.y, coords.z, camStartHeading, false,
                             false, false)
-                        newRecord[#newRecord + 1] = newCar
-                        manipulateVehicle(newCar)
-                        util.yield()
+                        SET_ENTITY_ALPHA(car, 51, false)
+                        SET_ENTITY_COLLISION(car, false, false)
+                        FREEZE_ENTITY_POSITION(car, true)
+                        manipulateVehicle(car)
+                        previewCars[x][y] = car
                     end
+                    SET_ENTITY_COORDS_NO_OFFSET(car, coords.x, coords.y, coords.z + spawnTargetDimensions.z * 0.5,
+                        false, false, false)
+                    GRIDSPAWN.drawBoundingBox(car, {
+                        r = 204,
+                        g = 132,
+                        b = 0,
+                        a = 100
+                    })
                 end
-                previewCars = {{}}
             end
-
-            if controls.r3Hold() and controls.dpadUpPress() and #undoRecord > 0 then
-                for _, car in pairs(undoRecord[#undoRecord]) do
-                    if DOES_ENTITY_EXIST(car) then
+            for x, tbl in pairs(previewCars) do
+                for y, car in pairs(tbl) do
+                    if x > xCount or y > yCount then
                         entities.delete_by_handle(car)
+                        previewCars[x][y] = nil
                     end
                 end
-                undoRecord[#undoRecord] = nil
-            end
-
-            if isPlacing then
-                arrowIndicator(startPosition, math.rad(arrowRotation), 1, {
-                    r = 255,
-                    g = 50,
-                    b = 50,
-                    a = 255
-                })
-                local angle = -math.rad(camStartHeading)
-                local angleCos = math.cos(angle)
-                local angleSin = math.sin(angle)
-                endPosition = v3.new(startPosition.x +
-                                         (angleCos * (endPosition.x - startPosition.x) - angleSin *
-                                             (endPosition.y - startPosition.y)), startPosition.y +
-                    (angleSin * (endPosition.x - startPosition.x) + angleCos * (endPosition.y - startPosition.y)),
-                    endPosition.z)
-                local spawnTargetXPlusPad = spawnTargetDimensions.x + xPadding
-                local spawnTargetYPlusPad = spawnTargetDimensions.y + yPadding
-
-                local xCount =
-                    math.min(math.floor(math.abs((startPosition.x - endPosition.x) / spawnTargetXPlusPad)), 9)
-                local yCount =
-                    math.min(math.floor(math.abs((startPosition.y - endPosition.y) / spawnTargetYPlusPad)), 9)
-                for x = 0, xCount, 1 do
-                    for y = 0, yCount, 1 do
-                        local multX = startPosition.x > endPosition.x and -1 or 1
-                        local multY = startPosition.y > endPosition.y and -1 or 1
-                        local tempForward = v3.new(startForward)
-                        local tempRight = v3.new(startRight)
-                        v3.mul(tempForward, (spawnTargetYPlusPad * y) * multY)
-                        v3.mul(tempRight, (spawnTargetXPlusPad * x) * multX)
-                        v3.add(tempForward, tempRight)
-                        v3.add(tempForward, startPosition)
-                        local coords = tempForward
-
-                        local zFound, zCoord = util.get_ground_z(coords.x, coords.y)
-                        if zFound then
-                            coords.z = zCoord
-                        else
-                            coords.z = startPosition.z
-                        end
-                        local car
-                        if previewCars[x] then
-                            if previewCars[x][y] then
-                                car = previewCars[x][y]
-                            end
-                        else
-                            previewCars[x] = {}
-                        end
-                        if not car then
-                            car = CREATE_VEHICLE(spawnTargetHash, coords.x, coords.y, coords.z, camStartHeading, false,
-                                false, false)
-                            SET_ENTITY_ALPHA(car, 51, false)
-                            SET_ENTITY_COLLISION(car, false, false)
-                            FREEZE_ENTITY_POSITION(car, true)
-                            manipulateVehicle(car)
-                            previewCars[x][y] = car
-                        end
-                        SET_ENTITY_COORDS_NO_OFFSET(car, coords.x, coords.y, coords.z + spawnTargetDimensions.z * 0.5,
-                            false, false, false)
-                        drawBoundingBox(car, {
-                            r = 204,
-                            g = 132,
-                            b = 0,
-                            a = 100
-                        })
-                    end
-                end
-                for x, tbl in pairs(previewCars) do
-                    for y, car in pairs(tbl) do
-                        if x > xCount or y > yCount then
-                            entities.delete_by_handle(car)
-                            previewCars[x][y] = nil
-                        end
-                    end
-                end
-            end
-        end
-    end,
-    handleCleanup = function()
-        for _, tbl in pairs(previewCars) do
-            for _, car in pairs(tbl) do
-                entities.delete_by_handle(car)
             end
         end
     end
-}
+end
+
+GRIDSPAWN.handleCleanup = function()
+    for _, tbl in pairs(previewCars) do
+        for _, car in pairs(tbl) do
+            entities.delete_by_handle(car)
+        end
+    end
+end
 
 return GRIDSPAWN
