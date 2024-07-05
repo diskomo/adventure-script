@@ -17,7 +17,7 @@ local menuHelpers = require('lib.AdventureScript.menu')
 ---
 --- ----------------------------------------
 --- START OF HEXAROBI AUTO-UPDATER
-local is_from_repository = true
+local is_from_repository = false
 util.ensure_package_is_installed('lua/auto-updater')
 if auto_updater == true and not is_from_repository then
     auto_updater.run_auto_update(config.auto_update_config)

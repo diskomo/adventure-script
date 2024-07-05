@@ -87,23 +87,15 @@ local adventureData = {
             id = 'mower'
         }}
     }, {
-        name = 'Offroad Racing',
-        description = 'Race around the Redwood Lights motocross track using dirtbikes and quads, or try the kart track with go-karts!',
+        name = 'Motocross',
+        description = 'Race around the Redwood Lights motocross track using dirtbikes, quads or buggies',
         locations = {{
             name = 'Redwood Lights Track',
-            id = 'dirtrace',
+            id = 'motocross',
             coords = {
                 x = 1093.9911,
                 y = 2108.692,
                 z = 53.391186
-            }
-        }, {
-            name = 'Kart Dirt Track',
-            id = 'kartrace',
-            coords = {
-                x = 1882.3873,
-                y = 3351.0962,
-                z = 42.945
             }
         }},
         vehicles = {{
@@ -113,15 +105,33 @@ local adventureData = {
             name = 'Quadbike',
             id = 'verus'
         }, {
+            name = 'Buggy',
+            id = 'vagrant'
+        }}
+    }, {
+        name = 'RC Offroad',
+        description = 'Use RC cars or go-karts on this little dirt track',
+        locations = {{
+            name = 'Dirt Track',
+            id = 'dirttrack',
+            coords = {
+                x = 1882.3873,
+                y = 3351.0962,
+                z = 42.945
+            }
+        }},
+        vehicles = {{
+            name = 'RC',
+            id = 'rcbandito',
+            mods = {
+                [vehicleMods.FRAME] = 15
+            }
+        }, {
             name = 'Go-Kart',
             id = 'veto',
             options = {
-                livery = 1,
-                randomColor = true
+                livery = 1
             }
-        }, {
-            name = 'Buggy',
-            id = 'vagrant'
         }}
     }, {
         name = 'River Ride',
@@ -152,12 +162,6 @@ local adventureData = {
             options = {
                 f1Wheels = true
             }
-        }, {
-            name = 'Dinghy',
-            id = 'dinghy'
-        }, {
-            name = 'Mini-Sub',
-            id = 'avisa'
         }}
     }, {
         name = 'Drift',

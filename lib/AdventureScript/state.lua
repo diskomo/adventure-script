@@ -1,6 +1,6 @@
 local state = {
     -- Displays a controls diagram on screen while holding R3
-    show_on_screen_controls = true,
+    show_on_screen_controls = false,
 
     -- Used as a list of passengers that are currently on the tour
     currentPassengers = {},
