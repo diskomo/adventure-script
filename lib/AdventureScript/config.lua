@@ -1,6 +1,6 @@
 local config = {}
 
-config.scriptVersion = '1.1.0'
+config.scriptVersion = '1.1.1'
 config.auto_update_config = {
     source_url = "https://raw.githubusercontent.com/diskomo/adventure-script/main/AdventureScript.lua",
     script_relpath = SCRIPT_RELPATH,

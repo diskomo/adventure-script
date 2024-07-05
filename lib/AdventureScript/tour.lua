@@ -45,10 +45,8 @@ end
 
 -- Delete the tour bus if not driving it
 tour.deleteTourBus = function()
-    if not tour.isDrivingBus() and state.theTourBus ~= nil then
-        if DOES_ENTITY_EXIST(state.theTourBus) then
-            entities.delete_by_handle(state.theTourBus)
-        end
+    if state.theTourBus and DOES_ENTITY_EXIST(state.theTourBus) then
+        entities.delete_by_handle(state.theTourBus)
         state.theTourBus = nil
     end
 end

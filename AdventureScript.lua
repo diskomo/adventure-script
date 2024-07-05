@@ -48,11 +48,16 @@ util.create_tick_handler(function()
             tour.goToNextTourStop()
         end
     end
+    -- Delete the tour bus (unless driving) and all spawned vehicles
     if controls.r3Hold() and controls.dpadLeftPress() then
         tour.deleteTourBus()
         vehicles.deleteSpawnedVehicles()
     end
 
+    -- Delete all vehicles in radius
+    if controls.r3Hold() and controls.dpadLeftPress() and controls.leftClickDown() then
+        vehicles.deleteVehiclesInRadius(50)
+    end
     -- Grid spawn handler
     if state.spawnModeEnabled == true then
         DISABLE_CONTROL_ACTION(0, 142, true)

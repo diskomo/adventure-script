@@ -130,7 +130,7 @@ local adventureData = {
             name = 'Go-Kart',
             id = 'veto',
             options = {
-                livery = 1
+                randomLivery = true
             }
         }}
     }, {
@@ -196,14 +196,14 @@ local adventureData = {
             options = {
                 drift = true,
                 f1Wheels = true,
-                livery = 6
+                randomLivery = true
             }
         }, {
             name = 'Supra',
             id = 'jester4',
             options = {
                 drift = true,
-                livery = 1
+                randomLivery = true
             },
             mods = {
                 [vehicleMods.SPOILERS] = 10,
@@ -293,7 +293,7 @@ local adventureData = {
             name = 'Mini (for descent)',
             id = 'issi4',
             options = {
-                livery = 1
+                randomLivery = true
             },
             mods = {
                 [vehicleMods.AERIALS] = -1,
@@ -310,8 +310,8 @@ local adventureData = {
             name = 'Go-Kart (for descent)',
             id = 'veto',
             options = {
-                livery = 9,
-                randomColor = true
+                randomColor = true,
+                randomLivery = true
             }
         }}
     }, {
@@ -338,14 +338,14 @@ local adventureData = {
             name = 'DR1',
             id = 'openwheel2',
             options = {
-                livery = 1,
+                randomLivery = true,
                 randomColor = true
             }
         }, {
             name = 'R88',
             id = 'formula2',
             options = {
-                livery = 1
+                randomLivery = true
             }
         }}
     }, {

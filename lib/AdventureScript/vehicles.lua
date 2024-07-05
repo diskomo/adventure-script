@@ -4,30 +4,26 @@ local gridSpawn = require('lib.AdventureScript.gridspawn')
 
 local vehicles = {}
 
+local DEFAULT_VEHICLE_OPTIONS = {
+    -- Enable low-grip drift tyres
+    drift = false,
+    -- Enable F1 wheel style (fat looking tyres)
+    f1Wheels = false,
+    -- Randomize the vehicle's livery
+    randomLivery = false,
+    -- Randomize the vehicle's primary and secondary colors
+    randomColor = false
+}
+
 -- Sets the vehicle used for the grid spawner
 -- @param hash: Hash of the vehicle
 -- @param options: Options for the vehicle
 -- @param modOverrides: Explicitly set vehicle mods
 vehicles.setVehicle = function(hash, options, modOverrides)
-    state.spawnModeEnabled = true -- automatically enable spawn mode when setting a vehicle
+    state.spawnModeEnabled = true -- automatically enable spawn mode when a vehicle is selected
     state.spawnTargetHash = hash
     state.spawnTargetDimensions = gridSpawn.getModelDimensions(hash)
-    if not options then
-        state.spawnTargetOptions = {
-            drift = false,
-            f1Wheels = false,
-            livery = -1,
-            randomColor = false
-        }
-    else
-        state.spawnTargetOptions = {
-            drift = options.drift or false,
-            f1Wheels = options.f1Wheels or false,
-            livery = options.livery or -1,
-            randomColor = options.randomColor or false
-        }
-    end
-
+    state.spawnTargetOptions = options or DEFAULT_VEHICLE_OPTIONS
     state.spawnTargetModOverrides = modOverrides or {}
 end
 
@@ -43,11 +39,6 @@ vehicles.makeAdventureVehicle = function(veh)
     if not state.spawnTargetOptions.randomColor then
         color = data.brandColor
         wheelColor = 37
-    end
-
-    local livery = -1
-    if (state.spawnTargetOptions.livery >= 0) then
-        livery = math.random(0, state.spawnTargetOptions.livery)
     end
 
     if not DOES_ENTITY_EXIST(veh) then
@@ -83,13 +74,17 @@ vehicles.makeAdventureVehicle = function(veh)
         SET_VEHICLE_MOD(veh, 24, 8, false)
     end
 
-    -- set livery
+    -- set random livery
+    local livery = -1
+    if state.spawnTargetOptions.randomLivery then
+        livery = math.random(1, GET_VEHICLE_LIVERY_COUNT(veh) - 1)
+    end
     if livery ~= -1 then
         SET_VEHICLE_LIVERY(veh, livery)
         SET_VEHICLE_MOD(veh, 48, livery, true)
     end
 
-    -- Branding
+    -- Branding 
     SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
     SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, color.r, color.g, color.b)
     SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, color.r + 20, color.g + 20, color.b + 20)
@@ -104,12 +99,7 @@ end
 vehicles.spawnAdventureToursBus = function()
     -- Reset spawn state
     state.spawnModeEnabled = false
-    state.spawnTargetOptions = {
-        drift = false,
-        f1Wheels = false,
-        livery = -1,
-        randomColor = false
-    }
+    state.spawnTargetOptions = DEFAULT_VEHICLE_OPTIONS
     local playerPed = PLAYER_PED_ID()
     if not IS_PED_IN_ANY_VEHICLE(playerPed, false) then
 
@@ -145,6 +135,11 @@ vehicles.deleteSpawnedVehicles = function()
         end
     end
     state.spawnedVehicles = {}
+end
+
+vehicles.deleteVehiclesInRadius = function(radius)
+    menu.trigger_commands("clearvehicles on")
+    menu.trigger_commands("cleararea " .. radius)
 end
 
 return vehicles

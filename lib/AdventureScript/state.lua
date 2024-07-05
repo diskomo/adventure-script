@@ -20,7 +20,7 @@ local state = {
     spawnTargetOptions = {
         drift = false,
         f1Wheels = false,
-        livery = -1,
+        randomLivery = false,
         randomColor = false
     },
     spawnTargetModOverrides = {}
