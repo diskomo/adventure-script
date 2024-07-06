@@ -1,4 +1,4 @@
-![Adventure Tours Banner](Lua%20Scripts/lib/AdventureScript/assets/banner.jpg)
+![Adventure Tours Banner](lib/AdventureScript/assets/banner.jpg)
 
 # Adventure Tours Official Lua Script
 ![Static Badge](https://img.shields.io/badge/Lua-blue?logo=lua&color=404182)

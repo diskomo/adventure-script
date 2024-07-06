@@ -29,4 +29,19 @@ local CONTROLS = {
     end
 }
 
+CONTROLS.doubleTapDpadLeft = function()
+    local currentTime = GET_GAME_TIMER()
+    if CONTROLS.dpadLeftPress() then
+        if CONTROLS.lastDpadLeftPressTime and (currentTime - CONTROLS.lastDpadLeftPressTime < 500) then -- 500ms for double-tap window
+            CONTROLS.lastDpadLeftPressTime = nil
+            return true
+        else
+            CONTROLS.lastDpadLeftPressTime = currentTime
+        end
+    end
+    return false
+end
+
+CONTROLS.lastDpadLeftPressTime = nil
+
 return CONTROLS

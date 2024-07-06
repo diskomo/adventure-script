@@ -36,14 +36,21 @@ tour.goToNextTourStop = function()
     SET_PED_COORDS_KEEP_VEHICLE(playerPed, firstLocation.coords.x, firstLocation.coords.y, firstLocation.coords.z)
 end
 
--- Check if the player is currently driving the bus
+-- Check if the player is currently driving a bus
 tour.isDrivingBus = function()
     local playerPed = PLAYER_PED_ID()
     local playerVehicle = GET_VEHICLE_PED_IS_IN(playerPed, false)
-    return playerVehicle == state.theTourBus
+
+    if playerVehicle ~= 0 then
+        local vehicleModel = GET_ENTITY_MODEL(playerVehicle)
+        local busModelHash = GET_HASH_KEY("bus")
+        return vehicleModel == busModelHash
+    end
+
+    return false
 end
 
--- Delete the tour bus if not driving it
+-- Delete the tour bus
 tour.deleteTourBus = function()
     if state.theTourBus and DOES_ENTITY_EXIST(state.theTourBus) then
         entities.delete_by_handle(state.theTourBus)

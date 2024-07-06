@@ -10,6 +10,7 @@ local state = require('lib.AdventureScript.state')
 local controls = require('lib.AdventureScript.controls')
 local gridSpawn = require('lib.AdventureScript.gridspawn')
 local tour = require('lib.AdventureScript.tour')
+local passengers = require('lib.AdventureScript.passengers')
 local vehicles = require('lib.AdventureScript.vehicles')
 local ui = require('lib.AdventureScript.ui')
 local menuHelpers = require('lib.AdventureScript.menu')
@@ -17,9 +18,8 @@ local menuHelpers = require('lib.AdventureScript.menu')
 ---
 --- ----------------------------------------
 --- START OF HEXAROBI AUTO-UPDATER
-local is_from_repository = false
 util.ensure_package_is_installed('lua/auto-updater')
-if auto_updater == true and not is_from_repository then
+if auto_updater ~= nil then
     auto_updater.run_auto_update(config.auto_update_config)
 end
 --- END OF HEXAROBI AUTO-UPDATER
@@ -39,6 +39,7 @@ util.create_tick_handler(function()
     -- Gamepad shortcuts (R3 + DPad)
     if controls.r3Hold() and controls.dpadDownPress() then
         vehicles.spawnAdventureToursBus()
+        passengers.updatePassengers()
     end
     if controls.r3Hold() and controls.dpadRightPress() then
         state.spawnModeEnabled = not state.spawnModeEnabled
@@ -55,7 +56,7 @@ util.create_tick_handler(function()
     end
 
     -- Delete all vehicles in radius
-    if controls.r3Hold() and controls.dpadLeftPress() and controls.leftClickDown() then
+    if controls.r3Hold() and controls.doubleTapDpadLeft() then
         vehicles.deleteVehiclesInRadius(50)
     end
     -- Grid spawn handler

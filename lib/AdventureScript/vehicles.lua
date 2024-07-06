@@ -75,14 +75,14 @@ vehicles.makeAdventureVehicle = function(veh)
     end
 
     -- set random livery
-    local livery = -1
-    if state.spawnTargetOptions.randomLivery then
-        livery = math.random(1, GET_VEHICLE_LIVERY_COUNT(veh) - 1)
-    end
-    if livery ~= -1 then
-        SET_VEHICLE_LIVERY(veh, livery)
-        SET_VEHICLE_MOD(veh, 48, livery, true)
-    end
+    -- local livery = -1
+    -- if state.spawnTargetOptions.randomLivery then
+    --     livery = math.random(1, GET_VEHICLE_LIVERY_COUNT(veh) - 1)
+    -- end
+    -- if livery ~= -1 then
+    --     SET_VEHICLE_LIVERY(veh, livery)
+    --     SET_VEHICLE_MOD(veh, 48, livery, true)
+    -- end
 
     -- Branding 
     SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
