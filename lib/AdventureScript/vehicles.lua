@@ -137,9 +137,10 @@ vehicles.deleteSpawnedVehicles = function()
     state.spawnedVehicles = {}
 end
 
-vehicles.deleteVehiclesInRadius = function(radius)
+vehicles.deleteVehiclesInArea = function()
     menu.trigger_commands("clearvehicles on")
-    menu.trigger_commands("cleararea " .. radius)
+    menu.trigger_commands("clearobjects off")
+    menu.trigger_commands("cleararea")
 end
 
 return vehicles

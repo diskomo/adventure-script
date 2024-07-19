@@ -29,6 +29,19 @@ local CONTROLS = {
     end
 }
 
+CONTROLS.doubleTapDpadUp = function()
+    local currentTime = GET_GAME_TIMER()
+    if CONTROLS.dpadUpPress() then
+        if CONTROLS.lastDpadUpPressTime and (currentTime - CONTROLS.lastDpadUpPressTime < 500) then -- 500ms for double-tap window
+            CONTROLS.lastDpadUpPressTime = nil
+            return true
+        else
+            CONTROLS.lastDpadUpPressTime = currentTime
+        end
+    end
+    return false
+end
+
 CONTROLS.doubleTapDpadLeft = function()
     local currentTime = GET_GAME_TIMER()
     if CONTROLS.dpadLeftPress() then
@@ -42,6 +55,21 @@ CONTROLS.doubleTapDpadLeft = function()
     return false
 end
 
+CONTROLS.doubleTapDpadDown = function()
+    local currentTime = GET_GAME_TIMER()
+    if CONTROLS.dpadDownPress() then
+        if CONTROLS.lastDpadDownPressTime and (currentTime - CONTROLS.lastDpadDownPressTime < 500) then -- 500ms for double-tap window
+            CONTROLS.lastDpadDownPressTime = nil
+            return true
+        else
+            CONTROLS.lastDpadDownPressTime = currentTime
+        end
+    end
+    return false
+end
+
+CONTROLS.lastDpadUpPressTime = nil
 CONTROLS.lastDpadLeftPressTime = nil
+CONTROLS.lastDpadDownPressTime = nil
 
 return CONTROLS

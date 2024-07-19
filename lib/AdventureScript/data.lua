@@ -1,3 +1,5 @@
+local data = {}
+
 -- Vehicle mods reference from https://pastebin.com/QzEAn02v
 local vehicleMods = {
     SPOILERS = 0,
@@ -51,417 +53,446 @@ local vehicleMods = {
     LIVERY = 48
 }
 
-local adventureData = {
-    -- Official AdventureTours Bus Stops: teleport locations and vehicles
-    tourStops = {{
-        name = 'Skatepark',
-        description = 'Ride the halfpipes',
-        locations = {{
-            name = 'Vespucci Halfpipe',
-            id = 'skatepark1',
-            coords = {
-                x = -917.7622,
-                y = -807.44653,
-                z = 15.9212
-            }
-        }, {
-            name = 'Underpass Skatepark',
-            id = 'skatepark2',
-            coords = {
-                x = 725.3054,
-                y = -1226.8306,
-                z = 24.691328
-            }
-        }},
-        vehicles = {{
-            name = 'BMX',
-            id = 'bmx'
-        }, {
-            name = 'Go-Kart',
-            id = 'veto2',
-            options = {
-                f1Wheels = true
-            }
-        }, {
-            name = 'Lawnmower',
-            id = 'mower'
-        }}
-    }, {
-        name = 'Motocross',
-        description = 'Race around the Redwood Lights motocross track using dirtbikes, quads or buggies',
-        locations = {{
-            name = 'Redwood Lights Track',
-            id = 'motocross',
-            coords = {
-                x = 1093.9911,
-                y = 2108.692,
-                z = 53.391186
-            }
-        }},
-        vehicles = {{
-            name = 'Dirtbike',
-            id = 'manchez2'
-        }, {
-            name = 'Quadbike',
-            id = 'verus'
-        }, {
-            name = 'Buggy',
-            id = 'vagrant'
-        }}
-    }, {
-        name = 'RC Offroad',
-        description = 'Use RC cars or go-karts on this little dirt track',
-        locations = {{
-            name = 'Dirt Track',
-            id = 'dirttrack',
-            coords = {
-                x = 1882.3873,
-                y = 3351.0962,
-                z = 42.945
-            }
-        }},
-        vehicles = {{
-            name = 'RC',
-            id = 'rcbandito',
-            mods = {
-                [vehicleMods.FRAME] = 15
-            }
-        }, {
-            name = 'Go-Kart',
-            id = 'veto',
-            options = {
-                randomLivery = true
-            }
-        }}
-    }, {
-        name = 'River Ride',
-        description = 'Jetski down the rapids and find some fat F250s to swim through the river',
-        locations = {{
-            name = 'Rapids (-> Swamp Swim)',
-            id = 'riverrapids',
-            coords = {
-                x = -47.31711,
-                y = 3089.3042,
-                z = 27.836765
-            }
-        }, {
-            name = 'Swamp Swim',
-            id = 'swampswim',
-            coords = {
-                x = -1447.9856,
-                y = 2571.5137,
-                z = 3.9270356
-            }
-        }},
-        vehicles = {{
-            name = 'Jetski',
-            id = 'seashark'
-        }, {
-            name = 'F250',
-            id = 'sandking',
-            options = {
-                f1Wheels = true
-            }
-        }}
-    }, {
-        name = 'Drift',
-        description = 'Drift around the dock carpark or the snaking dirt road by the wind farm',
-        locations = {{
-            name = 'Docks',
-            id = 'drift1',
-            coords = {
-                x = 1266.2307,
-                y = -3097.5962,
-                z = 5.907445
-            }
-        }, {
-            name = 'Dirt Turbines',
-            id = 'drift2',
-            coords = {
-                x = 2188.031,
-                y = 1594.5018,
-                z = 80.5829
-            }
-        }},
-        vehicles = {{
-            name = '65 Mustang',
-            id = 'drifttampa',
-            options = {
-                drift = true,
-                f1Wheels = true
-            }
-        }, {
-            name = 'AE86',
-            id = 'futo2',
-            options = {
-                drift = true,
-                f1Wheels = true,
-                randomLivery = true
-            }
-        }, {
-            name = 'Supra',
-            id = 'jester4',
-            options = {
-                drift = true,
-                randomLivery = true
-            },
-            mods = {
-                [vehicleMods.SPOILERS] = 10,
-                [vehicleMods.WINDOWS] = 1
-            }
-        }, {
-            name = 'Skyline',
-            id = 'elegy',
-            options = {
-                drift = true
-            },
-            mods = {
-                [vehicleMods.ARCH_COVER] = 4,
-                [vehicleMods.EXHAUST] = 2,
-                [vehicleMods.REAR_BUMPER] = -1,
-                [vehicleMods.FRONT_BUMPER] = 2,
-                [vehicleMods.PLATEHOLDER] = 1,
-                [vehicleMods.WINDOWS] = 1
-            }
-        }}
-    }, {
-        name = 'Mountain',
-        description = 'Mt Chiliad or Mt Gordo 4WD climbs and go-kart descent',
-        locations = {{
-            name = 'Chiliad Climb',
-            id = 'chiliadclimb',
-            coords = {
-                x = -367.6046,
-                y = 4916.092,
-                z = 196.70187
-            }
-        }, {
-            name = 'Rocky Descent',
-            id = 'rockydescent',
-            coords = {
-                x = 505.47202,
-                y = 5539.428,
-                z = 778.25977
-            }
-        }, {
-            name = 'Rally Descent',
-            id = 'rallydescent',
-            coords = {
-                x = 642.8843,
-                y = 5629.7363,
-                z = 726.7645
-            }
-        }, {
-            name = 'Bike Trail (-> Jetpack Bridge)',
-            id = 'biketrail',
-            coords = {
-                x = -1139.7003,
-                y = 4610.722,
-                z = 146.11864
-            }
-        }, {
-            name = 'Jetpack Bridge (-> Rocky Descent)',
-            id = 'biketrail',
-            coords = {
-                x = -1139.7003,
-                y = 4610.722,
-                z = 146.11864
-            }
-        }, {
-            name = 'Mt. Gordo',
-            id = 'gordoclimb',
-            coords = {
-                x = 2920.821,
-                y = 5310.7227,
-                z = 96.14481
-            }
-        }},
-        vehicles = {{
-            name = 'Patrol',
-            id = 'hellion',
-            mods = {
-                [vehicleMods.EXHAUST] = 2,
-                [vehicleMods.FENDER] = 7
-            }
-        }, {
-            name = 'Hilux',
-            id = 'everon'
-        }, {
-            name = 'Mountain Bike',
-            id = 'scorcher'
-        }, {
-            name = 'Mini (for descent)',
-            id = 'issi4',
-            options = {
-                randomLivery = true
-            },
-            mods = {
-                [vehicleMods.AERIALS] = -1,
-                [vehicleMods.ARCH_COVER] = -1,
-                [vehicleMods.TANK] = -1,
-                [vehicleMods.FRONT_BUMPER] = 2,
-                [vehicleMods.SIDE_SKIRT] = 1,
-                [vehicleMods.EXHAUST] = 3,
-                [vehicleMods.HOOD] = 6,
-                [vehicleMods.FENDER] = 2,
-                [vehicleMods.GRILLE] = 1
-            }
-        }, {
-            name = 'Go-Kart (for descent)',
-            id = 'veto',
-            options = {
-                randomColor = true,
-                randomLivery = true
-            }
-        }}
-    }, {
-        name = 'F1 Race',
-        description = 'Formula 1 racing events',
-        locations = {{
-            name = 'Arena Rooftop',
-            id = 'f1ring',
-            coords = {
-                x = -311.61465,
-                y = -1922.4286,
-                z = 51.293106
-            }
-        }, {
-            name = 'Raceway',
-            id = 'raceway',
-            coords = {
-                x = 1178.46,
-                y = 302.3174,
-                z = 81.98781
-            }
-        }},
-        vehicles = {{
-            name = 'DR1',
-            id = 'openwheel2',
-            options = {
-                randomLivery = true,
-                randomColor = true
-            }
-        }, {
-            name = 'R88',
-            id = 'formula2',
-            options = {
-                randomLivery = true
-            }
-        }}
-    }, {
-        name = 'Aero',
-        description = 'Take flight in some stunt planes or jetpacks!',
-        locations = {{
-            name = 'Runway Desert',
-            id = 'runway1',
-            coords = {
-                x = 1063.3182,
-                y = 3079.62,
-                z = 41.166504
-            }
-        }, {
-            name = 'Runway LSX',
-            id = 'runway2',
-            coords = {
-                x = -1663.9249,
-                y = -2944.1997,
-                z = 13.944448
-            }
-        }, {
-            name = 'Runway Mountain',
-            id = 'runway3',
-            coords = {
-                x = 2128.0996,
-                y = 4807.3364,
-                z = 41.195976
-            }
-        }},
-        vehicles = {{
-            name = 'Stunt Plane',
-            id = 'alphaz1'
-        }, {
-            name = 'Jetpack',
-            id = 'thruster'
-        }}
+-- Official AdventureTours Bus Stops: teleport locations and vehicles
+data.tourStops = {{
+    name = 'Motocross',
+    description = 'Race around the Redwood Lights motocross track using dirtbikes, quads or buggies',
+    locations = {{
+        name = 'Redwood Lights Track',
+        id = 'motocross',
+        coords = {
+            x = 1093.9911,
+            y = 2108.692,
+            z = 53.391186
+        }
     }},
-    licensePlate = 'ADVTOURS',
-    brandColor = { -- official AdventureTours yellow
-        r = 204,
-        g = 132,
-        b = 0
-    },
-    -- These mods will be applied to all spawned vehicles
-    defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
-                   vehicleMods.STRUTS, vehicleMods.TRANSMISSION, vehicleMods.TRIM, vehicleMods.AERIALS,
-                   vehicleMods.AIR_FILTER, vehicleMods.ENGINE_BLOCK, vehicleMods.ENGINE, vehicleMods.GRILLE,
-                   vehicleMods.SIDE_SKIRT, vehicleMods.REAR_BUMPER, vehicleMods.FRONT_BUMPER},
-    tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
-                 'No shooting out of the bus windows'},
-    welcomeMessage = 'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.',
-    callToActionMessage = 'Would anyone else like to join the tour?',
-    thankYouMessage = 'Thank you all so much for joining the tour!',
-    boastMessage = 'I wrote my own lua script to do these tours',
-    passengerCountMessage = function(passengerCount)
-        return 'I have hosted over ' .. tostring(passengerCount) .. ' passengers so far!'
-    end,
-    -- Tour guide animations
-    actions = {{
-        id = 'bendover',
-        name = 'Bend over'
+    vehicles = {{
+        name = 'Dirtbike',
+        id = 'manchez2'
     }, {
-        id = 'boxing',
-        name = 'Throw some fists'
+        name = 'Quadbike',
+        id = 'verus'
     }, {
-        id = 'guitar',
-        name = 'Play guitar'
-    }, {
-        id = 'buttwiggle',
-        name = 'Buttwiggle dance'
-    }, {
-        id = 'stretch',
-        name = 'Stretch'
-    }, {
-        id = 'clap',
-        name = 'Clap'
-    }, {
-        id = 'flip',
-        name = 'Flip',
-        variants = {'1', '2'}
-    }, {
-        id = 'lapdance',
-        name = 'Sexual dance',
-        variants = {'1', '3', '4'}
-    }, {
-        id = 'blowkiss',
-        name = 'Blow kisses'
-    }, {
-        id = 'armscrossed3',
-        name = 'Cross arms'
-    }, {
-        id = 'fallasleep',
-        name = 'Fall asleep'
-    }, {
-        id = 'pushup',
-        name = 'Pushups'
-    }, {
-        id = 'drinkbeer',
-        name = 'Drink beer'
-    }, {
-        id = 'carryboxofbeer',
-        name = 'Carry beer'
-    }, {
-        id = 'sweepwithbroom',
-        name = 'Broom sweep'
-    }, {
-        id = 'holdcamera',
-        name = 'Hold camera'
-    }, {
-        id = 'holdfreewaysign',
-        name = 'Hold freeway sign'
-    }, {
-        id = 'holdrose',
-        name = 'Hold rose'
+        name = 'Buggy',
+        id = 'vagrant'
     }}
+}, {
+    name = 'River Ride',
+    description = 'Jetski down the rapids and find some fat F250s to swim through the river',
+    locations = {{
+        name = 'Rapids (-> Swamp Swim)',
+        id = 'riverrapids',
+        coords = {
+            x = -47.31711,
+            y = 3089.3042,
+            z = 27.836765
+        }
+    }, {
+        name = 'Swamp Swim',
+        id = 'swampswim',
+        coords = {
+            x = -1447.9856,
+            y = 2571.5137,
+            z = 3.9270356
+        }
+    }},
+    vehicles = {{
+        name = 'Jetski',
+        id = 'seashark'
+    }, {
+        name = 'F250',
+        id = 'sandking',
+        options = {
+            f1Wheels = true
+        }
+    }}
+}, {
+    name = 'Drift',
+    description = 'Drift around the dock carpark or the snaking dirt road by the wind farm',
+    locations = {{
+        name = 'Docks',
+        id = 'drift1',
+        coords = {
+            x = 1266.2307,
+            y = -3097.5962,
+            z = 5.907445
+        }
+    }, {
+        name = 'Dirt Turbines',
+        id = 'drift2',
+        coords = {
+            x = 2188.031,
+            y = 1594.5018,
+            z = 80.5829
+        }
+    }},
+    vehicles = {{
+        name = '65 Mustang',
+        id = 'drifttampa',
+        options = {
+            drift = true,
+            f1Wheels = true
+        }
+    }, {
+        name = 'AE86',
+        id = 'futo2',
+        options = {
+            drift = true,
+            f1Wheels = true,
+            randomLivery = true
+        }
+    }, {
+        name = 'Supra',
+        id = 'jester4',
+        options = {
+            drift = true,
+            randomLivery = true
+        },
+        mods = {
+            [vehicleMods.SPOILERS] = 10,
+            [vehicleMods.WINDOWS] = 1
+        }
+    }, {
+        name = 'Skyline',
+        id = 'elegy',
+        options = {
+            drift = true
+        },
+        mods = {
+            [vehicleMods.ARCH_COVER] = 4,
+            [vehicleMods.EXHAUST] = 2,
+            [vehicleMods.REAR_BUMPER] = -1,
+            [vehicleMods.FRONT_BUMPER] = 2,
+            [vehicleMods.PLATEHOLDER] = 1,
+            [vehicleMods.WINDOWS] = 1
+        }
+    }}
+}, {
+    name = 'Skatepark',
+    description = 'Ride the halfpipes',
+    locations = {{
+        name = 'Vespucci Halfpipe',
+        id = 'skatepark1',
+        coords = {
+            x = -917.7622,
+            y = -807.44653,
+            z = 15.9212
+        }
+    }, {
+        name = 'Underpass Skatepark',
+        id = 'skatepark2',
+        coords = {
+            x = 725.3054,
+            y = -1226.8306,
+            z = 24.691328
+        }
+    }},
+    vehicles = {{
+        name = 'BMX',
+        id = 'bmx'
+    }, {
+        name = 'Go-Kart',
+        id = 'veto2',
+        options = {
+            f1Wheels = true
+        }
+    }, {
+        name = 'Lawnmower',
+        id = 'mower'
+    }}
+}, {
+    name = 'Mountain',
+    description = 'Mt Chiliad or Mt Gordo 4WD climbs and go-kart descent',
+    locations = {{
+        name = 'Chiliad Climb',
+        id = 'chiliadclimb',
+        coords = {
+            x = -367.6046,
+            y = 4916.092,
+            z = 196.70187
+        }
+    }, {
+        name = 'Rocky Descent (Minis)',
+        id = 'rockydescent',
+        coords = {
+            x = 505.47202,
+            y = 5539.428,
+            z = 778.25977
+        }
+    }, {
+        name = 'Rally Descent (Karts)',
+        id = 'rallydescent',
+        coords = {
+            x = 642.8843,
+            y = 5629.7363,
+            z = 726.7645
+        }
+    }, {
+        name = 'Bike Trail -> Jetpack Bridge',
+        id = 'biketrail',
+        coords = {
+            x = -1139.7003,
+            y = 4610.722,
+            z = 146.11864
+        }
+    }, {
+        name = 'Mt. Gordo',
+        id = 'gordoclimb',
+        coords = {
+            x = 2920.821,
+            y = 5310.7227,
+            z = 96.14481
+        }
+    }},
+    vehicles = {{
+        name = 'Patrol',
+        id = 'hellion',
+        mods = {
+            [vehicleMods.EXHAUST] = 2,
+            [vehicleMods.FENDER] = 7
+        }
+    }, {
+        name = 'Hilux',
+        id = 'everon'
+    }, {
+        name = 'Mountain Bike',
+        id = 'scorcher'
+    }, {
+        name = 'Mini (for descent)',
+        id = 'issi4',
+        options = {
+            randomLivery = true
+        },
+        mods = {
+            [vehicleMods.AERIALS] = -1,
+            [vehicleMods.ARCH_COVER] = -1,
+            [vehicleMods.TANK] = -1,
+            [vehicleMods.FRONT_BUMPER] = 2,
+            [vehicleMods.SIDE_SKIRT] = 1,
+            [vehicleMods.EXHAUST] = 3,
+            [vehicleMods.HOOD] = 6,
+            [vehicleMods.FENDER] = 2,
+            [vehicleMods.GRILLE] = 1
+        }
+    }, {
+        name = 'Go-Kart (for descent)',
+        id = 'veto',
+        options = {
+            randomColor = true,
+            randomLivery = true
+        }
+    }}
+}, {
+    name = 'F1 Race',
+    description = 'Formula 1 racing events',
+    locations = {{
+        name = 'Arena Rooftop',
+        id = 'f1ring',
+        coords = {
+            x = -311.61465,
+            y = -1922.4286,
+            z = 51.293106
+        }
+    }, {
+        name = 'Raceway',
+        id = 'raceway',
+        coords = {
+            x = 1178.46,
+            y = 302.3174,
+            z = 81.98781
+        }
+    }},
+    vehicles = {{
+        name = 'DR1',
+        id = 'openwheel2',
+        options = {
+            randomLivery = true,
+            randomColor = true
+        }
+    }, {
+        name = 'R88',
+        id = 'formula2',
+        options = {
+            randomLivery = true
+        }
+    }}
+}, {
+    name = 'Aero',
+    description = 'Take flight in some stunt planes or jetpacks!',
+    locations = {{
+        name = 'Runway Desert',
+        id = 'runway1',
+        coords = {
+            x = 1063.3182,
+            y = 3079.62,
+            z = 41.166504
+        }
+    }, {
+        name = 'Runway LSX',
+        id = 'runway2',
+        coords = {
+            x = -1663.9249,
+            y = -2944.1997,
+            z = 13.944448
+        }
+    }, {
+        name = 'Runway Mountain',
+        id = 'runway3',
+        coords = {
+            x = 2128.0996,
+            y = 4807.3364,
+            z = 41.195976
+        }
+    }},
+    vehicles = {{
+        name = 'Stunt Plane',
+        id = 'alphaz1'
+    }, {
+        name = 'Jetpack',
+        id = 'thruster'
+    }}
+}, {
+    name = 'RC Offroad',
+    description = 'Use RC cars or go-karts on this little dirt track',
+    locations = {{
+        name = 'Dirt Track',
+        id = 'dirttrack',
+        coords = {
+            x = 1882.3873,
+            y = 3351.0962,
+            z = 42.945
+        }
+    }},
+    vehicles = {{
+        name = 'RC (broken)',
+        id = 'rcbandito',
+        mods = {
+            [vehicleMods.FRAME] = 15
+        }
+    }, {
+        name = 'Go-Kart',
+        id = 'veto',
+        options = {
+            randomLivery = true
+        }
+    }}
+}}
+
+data.licensePlate = 'ADVTOURS'
+
+data.brandColor = { -- official AdventureTours yellow
+    r = 204,
+    g = 132,
+    b = 0
 }
 
-return adventureData
+-- These mods will be applied to all spawned vehicles
+data.defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
+                    vehicleMods.STRUTS, vehicleMods.TRANSMISSION, vehicleMods.TRIM, vehicleMods.AERIALS,
+                    vehicleMods.AIR_FILTER, vehicleMods.ENGINE_BLOCK, vehicleMods.ENGINE, vehicleMods.GRILLE,
+                    vehicleMods.SIDE_SKIRT, vehicleMods.REAR_BUMPER, vehicleMods.FRONT_BUMPER}
+
+data.tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
+                  'No shooting out of the bus windows'}
+
+data.welcomeMessage =
+    'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.'
+
+data.callToActionMessage = 'Would anyone else like to join the tour?'
+
+data.thankYouMessage = 'Thank you all so much for joining the tour!'
+
+data.boastMessage = 'I wrote my own lua script to do these tours'
+
+data.passengerCountMessage = function(passengerCount)
+    return 'I have hosted over ' .. tostring(passengerCount) .. ' passengers so far!'
+end
+
+-- Tour guide animations
+data.actions = {{
+    id = 'holdcamera',
+    name = 'Hold camera',
+    type = 'anim'
+}, {
+    id = 'binoculars',
+    name = 'Binoculars',
+    type = 'scen'
+}, {
+    id = 'examinemap',
+    name = 'Examine map',
+    type = 'anim'
+}, {
+    id = 'yoga',
+    name = 'Yoga',
+    type = 'scen'
+}, {
+    id = 'weld',
+    name = 'Weld',
+    type = 'scen'
+}, {
+    id = 'standfish',
+    name = 'Fishing',
+    type = 'scen'
+}, {
+    id = 'sweepwithbroom',
+    name = 'Broom sweep',
+    type = 'anim'
+}, {
+    id = 'highclassprostitute',
+    name = 'Sassy smoke',
+    type = 'scen'
+}, {
+    id = 'tendtodead',
+    name = 'Tend to dead',
+    type = 'scen'
+}, {
+    id = 'playbongos',
+    name = 'Play bongos',
+    type = 'anim'
+}, {
+    id = 'stretch',
+    name = 'Stretch',
+    type = 'anim'
+}, {
+    id = 'sunbathe',
+    name = 'Sunbathe',
+    type = 'scen'
+}, {
+    id = 'boxing',
+    name = 'Throw some fists',
+    type = 'anim'
+}, {
+    id = 'clap',
+    name = 'Clap',
+    type = 'anim'
+}, {
+    id = 'flip',
+    name = 'Flip',
+    variants = {'1', '2'},
+    type = 'anim'
+}, {
+    id = 'lapdance',
+    name = 'Sexual dance',
+    variants = {'1', '3', '4'},
+    type = 'anim'
+}, {
+    id = 'buttwiggle',
+    name = 'Buttwiggle dance',
+    type = 'anim'
+}, {
+    id = 'pushup',
+    name = 'Pushups',
+    type = 'anim'
+}, {
+    id = 'drinkbeer',
+    name = 'Drink beer',
+    type = 'anim'
+}, {
+    id = 'holdrose',
+    name = 'Hold rose',
+    type = 'anim'
+}}
+
+data.vehicleMods = vehicleMods
+
+return data

@@ -33,6 +33,14 @@ local function addEventLocation(listRef, locationName, locationCoords)
     end)
 end
 
+local function cancelAnimation()
+    local ped = GET_PLAYER_PED_SCRIPT_INDEX(players.user())
+    CLEAR_PED_TASKS_IMMEDIATELY(ped)
+    menu.trigger_commands("clearvehicles off")
+    menu.trigger_commands("clearobjects on")
+    menu.trigger_commands("cleararea")
+end
+
 menuHelpers.initializeMenu = function()
     -- Put on the tour guide outfit (requires `<%AppData%>/Stand/Outfits/tourguide.txt`)
     menu.trigger_commands('outfittourguide')
@@ -63,10 +71,7 @@ menuHelpers.initializeMenu = function()
 
     local actionsMenu = menu.list(menu.my_root(), 'Actions', {}, 'Fun animations for the Tour Guide')
     menu.action(actionsMenu, 'Cancel', {},
-        'Cancels any actions being performed by the Tour Guide and clears away props (except vehicles)', function()
-            local ped = GET_PLAYER_PED_SCRIPT_INDEX(players.user())
-            CLEAR_PED_TASKS_IMMEDIATELY(ped)
-        end)
+        'Cancels any actions being performed by the Tour Guide and clears away props (except vehicles)', cancelAnimation)
     menu.divider(actionsMenu, 'Animations')
     for _, action in pairs(data.actions) do
         menu.action(actionsMenu, action.name, {}, action.name, function()
@@ -74,9 +79,28 @@ menuHelpers.initializeMenu = function()
             if action.variants ~= nil then
                 variant = action.variants[math.random(#action.variants)]
             end
-            menu.trigger_commands('anim' .. action.id .. variant)
+            menu.trigger_commands(action.type .. action.id .. variant)
         end)
     end
+
+    local vehiclesMenu = menu.list(menu.my_root(), 'Vehicles', {}, 'Vehicle mods')
+    menu.action(vehiclesMenu, 'Adventurify', {}, 'Adventurify the current vehicle', function()
+        local vehicle = GET_VEHICLE_PED_IS_IN(PLAYER_PED_ID(), false)
+        if vehicle ~= 0 then
+            vehicles.makeAdventureVehicle(vehicle)
+        end
+    end)
+
+    -- Temporary spoiler control because Stand's built-in vehicle mod menu is missing it
+    menu.slider(vehiclesMenu, 'Spoiler', {}, 'Choose a spoiler for the current vehicle', -1, 20, -1, 1, function(value)
+        local vehicle = GET_VEHICLE_PED_IS_IN(PLAYER_PED_ID(), false)
+        if vehicle ~= 0 then
+            if value < -1 or value > GET_NUM_VEHICLE_MODS(vehicle, 0) then
+                return
+            end
+            SET_VEHICLE_MOD(vehicle, 0, value, false)
+        end
+    end)
 
     local chatMenu = menu.list(menu.my_root(), 'Chat', {}, 'Handy chat messages')
     menu.action(chatMenu, 'Welcome', {}, data.welcomeMessage, function()
@@ -97,9 +121,10 @@ menuHelpers.initializeMenu = function()
     menu.action(chatMenu, 'Boast', {}, data.boastMessage, function()
         chat.send_message(data.boastMessage, false, true, true)
     end)
-    menu.action(chatMenu, 'Passenger Count', {}, data.passengerCountMessage(passengers.passengerDatabase), function()
-        chat.send_message(data.passengerCountMessage(passengers.passengerDatabase), false, true, true)
-    end)
+    menu.action(chatMenu, 'Passenger Count', {}, data.passengerCountMessage(passengers.passengersDatabaseCount),
+        function()
+            chat.send_message(data.passengerCountMessage(passengers.passengersDatabaseCount), false, true, true)
+        end)
 
     menu.toggle(menu.my_root(), 'Show controls', {}, 'Show gamepad controls when holding R3', function()
         state.show_on_screen_controls = not state.show_on_screen_controls

@@ -6,12 +6,14 @@ local passengers = {}
 -- Used to load and populate the .txt file record of every passenger that has joined a tour
 local passengersTxtFile = filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt'
 
-passengers.loadPassengers = function()
+local loadPassengersDatabase = function()
     local file = io.open(passengersTxtFile, 'r')
+    local database = {}
     local count = 0
+
     if file then
         for line in file:lines() do
-            passengers.passengerDatabase[line] = true
+            database[line] = true
             count = count + 1
         end
         file:close()
@@ -24,15 +26,15 @@ passengers.loadPassengers = function()
             util.toast('Error: Could not open passengers.txt file for writing.')
         end
     end
-    return count
+    return database, count
 end
 
-passengers.passengerDatabase = passengers.loadPassengers()
+passengers.passengersDatabase, passengers.passengersDatabaseCount = loadPassengersDatabase()
 
-passengers.addPassengerToTable = function(passengerName)
-    if not passengers.passengerDatabase[passengerName] then
+passengers.savePassengerToDatabase = function(passengerName)
+    if not passengers.passengersDatabase[passengerName] then
         -- The passenger isn't in the set, add them
-        passengers.passengerDatabase[passengerName] = true
+        passengers.passengersDatabase[passengerName] = true
         local file = io.open(passengersTxtFile, 'a')
         if file then
             file:write(passengerName .. '\n')
@@ -44,7 +46,7 @@ passengers.addPassengerToTable = function(passengerName)
 end
 
 passengers.updatePassengers = function()
-    local player = GET_PLAYER_INDEX()
+    -- local player = GET_PLAYER_INDEX()
     local playerPed = PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
     local isInVehicle = IS_PED_IN_ANY_VEHICLE(playerPed, false)
@@ -68,7 +70,7 @@ passengers.updatePassengers = function()
                 if passenger ~= nil then
                     local passengerName = GET_PLAYER_NAME(NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
                     if (passengerName ~= '**Invalid**' and passengerName ~= nil) then
-                        table.insert(busPassengers, passengerName)
+                        table.insert(busPassengers, i, passengerName)
                         passengers.assistPassenger(passengerName)
                     end
                 end
@@ -77,7 +79,7 @@ passengers.updatePassengers = function()
             state.currentPassengers = busPassengers
 
             for i, passengerName in ipairs(busPassengers) do
-                passengers.addPassengerToTable(passengerName)
+                passengers.savePassengerToDatabase(passengerName)
             end
 
             SET_VEHICLE_NUMBER_PLATE_TEXT(bus, 'ADVTOUR' ..

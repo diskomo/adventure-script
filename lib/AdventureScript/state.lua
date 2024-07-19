@@ -6,7 +6,7 @@ local state = {
     currentPassengers = {},
 
     -- Keep track of the current tour stop
-    currentTourStopIndex = 1,
+    currentTourStopIndex = 0,
 
     -- Keep track of currently spawned vehicles
     spawnedVehicles = {},
