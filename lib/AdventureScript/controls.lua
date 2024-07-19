@@ -1,4 +1,5 @@
--- functions for checking which controller inputs have been pressed
+local doublePressTime = 500 -- 500ms for double-tap window
+
 local CONTROLS = {
     leftClickDown = function()
         return IS_DISABLED_CONTROL_JUST_PRESSED(2, 24)
@@ -32,7 +33,7 @@ local CONTROLS = {
 CONTROLS.doubleTapDpadUp = function()
     local currentTime = GET_GAME_TIMER()
     if CONTROLS.dpadUpPress() then
-        if CONTROLS.lastDpadUpPressTime and (currentTime - CONTROLS.lastDpadUpPressTime < 500) then -- 500ms for double-tap window
+        if CONTROLS.lastDpadUpPressTime and (currentTime - CONTROLS.lastDpadUpPressTime < doublePressTime) then
             CONTROLS.lastDpadUpPressTime = nil
             return true
         else
@@ -45,7 +46,7 @@ end
 CONTROLS.doubleTapDpadLeft = function()
     local currentTime = GET_GAME_TIMER()
     if CONTROLS.dpadLeftPress() then
-        if CONTROLS.lastDpadLeftPressTime and (currentTime - CONTROLS.lastDpadLeftPressTime < 500) then -- 500ms for double-tap window
+        if CONTROLS.lastDpadLeftPressTime and (currentTime - CONTROLS.lastDpadLeftPressTime < doublePressTime) then
             CONTROLS.lastDpadLeftPressTime = nil
             return true
         else
@@ -58,7 +59,7 @@ end
 CONTROLS.doubleTapDpadDown = function()
     local currentTime = GET_GAME_TIMER()
     if CONTROLS.dpadDownPress() then
-        if CONTROLS.lastDpadDownPressTime and (currentTime - CONTROLS.lastDpadDownPressTime < 500) then -- 500ms for double-tap window
+        if CONTROLS.lastDpadDownPressTime and (currentTime - CONTROLS.lastDpadDownPressTime < doublePressTime) then
             CONTROLS.lastDpadDownPressTime = nil
             return true
         else

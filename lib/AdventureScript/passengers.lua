@@ -82,8 +82,13 @@ passengers.updatePassengers = function()
                 passengers.savePassengerToDatabase(passengerName)
             end
 
-            SET_VEHICLE_NUMBER_PLATE_TEXT(bus, 'ADVTOUR' ..
-                ((#busPassengers > 0 and #busPassengers < 10) and tostring(#busPassengers) or 'S'))
+            local licensePlate = 'ADVTOUR'
+            if #busPassengers > 0 and #busPassengers < 10 then
+                licensePlate = licensePlate .. tostring(#busPassengers)
+            else
+                licensePlate = licensePlate .. 'S'
+            end
+            SET_VEHICLE_NUMBER_PLATE_TEXT(bus, licensePlate)
             util.toast((#busPassengers > 0 and 'Assisted passengers. ' or 'Empty bus. ') .. tostring(#busPassengers) ..
                            ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
         end
