@@ -1,4 +1,4 @@
-local menuHelpers = {}
+local MENUHELPERS = {}
 
 local config = require('lib.AdventureScript.config')
 local state = require('lib.AdventureScript.state')
@@ -41,7 +41,7 @@ local function cancelAnimation()
     menu.trigger_commands("cleararea")
 end
 
-menuHelpers.initializeMenu = function()
+MENUHELPERS.initializeMenu = function()
     -- Put on the tour guide outfit (requires `<%AppData%>/Stand/Outfits/tourguide.txt`)
     menu.trigger_commands('outfittourguide')
     -- Adventure Tours are supposed to be a passive affair, so this takes away the guide's weapons
@@ -121,10 +121,6 @@ menuHelpers.initializeMenu = function()
     menu.action(chatMenu, 'Boast', {}, data.boastMessage, function()
         chat.send_message(data.boastMessage, false, true, true)
     end)
-    menu.action(chatMenu, 'Passenger Count', {}, data.passengerCountMessage(passengers.passengersDatabaseCount),
-        function()
-            chat.send_message(data.passengerCountMessage(passengers.passengersDatabaseCount), false, true, true)
-        end)
 
     menu.toggle(menu.my_root(), 'Show controls', {}, 'Show gamepad controls when holding R3', function()
         state.show_on_screen_controls = not state.show_on_screen_controls
@@ -138,4 +134,4 @@ menuHelpers.initializeMenu = function()
     menu.divider(menu.my_root(), 'Version ' .. config.scriptVersion)
 end
 
-return menuHelpers
+return MENUHELPERS

@@ -1,4 +1,4 @@
-local data = {}
+local DATA = {}
 
 -- Vehicle mods reference from https://pastebin.com/QzEAn02v
 local vehicleMods = {
@@ -54,7 +54,7 @@ local vehicleMods = {
 }
 
 -- Official AdventureTours Bus Stops: teleport locations and vehicles
-data.tourStops = {{
+DATA.tourStops = {{
     name = 'Motocross',
     description = 'Race around the Redwood Lights motocross track using dirtbikes, quads or buggies',
     locations = {{
@@ -378,38 +378,38 @@ data.tourStops = {{
     }}
 }}
 
-data.licensePlate = 'ADVTOURS'
+DATA.licensePlate = 'ADVTOURS'
 
-data.brandColor = { -- official AdventureTours yellow
+DATA.brandColor = { -- official AdventureTours yellow
     r = 204,
     g = 132,
     b = 0
 }
 
 -- These mods will be applied to all spawned vehicles
-data.defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
+DATA.defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
                     vehicleMods.STRUTS, vehicleMods.TRANSMISSION, vehicleMods.TRIM, vehicleMods.AERIALS,
                     vehicleMods.AIR_FILTER, vehicleMods.ENGINE_BLOCK, vehicleMods.ENGINE, vehicleMods.GRILLE,
                     vehicleMods.SIDE_SKIRT, vehicleMods.REAR_BUMPER, vehicleMods.FRONT_BUMPER}
 
-data.tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
+DATA.tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
                   'No shooting out of the bus windows'}
 
-data.welcomeMessage =
+DATA.welcomeMessage =
     'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.'
 
-data.callToActionMessage = 'Would anyone else like to join the tour?'
+DATA.callToActionMessage = 'Would anyone else like to join the tour?'
 
-data.thankYouMessage = 'Thank you all so much for joining the tour!'
+DATA.thankYouMessage = 'Thank you all so much for joining the tour!'
 
-data.boastMessage = 'I wrote my own lua script to do these tours'
+DATA.boastMessage = 'I wrote my own lua script to do these tours'
 
-data.passengerCountMessage = function(passengerCount)
+DATA.passengerCountMessage = function(passengerCount)
     return 'I have hosted over ' .. tostring(passengerCount) .. ' passengers so far!'
 end
 
 -- Tour guide animations
-data.actions = {{
+DATA.actions = {{
     id = 'holdcamera',
     name = 'Hold camera',
     type = 'anim'
@@ -493,6 +493,6 @@ data.actions = {{
     type = 'anim'
 }}
 
-data.vehicleMods = vehicleMods
+DATA.vehicleMods = vehicleMods
 
-return data
+return DATA

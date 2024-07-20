@@ -2,7 +2,7 @@ local data = require('lib.AdventureScript.data')
 local state = require('lib.AdventureScript.state')
 local gridSpawn = require('lib.AdventureScript.gridspawn')
 
-local vehicles = {}
+local VEHICLES = {}
 
 local DEFAULT_VEHICLE_OPTIONS = {
     -- Enable low-grip drift tyres
@@ -19,7 +19,7 @@ local DEFAULT_VEHICLE_OPTIONS = {
 -- @param hash: Hash of the vehicle
 -- @param options: Options for the vehicle
 -- @param modOverrides: Explicitly set vehicle mods
-vehicles.setVehicle = function(hash, options, modOverrides)
+VEHICLES.setVehicle = function(hash, options, modOverrides)
     state.spawnModeEnabled = true -- automatically enable spawn mode when a vehicle is selected
     state.spawnTargetHash = hash
     state.spawnTargetDimensions = gridSpawn.getModelDimensions(hash)
@@ -29,7 +29,7 @@ end
 
 -- Converts any old vehicle into an AdventureToy
 -- @param veh: The vehicle entity
-vehicles.makeAdventureVehicle = function(veh)
+VEHICLES.makeAdventureVehicle = function(veh)
     local color = {
         r = math.random(0, 255),
         g = math.random(0, 255),
@@ -96,7 +96,7 @@ vehicles.makeAdventureVehicle = function(veh)
 end
 
 -- Spawns the official Adventure Tours bus
-vehicles.spawnAdventureToursBus = function()
+VEHICLES.spawnAdventureToursBus = function()
     -- Reset spawn state
     state.spawnModeEnabled = false
     state.spawnTargetOptions = DEFAULT_VEHICLE_OPTIONS
@@ -121,14 +121,14 @@ vehicles.spawnAdventureToursBus = function()
         local bus = CREATE_VEHICLE(busModel, playerPos.x + 5.0, playerPos.y + 5.0, playerPos.z,
             GET_ENTITY_HEADING(playerPed), true, false)
 
-        vehicles.makeAdventureVehicle(bus)
+        VEHICLES.makeAdventureVehicle(bus)
         state.theTourBus = bus
         SET_PED_INTO_VEHICLE(playerPed, bus, -1)
         util.yield(1000)
     end
 end
 
-vehicles.deleteSpawnedVehicles = function()
+VEHICLES.deleteSpawnedVehicles = function()
     for _, car in pairs(state.spawnedVehicles) do
         if DOES_ENTITY_EXIST(car) then
             entities.delete_by_handle(car)
@@ -137,10 +137,10 @@ vehicles.deleteSpawnedVehicles = function()
     state.spawnedVehicles = {}
 end
 
-vehicles.deleteVehiclesInArea = function()
+VEHICLES.deleteVehiclesInArea = function()
     menu.trigger_commands("clearvehicles on")
     menu.trigger_commands("clearobjects off")
     menu.trigger_commands("cleararea")
 end
 
-return vehicles
+return VEHICLES

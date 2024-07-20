@@ -1,51 +1,44 @@
 local state = require('lib.AdventureScript.state')
 local tour = require('lib.AdventureScript.tour')
 
-local passengers = {}
+local PASSENGERS = {}
 
--- Used to load and populate the .txt file record of every passenger that has joined a tour
-local passengersTxtFile = filesystem.scripts_dir() .. 'lib\\AdventureScript\\passengers.txt'
+-- Keep the fuckin cops off a passenger and keep 'em healthy
+PASSENGERS.assistPassenger = function(passenger)
+    menu.trigger_commands('bail' .. passenger .. ' on')
+    menu.trigger_commands('autoheal' .. passenger .. ' on')
 
-local loadPassengersDatabase = function()
-    local file = io.open(passengersTxtFile, 'r')
-    local database = {}
-    local count = 0
-
-    if file then
-        for line in file:lines() do
-            database[line] = true
-            count = count + 1
-        end
-        file:close()
-    else
-        local file = io.write(passengersTxtFile, 'w')
-        if file then
-            file:write('')
-            file:close()
-        else
-            util.toast('Error: Could not open passengers.txt file for writing.')
-        end
-    end
-    return database, count
 end
 
-passengers.passengersDatabase, passengers.passengersDatabaseCount = loadPassengersDatabase()
-
-passengers.savePassengerToDatabase = function(passengerName)
-    if not passengers.passengersDatabase[passengerName] then
-        -- The passenger isn't in the set, add them
-        passengers.passengersDatabase[passengerName] = true
-        local file = io.open(passengersTxtFile, 'a')
-        if file then
-            file:write(passengerName .. '\n')
-            file:close()
-        else
-            util.toast('Error: Could not open passengers.txt file for writing.')
-        end
+PASSENGERS.assistPassengers = function(passengers)
+    for i = 0, #passengers do
+        menu.trigger_commands('bail' .. passengers[i] .. ' on')
+        menu.trigger_commands('autoheal' .. passengers[i] .. ' on')
     end
 end
 
-passengers.updatePassengers = function()
+PASSENGERS.getLocalPlayers = function()
+    local playerPed = PLAYER_PED_ID()
+    local playerPos = GET_ENTITY_COORDS(playerPed)
+    local radius = 10000
+    local playersList = {}
+    for i = 0, 31 do
+        if NETWORK_IS_PLAYER_ACTIVE(i) and i ~= PLAYER_ID() then
+            local ped = GET_PLAYER_PED(i)
+            local pedPos = GET_ENTITY_COORDS(ped)
+            local distance = VDIST2(playerPos.x, playerPos.y, playerPos.z, pedPos.x, pedPos.y, pedPos.z)
+            if distance <= radius then
+                local playerName = GET_PLAYER_NAME(i)
+                if (playerName ~= '**Invalid**') then
+                    table.insert(playersList, playerName)
+                end
+            end
+        end
+    end
+    return playersList
+end
+
+PASSENGERS.updatePassengers = function()
     -- local player = GET_PLAYER_INDEX()
     local playerPed = PLAYER_PED_ID()
     local allPlayersIds = players.list(false, true, true)
@@ -71,16 +64,12 @@ passengers.updatePassengers = function()
                     local passengerName = GET_PLAYER_NAME(NETWORK_GET_PLAYER_INDEX_FROM_PED(passenger))
                     if (passengerName ~= '**Invalid**' and passengerName ~= nil) then
                         table.insert(busPassengers, i, passengerName)
-                        passengers.assistPassenger(passengerName)
+                        PASSENGERS.assistPassenger(passengerName)
                     end
                 end
             end
 
             state.currentPassengers = busPassengers
-
-            for i, passengerName in ipairs(busPassengers) do
-                passengers.savePassengerToDatabase(passengerName)
-            end
 
             local licensePlate = 'ADVTOUR'
             if #busPassengers > 0 and #busPassengers < 10 then
@@ -93,45 +82,11 @@ passengers.updatePassengers = function()
                            ' out of ' .. tostring(#allPlayersIds) .. ' are on the bus.')
         end
     else
-        local localPlayers = passengers.getLocalPlayers()
-        passengers.assistPassengers(localPlayers)
+        local localPlayers = PASSENGERS.getLocalPlayers()
+        PASSENGERS.assistPassengers(localPlayers)
         state.currentPassengers = localPlayers
         util.toast('Found ' .. tostring(#localPlayers) .. ' local players.')
     end
 end
 
--- Keep the fuckin cops off a passenger and keep 'em healthy
-passengers.assistPassenger = function(passenger)
-    menu.trigger_commands('bail' .. passenger .. ' on')
-    menu.trigger_commands('autoheal' .. passenger .. ' on')
-
-end
-passengers.assistPassengers = function(passengers)
-    for i = 0, #passengers do
-        menu.trigger_commands('bail' .. passengers[i] .. ' on')
-        menu.trigger_commands('autoheal' .. passengers[i] .. ' on')
-    end
-end
-
-passengers.getLocalPlayers = function()
-    local playerPed = PLAYER_PED_ID()
-    local playerPos = GET_ENTITY_COORDS(playerPed)
-    local radius = 10000
-    local playersList = {}
-    for i = 0, 31 do
-        if NETWORK_IS_PLAYER_ACTIVE(i) and i ~= PLAYER_ID() then
-            local ped = GET_PLAYER_PED(i)
-            local pedPos = GET_ENTITY_COORDS(ped)
-            local distance = VDIST2(playerPos.x, playerPos.y, playerPos.z, pedPos.x, pedPos.y, pedPos.z)
-            if distance <= radius then
-                local playerName = GET_PLAYER_NAME(i)
-                if (playerName ~= '**Invalid**') then
-                    table.insert(playersList, playerName)
-                end
-            end
-        end
-    end
-    return playersList
-end
-
-return passengers
+return PASSENGERS

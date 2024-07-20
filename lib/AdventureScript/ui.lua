@@ -1,8 +1,8 @@
-local ui = {}
+local UI = {}
 
 -- Startup Logo (credit to Hexarobi)
 -- https://github.com/hexarobi/stand-lua-constructor
-ui.showLogo = function()
+UI.showLogo = function()
     local logo = directx.create_texture(filesystem.scripts_dir() .. 'lib\\AdventureScript\\assets\\logo.png')
     local fade_steps = 25
     -- Fade In
@@ -26,7 +26,7 @@ local busControlsTexture = directx.create_texture(filesystem.scripts_dir() ..
                                                       'lib\\AdventureScript\\assets\\controls-bus.png')
 local footControlsTexture = directx.create_texture(filesystem.scripts_dir() ..
                                                        'lib\\AdventureScript\\assets\\controls-foot.png')
-ui.showGamepadControls = function(isDrivingBus)
+UI.showGamepadControls = function(isDrivingBus)
     if isDrivingBus then
         directx.draw_texture(busControlsTexture, 0.10, 0.10, 0.5, 0.5, 0.5, 0.5, 0, 1, 1, 1, 1)
     else
@@ -34,4 +34,4 @@ ui.showGamepadControls = function(isDrivingBus)
     end
 end
 
-return ui
+return UI

@@ -1,4 +1,4 @@
-local state = {
+local STATE = {
     -- Displays a controls diagram on screen while holding R3
     show_on_screen_controls = false,
 
@@ -26,4 +26,4 @@ local state = {
     spawnTargetModOverrides = {}
 }
 
-return state
+return STATE

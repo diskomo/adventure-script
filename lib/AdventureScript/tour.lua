@@ -2,7 +2,7 @@ local data = require('lib.AdventureScript.data')
 local state = require('lib.AdventureScript.state')
 local vehicles = require('lib.AdventureScript.vehicles')
 
-local tour = {}
+local TOUR = {}
 
 -- Function to get the current tour stop
 local function getCurrentTourStop(index)
@@ -28,7 +28,7 @@ local function teleportPlayerToTourStop(tourStop)
 end
 
 -- Function to navigate to the next tour stop
-tour.goToNextTourStop = function()
+TOUR.goToNextTourStop = function()
     state.currentTourStopIndex = state.currentTourStopIndex + 1
     if state.currentTourStopIndex > #data.tourStops then
         state.currentTourStopIndex = 1
@@ -39,7 +39,7 @@ tour.goToNextTourStop = function()
 end
 
 -- Function to navigate to the previous tour stop
-tour.goToPreviousTourStop = function()
+TOUR.goToPreviousTourStop = function()
     state.currentTourStopIndex = state.currentTourStopIndex - 1
     if state.currentTourStopIndex < 1 then
         state.currentTourStopIndex = #data.tourStops
@@ -50,7 +50,7 @@ tour.goToPreviousTourStop = function()
 end
 
 -- Check if the player is currently driving a bus
-tour.isDrivingBus = function()
+TOUR.isDrivingBus = function()
     local playerPed = PLAYER_PED_ID()
     local playerVehicle = GET_VEHICLE_PED_IS_IN(playerPed, false)
 
@@ -64,11 +64,11 @@ tour.isDrivingBus = function()
 end
 
 -- Delete the tour bus
-tour.deleteTourBus = function()
+TOUR.deleteTourBus = function()
     if state.theTourBus and DOES_ENTITY_EXIST(state.theTourBus) then
         entities.delete_by_handle(state.theTourBus)
         state.theTourBus = nil
     end
 end
 
-return tour
+return TOUR
