@@ -43,14 +43,16 @@ Stand
 	Settings
 		Appearance
 			Colours
-				Primary Colour: 0D0A08FF
+				Primary Colour: EDBB47BE
+				Focused Text Colour: 0C0907FF
+				Focused Texture Colour: 0C0907FF
 				Background Colour: 0D0A08FF
 				Unfocused Text Colour: 53504EFF
 				Unfocused Right-Bound Text Colour: 53504EFF
 				Unfocused Texture Colour: 53504EFF
-				HUD Colour: EFCF46FF
-				AR Colour: EFCF46FF
-				Minigame Colour: EFCF46FF
+				HUD Colour: EAB646BE
+				AR Colour: EAB646BE
+				Minigame Colour: EAB646BE
 			Position: 2, 138
 			Header
 				Header: Custom
@@ -60,13 +62,14 @@ Stand
 				Address Separator: Stand/Online
 				Height: 18
 				Text
-					Scale: 8
+					Scale: 9
+					Y Offset: 0
 				Show Cursor Position: On
 			Cursor
 				Scroll Gap: 0
 				Rounded: On
 			Tabs
-				Width: 32
+				Width: 42
 				Height: 46
 				Text
 					Scale: 20
@@ -80,16 +83,17 @@ Stand
 			Command Info Text
 				Position: Bottom
 			Notifications
-				Custom Position: 360, 1050
+				Custom Position: 320, 1050
+				Width: 320
 				Border Colour: EFCF46FF
-				Flash Colour: EFCF46FF
+				Flash Colour: EAB646BE
 				Background Colour: 12171DF5
 			Border
 				Width: 2
 				Colour: EFCF46B4
 			Max Visible Commands: 23
 			List Width: 420
-			List Height: 26
+			List Height: 30
 			Spacer Size: 1
 			Background Blur: 10
 			Font & Text
@@ -97,13 +101,11 @@ Stand
 					Scale: 14
 				Small Text
 					Scale: 8
+		Input
+			Back Closes Menu: On
 		Info Text
 			Position: 1890, 214
 			Alignment: Bottom Right
 			Scale: 12
-		Notifications
-			Suppress Generic Responses
-				Command Box: On
-				Hotkey: On
 	Lua Scripts
 		AdventureScript: On
