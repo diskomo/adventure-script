@@ -2,9 +2,6 @@ local STATE = {
     -- Displays a controls diagram on screen while holding R3
     show_on_screen_controls = false,
 
-    -- Used as a list of passengers that are currently on the tour
-    currentPassengers = {},
-
     -- Keep track of the current tour stop
     currentTourStopIndex = 0,
 

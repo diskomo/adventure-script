@@ -3,7 +3,6 @@ local MENUHELPERS = {}
 local config = require('lib.AdventureScript.config')
 local state = require('lib.AdventureScript.state')
 local data = require('lib.AdventureScript.data')
-local passengers = require('lib.AdventureScript.passengers')
 local vehicles = require('lib.AdventureScript.vehicles')
 
 local function addEventVehicle(listRef, vehicleName, vehicleModel, vehicleOptions, vehicleMods)
@@ -34,11 +33,7 @@ local function addEventLocation(listRef, locationName, locationCoords)
 end
 
 local function cancelAnimation()
-    local ped = GET_PLAYER_PED_SCRIPT_INDEX(players.user())
-    CLEAR_PED_TASKS_IMMEDIATELY(ped)
-    menu.trigger_commands("clearvehicles off")
-    menu.trigger_commands("clearobjects on")
-    menu.trigger_commands("cleararea")
+    menu.trigger_commands("cancelanim")
 end
 
 MENUHELPERS.initializeMenu = function()
@@ -49,9 +44,7 @@ MENUHELPERS.initializeMenu = function()
     menu.trigger_commands('superdrive on')
     menu.trigger_commands('superhandbrake on')
 
-    menu.divider(menu.my_root(),
-        #state.currentPassengers == 0 and 'Tour Stops' or tostring(#state.currentPassengers) .. ' passenger' ..
-            (#state.currentPassengers == 1 and '' or 's'))
+    menu.divider(menu.my_root(), 'Tour Stops')
 
     -- Add the tour stops to the menu
     for _, ts in pairs(data.tourStops) do

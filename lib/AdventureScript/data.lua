@@ -380,10 +380,16 @@ DATA.tourStops = {{
 
 DATA.licensePlate = 'ADVTOURS'
 
-DATA.brandColor = { -- official AdventureTours yellow
-    r = 204,
-    g = 132,
-    b = 0
+-- DATA.brandColor = { -- official AdventureTours yellow
+--     r = 204,
+--     g = 132,
+--     b = 0
+-- }
+
+DATA.brandColor = { -- official AdventureTours pink
+    r = 252,
+    g = 134,
+    b = 255
 }
 
 -- These mods will be applied to all spawned vehicles
@@ -403,10 +409,6 @@ DATA.callToActionMessage = 'Would anyone else like to join the tour?'
 DATA.thankYouMessage = 'Thank you all so much for joining the tour!'
 
 DATA.boastMessage = 'I wrote my own lua script to do these tours'
-
-DATA.passengerCountMessage = function(passengerCount)
-    return 'I have hosted over ' .. tostring(passengerCount) .. ' passengers so far!'
-end
 
 -- Tour guide animations
 DATA.actions = {{

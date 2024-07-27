@@ -10,7 +10,6 @@ local state = require('lib.AdventureScript.state')
 local controls = require('lib.AdventureScript.controls')
 local gridSpawn = require('lib.AdventureScript.gridspawn')
 local tour = require('lib.AdventureScript.tour')
-local passengers = require('lib.AdventureScript.passengers')
 local vehicles = require('lib.AdventureScript.vehicles')
 local ui = require('lib.AdventureScript.ui')
 local menuHelpers = require('lib.AdventureScript.menu')
@@ -39,7 +38,6 @@ util.create_tick_handler(function()
     -- Gamepad shortcuts (R3 + DPad)
     if controls.r3Hold() and controls.dpadDownPress() then
         vehicles.spawnAdventureToursBus()
-        passengers.updatePassengers()
     end
 
     if controls.r3Hold() and controls.doubleTapDpadDown() then
