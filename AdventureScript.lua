@@ -58,7 +58,9 @@ util.create_tick_handler(function()
 
     -- Delete the tour bus (unless driving) and all spawned vehicles
     if controls.r3Hold() and controls.dpadLeftPress() then
-        tour.deleteTourBus()
+        if not tour.isDrivingBus() then
+            tour.deleteTourBus()
+        end
         vehicles.deleteSpawnedVehicles()
     end
 

@@ -56,7 +56,7 @@ TOUR.isDrivingBus = function()
 
     if playerVehicle ~= 0 then
         local vehicleModel = GET_ENTITY_MODEL(playerVehicle)
-        local busModelHash = GET_HASH_KEY("bus")
+        local busModelHash = GET_HASH_KEY(state.busType)
         return vehicleModel == busModelHash
     end
 

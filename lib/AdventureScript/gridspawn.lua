@@ -46,12 +46,12 @@ GRIDSPAWN.initialize = function()
     state.spawnTargetDimensions = GRIDSPAWN.getModelDimensions(state.spawnTargetHash)
 end
 
-GRIDSPAWN.arrowIndicator = function(pos, angle, size, color)
-    local colorSecondary = {
-        r = color.r - 20,
-        g = color.g - 20,
-        b = color.b - 20,
-        a = color.a
+GRIDSPAWN.arrowIndicator = function(pos, angle, size, colour)
+    local colourSecondary = {
+        r = colour.r - 20,
+        g = colour.g - 20,
+        b = colour.b - 20,
+        a = colour.a
     }
     local angleCos = math.cos(angle)
     local angleSin = math.sin(angle)
@@ -61,31 +61,31 @@ GRIDSPAWN.arrowIndicator = function(pos, angle, size, color)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * 0), pos.y + (angleSin * 0 + angleCos * 0), pos.z + 0,
         pos.x + (angleCos * 0 - angleSin * height), pos.y + (angleSin * 0 + angleCos * height), pos.z + length + height,
         pos.x + (angleCos * width - angleSin * 0), pos.y + (angleSin * width + angleCos * 0), pos.z + length,
-        colorSecondary.r, colorSecondary.g, colorSecondary.b, colorSecondary.a)
+        colourSecondary.r, colourSecondary.g, colourSecondary.b, colourSecondary.a)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * -height), pos.y + (angleSin * 0 + angleCos * -height),
         pos.z + length + height, pos.x + (angleCos * 0 - angleSin * 0), pos.y + (angleSin * 0 + angleCos * 0),
         pos.z + 0, pos.x + (angleCos * width - angleSin * 0), pos.y + (angleSin * width + angleCos * 0), pos.z + length,
-        colorSecondary.r, colorSecondary.g, colorSecondary.b, colorSecondary.a)
+        colourSecondary.r, colourSecondary.g, colourSecondary.b, colourSecondary.a)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * 0), pos.y + (angleSin * 0 + angleCos * 0), pos.z + 0,
         pos.x + (angleCos * 0 - angleSin * -height), pos.y + (angleSin * 0 + angleCos * -height),
         pos.z + length + height, pos.x + (angleCos * -width - angleSin * 0), pos.y + (angleSin * -width + angleCos * 0),
-        pos.z + length, color.r, color.g, color.b, color.a)
+        pos.z + length, colour.r, colour.g, colour.b, colour.a)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * height), pos.y + (angleSin * 0 + angleCos * height),
         pos.z + length + height, pos.x + (angleCos * 0 - angleSin * 0), pos.y + (angleSin * 0 + angleCos * 0),
         pos.z + 0, pos.x + (angleCos * -width - angleSin * 0), pos.y + (angleSin * -width + angleCos * 0),
-        pos.z + length, color.r, color.g, color.b, color.a)
+        pos.z + length, colour.r, colour.g, colour.b, colour.a)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * height), pos.y + (angleSin * 0 + angleCos * height),
         pos.z + length + height, pos.x + (angleCos * 0 - angleSin * -height),
         pos.y + (angleSin * 0 + angleCos * -height), pos.z + length + height, pos.x + (angleCos * width - angleSin * 0),
-        pos.y + (angleSin * width + angleCos * 0), pos.z + length, colorSecondary.r, colorSecondary.g, colorSecondary.b,
-        colorSecondary.a)
+        pos.y + (angleSin * width + angleCos * 0), pos.z + length, colourSecondary.r, colourSecondary.g,
+        colourSecondary.b, colourSecondary.a)
     DRAW_POLY(pos.x + (angleCos * 0 - angleSin * -height), pos.y + (angleSin * 0 + angleCos * -height),
         pos.z + length + height, pos.x + (angleCos * 0 - angleSin * height), pos.y + (angleSin * 0 + angleCos * height),
         pos.z + length + height, pos.x + (angleCos * -width - angleSin * 0), pos.y + (angleSin * -width + angleCos * 0),
-        pos.z + length, color.r, color.g, color.b, color.a)
+        pos.z + length, colour.r, colour.g, colour.b, colour.a)
 end
 
-GRIDSPAWN.drawBoundingBox = function(entity, color)
+GRIDSPAWN.drawBoundingBox = function(entity, colour)
     GET_ENTITY_MATRIX(entity, rightVectorPointer, forwardVectorPointer, upVectorPointer, positionPointer);
     local forwardVector = v3.new(forwardVectorPointer)
     local rightVector = v3.new(rightVectorPointer)
@@ -134,29 +134,30 @@ GRIDSPAWN.drawBoundingBox = function(entity, color)
         y = upVector.y * dimensions.z + bottomLeftBack.y,
         z = upVector.z * dimensions.z + bottomLeftBack.z
     }
-    DRAW_LINE(topRight.x, topRight.y, topRight.z, topRightBack.x, topRightBack.y, topRightBack.z, color.r, color.g,
-        color.b, color.a)
-    DRAW_LINE(topRight.x, topRight.y, topRight.z, topLeft.x, topLeft.y, topLeft.z, color.r, color.g, color.b, color.a)
-    DRAW_LINE(topRight.x, topRight.y, topRight.z, bottomRight.x, bottomRight.y, bottomRight.z, color.r, color.g,
-        color.b, color.a)
+    DRAW_LINE(topRight.x, topRight.y, topRight.z, topRightBack.x, topRightBack.y, topRightBack.z, colour.r, colour.g,
+        colour.b, colour.a)
+    DRAW_LINE(topRight.x, topRight.y, topRight.z, topLeft.x, topLeft.y, topLeft.z, colour.r, colour.g, colour.b,
+        colour.a)
+    DRAW_LINE(topRight.x, topRight.y, topRight.z, bottomRight.x, bottomRight.y, bottomRight.z, colour.r, colour.g,
+        colour.b, colour.a)
     DRAW_LINE(bottomLeftBack.x, bottomLeftBack.y, bottomLeftBack.z, bottomRightBack.x, bottomRightBack.y,
-        bottomRightBack.z, color.r, color.g, color.b, color.a)
-    DRAW_LINE(bottomLeftBack.x, bottomLeftBack.y, bottomLeftBack.z, bottomLeft.x, bottomLeft.y, bottomLeft.z, color.r,
-        color.g, color.b, color.a)
+        bottomRightBack.z, colour.r, colour.g, colour.b, colour.a)
+    DRAW_LINE(bottomLeftBack.x, bottomLeftBack.y, bottomLeftBack.z, bottomLeft.x, bottomLeft.y, bottomLeft.z, colour.r,
+        colour.g, colour.b, colour.a)
     DRAW_LINE(bottomLeftBack.x, bottomLeftBack.y, bottomLeftBack.z, topLeftBack.x, topLeftBack.y, topLeftBack.z,
-        color.r, color.g, color.b, color.a)
-    DRAW_LINE(topLeftBack.x, topLeftBack.y, topLeftBack.z, topRightBack.x, topRightBack.y, topRightBack.z, color.r,
-        color.g, color.b, color.a)
-    DRAW_LINE(topLeftBack.x, topLeftBack.y, topLeftBack.z, topLeft.x, topLeft.y, topLeft.z, color.r, color.g, color.b,
-        color.a)
+        colour.r, colour.g, colour.b, colour.a)
+    DRAW_LINE(topLeftBack.x, topLeftBack.y, topLeftBack.z, topRightBack.x, topRightBack.y, topRightBack.z, colour.r,
+        colour.g, colour.b, colour.a)
+    DRAW_LINE(topLeftBack.x, topLeftBack.y, topLeftBack.z, topLeft.x, topLeft.y, topLeft.z, colour.r, colour.g,
+        colour.b, colour.a)
     DRAW_LINE(bottomRightBack.x, bottomRightBack.y, bottomRightBack.z, topRightBack.x, topRightBack.y, topRightBack.z,
-        color.r, color.g, color.b, color.a)
-    DRAW_LINE(bottomLeft.x, bottomLeft.y, bottomLeft.z, topLeft.x, topLeft.y, topLeft.z, color.r, color.g, color.b,
-        color.a)
-    DRAW_LINE(bottomLeft.x, bottomLeft.y, bottomLeft.z, bottomRight.x, bottomRight.y, bottomRight.z, color.r, color.g,
-        color.b, color.a)
+        colour.r, colour.g, colour.b, colour.a)
+    DRAW_LINE(bottomLeft.x, bottomLeft.y, bottomLeft.z, topLeft.x, topLeft.y, topLeft.z, colour.r, colour.g, colour.b,
+        colour.a)
+    DRAW_LINE(bottomLeft.x, bottomLeft.y, bottomLeft.z, bottomRight.x, bottomRight.y, bottomRight.z, colour.r, colour.g,
+        colour.b, colour.a)
     DRAW_LINE(bottomRightBack.x, bottomRightBack.y, bottomRightBack.z, bottomRight.x, bottomRight.y, bottomRight.z,
-        color.r, color.g, color.b, color.a)
+        colour.r, colour.g, colour.b, colour.a)
 end
 
 GRIDSPAWN.handleSpawn = function(spawnTargetHash, spawnTargetDimensions, manipulateVehicle)

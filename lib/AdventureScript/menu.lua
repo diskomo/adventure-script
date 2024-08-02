@@ -1,6 +1,7 @@
 local MENUHELPERS = {}
 
 local config = require('lib.AdventureScript.config')
+local constants = require('lib.AdventureScript.constants')
 local state = require('lib.AdventureScript.state')
 local data = require('lib.AdventureScript.data')
 local vehicles = require('lib.AdventureScript.vehicles')
@@ -62,6 +63,27 @@ MENUHELPERS.initializeMenu = function()
 
     menu.divider(menu.my_root(), 'Other Settings')
 
+    local colourMenu = menu.list(menu.my_root(), 'Colours', {}, 'Change the brand colour of the Adventure Tour')
+    menu.toggle(colourMenu, 'Yellow', {}, 'Set the brand colour to yellow', function()
+        state.brandColour = 'yellow'
+    end, state.brandColour == 'yellow')
+
+    menu.toggle(colourMenu, 'White', {}, 'Set the brand colour to white', function()
+        state.brandColour = 'white'
+    end, state.brandColour == 'white')
+
+    menu.toggle(colourMenu, 'Pink', {}, 'Set the brand colour to pink', function()
+        state.brandColour = 'pink'
+    end, state.brandColour == 'pink')
+
+    local busMenu = menu.list(menu.my_root(), 'Bus Type', {}, 'Change the type of bus used for the Adventure Tour')
+    menu.toggle(busMenu, 'Public Transport Bus', {}, 'Use the large public transport bus', function()
+        state.busType = 'bus'
+    end, state.busType == 'bus')
+    menu.toggle(busMenu, 'Tour Bus', {}, 'Use the (smaller) Vinewood tour bus', function()
+        state.busType = 'tourbus'
+    end, state.busType == 'tourbus')
+
     local actionsMenu = menu.list(menu.my_root(), 'Actions', {}, 'Fun animations for the Tour Guide')
     menu.action(actionsMenu, 'Cancel', {},
         'Cancels any actions being performed by the Tour Guide and clears away props (except vehicles)', cancelAnimation)
@@ -96,23 +118,20 @@ MENUHELPERS.initializeMenu = function()
     end)
 
     local chatMenu = menu.list(menu.my_root(), 'Chat', {}, 'Handy chat messages')
-    menu.action(chatMenu, 'Welcome', {}, data.welcomeMessage, function()
-        chat.send_message(data.welcomeMessage, false, true, true)
+    menu.action(chatMenu, 'Welcome', {}, constants.welcomeMessage, function()
+        chat.send_message(constants.welcomeMessage, false, true, true)
     end)
     menu.action(chatMenu, 'Rules', {}, 'Display the rules', function()
-        for _, rule in pairs(data.tourRules) do
+        for _, rule in pairs(constants.tourRules) do
             chat.send_message(rule, false, true, true)
             util.yield(1000)
         end
     end)
-    menu.action(chatMenu, 'Invite', {}, data.callToActionMessage, function()
-        chat.send_message(data.callToActionMessage, false, true, true)
+    menu.action(chatMenu, 'Invite', {}, constants.callToActionMessage, function()
+        chat.send_message(constants.callToActionMessage, false, true, true)
     end)
-    menu.action(chatMenu, 'Thank you', {}, data.thankYouMessage, function()
-        chat.send_message(data.thankYouMessage, false, true, true)
-    end)
-    menu.action(chatMenu, 'Boast', {}, data.boastMessage, function()
-        chat.send_message(data.boastMessage, false, true, true)
+    menu.action(chatMenu, 'Thank you', {}, constants.thankYouMessage, function()
+        chat.send_message(constants.thankYouMessage, false, true, true)
     end)
 
     menu.toggle(menu.my_root(), 'Show controls', {}, 'Show gamepad controls when holding R3', function()

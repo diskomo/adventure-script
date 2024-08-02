@@ -11,6 +11,11 @@ local STATE = {
     -- Keep track of the tour bus
     theTourBus = nil,
 
+    brandColour = 'yellow',
+
+    -- 'bus' or 'tourbus'
+    busType = 'bus',
+
     spawnModeEnabled = false,
     spawnTargetHash = util.joaat('manchez2'),
     spawnTargetDimensions = nil,
@@ -18,7 +23,7 @@ local STATE = {
         drift = false,
         f1Wheels = false,
         randomLivery = false,
-        randomColor = false
+        randomColour = false
     },
     spawnTargetModOverrides = {}
 }

@@ -1,4 +1,6 @@
+local constants = require('lib.AdventureScript.constants')
 local data = require('lib.AdventureScript.data')
+
 local state = require('lib.AdventureScript.state')
 local gridSpawn = require('lib.AdventureScript.gridspawn')
 
@@ -11,8 +13,8 @@ local DEFAULT_VEHICLE_OPTIONS = {
     f1Wheels = false,
     -- Randomize the vehicle's livery
     randomLivery = false,
-    -- Randomize the vehicle's primary and secondary colors
-    randomColor = false
+    -- Randomize the vehicle's primary and secondary colours
+    randomColour = false
 }
 
 -- Sets the vehicle used for the grid spawner
@@ -30,15 +32,15 @@ end
 -- Converts any old vehicle into an AdventureToy
 -- @param veh: The vehicle entity
 VEHICLES.makeAdventureVehicle = function(veh)
-    local color = {
+    local colour = {
         r = math.random(0, 255),
         g = math.random(0, 255),
         b = math.random(0, 255)
     }
-    local wheelColor = math.random(0, 80)
-    if not state.spawnTargetOptions.randomColor then
-        color = data.brandColor
-        wheelColor = 37
+    local wheelColour = math.random(0, 80)
+    if not state.spawnTargetOptions.randomColour then
+        colour = data.getColour(state.brandColour)
+        wheelColour = 37
     end
 
     if not DOES_ENTITY_EXIST(veh) then
@@ -46,8 +48,8 @@ VEHICLES.makeAdventureVehicle = function(veh)
     end
     SET_ENTITY_INVINCIBLE(veh, true)
     SET_VEHICLE_MOD_KIT(veh, 0)
-    -- This loop will set all of the vehicle modifications defined in defaultMods to their highest possible value
-    for _, type in pairs(data.defaultMods) do
+    -- This loop will set all of the vehicle modifications defined in defaultVehicleMods to their highest possible value
+    for _, type in pairs(constants.defaultVehicleMods) do
         SET_VEHICLE_MOD(veh, type, GET_NUM_VEHICLE_MODS(veh, type) - 1, true)
     end
 
@@ -85,11 +87,11 @@ VEHICLES.makeAdventureVehicle = function(veh)
     -- end
 
     -- Branding 
-    SET_VEHICLE_EXTRA_COLOURS(veh, wheelColor, wheelColor)
-    SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, color.r, color.g, color.b)
-    SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, color.r + 20, color.g + 20, color.b + 20)
+    SET_VEHICLE_EXTRA_COLOURS(veh, wheelColour, wheelColour)
+    SET_VEHICLE_CUSTOM_PRIMARY_COLOUR(veh, colour.r, colour.g, colour.b)
+    SET_VEHICLE_CUSTOM_SECONDARY_COLOUR(veh, colour.r + 20, colour.g + 20, colour.b + 20)
     SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(veh, 5) -- yankton plate
-    SET_VEHICLE_NUMBER_PLATE_TEXT(veh, data.licensePlate)
+    SET_VEHICLE_NUMBER_PLATE_TEXT(veh, constants.licensePlate)
     SET_VEHICLE_MOD(veh, 14, math.random(16, 23), true) -- horn (high note)
     TOGGLE_VEHICLE_MOD(veh, 22, true) -- xenon headlights
     SET_VEHICLE_XENON_LIGHT_COLOR_INDEX(veh, 6) -- gold tint headlights
@@ -112,7 +114,7 @@ VEHICLES.spawnAdventureToursBus = function()
         end
 
         -- Load a new bus
-        local busModel = util.joaat('bus')
+        local busModel = util.joaat(state.busType)
         REQUEST_MODEL(busModel)
         while not HAS_MODEL_LOADED(busModel) do
             util.yield(1000)

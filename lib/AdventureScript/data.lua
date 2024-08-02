@@ -1,57 +1,6 @@
-local DATA = {}
+local constants = require('lib.AdventureScript.constants')
 
--- Vehicle mods reference from https://pastebin.com/QzEAn02v
-local vehicleMods = {
-    SPOILERS = 0,
-    FRONT_BUMPER = 1,
-    REAR_BUMPER = 2,
-    SIDE_SKIRT = 3,
-    EXHAUST = 4,
-    FRAME = 5,
-    GRILLE = 6,
-    HOOD = 7,
-    FENDER = 8,
-    RIGHT_FENDER = 9,
-    ROOF = 10,
-    ENGINE = 11,
-    BRAKES = 12,
-    TRANSMISSION = 13,
-    HORNS = 14,
-    SUSPENSION = 15,
-    ARMOR = 16,
-    UNK17 = 17,
-    TURBO = 18,
-    UNK19 = 19,
-    TIRE_SMOKE = 20,
-    UNK21 = 21,
-    XENON_HEADLIGHTS = 22,
-    FRONT_WHEELS = 23,
-    BACK_WHEELS = 24,
-    PLATEHOLDER = 25,
-    VANITY_PLATES = 26,
-    TRIM = 27,
-    ORNAMENTS = 28,
-    DASHBOARD = 29,
-    DIAL = 30,
-    DOOR_SPEAKER = 31,
-    SEATS = 32,
-    STEERINGWHEEL = 33,
-    SHIFTER_LEAVERS = 34,
-    PLAQUES = 35,
-    SPEAKERS = 36,
-    TRUNK = 37,
-    HYDRULICS = 38,
-    ENGINE_BLOCK = 39,
-    AIR_FILTER = 40,
-    STRUTS = 41,
-    ARCH_COVER = 42,
-    AERIALS = 43,
-    TRIM2 = 44,
-    TANK = 45,
-    WINDOWS = 46,
-    UNK47 = 47,
-    LIVERY = 48
-}
+local DATA = {}
 
 -- Official AdventureTours Bus Stops: teleport locations and vehicles
 DATA.tourStops = {{
@@ -75,20 +24,31 @@ DATA.tourStops = {{
     }, {
         name = 'Buggy',
         id = 'vagrant'
+    }, {
+        name = 'Hot Quad',
+        id = 'blazer3'
     }}
 }, {
     name = 'River Ride',
-    description = 'Jetski down the rapids and find some fat F250s to swim through the river',
+    description = 'Jetski down the rapids and on to the swamp swim event',
     locations = {{
-        name = 'Rapids (-> Swamp Swim)',
+        name = 'Rapids',
         id = 'riverrapids',
         coords = {
             x = -47.31711,
             y = 3089.3042,
             z = 27.836765
         }
-    }, {
-        name = 'Swamp Swim',
+    }},
+    vehicles = {{
+        name = 'Jetski',
+        id = 'seashark'
+    }}
+}, {
+    name = 'Swamp Swim',
+    description = 'Swim some fat F250s through the river',
+    locations = {{
+        name = 'Zancudo River',
         id = 'swampswim',
         coords = {
             x = -1447.9856,
@@ -97,9 +57,6 @@ DATA.tourStops = {{
         }
     }},
     vehicles = {{
-        name = 'Jetski',
-        id = 'seashark'
-    }, {
         name = 'F250',
         id = 'sandking',
         options = {
@@ -142,29 +99,18 @@ DATA.tourStops = {{
             randomLivery = true
         }
     }, {
-        name = 'Supra',
-        id = 'jester4',
-        options = {
-            drift = true,
-            randomLivery = true
-        },
-        mods = {
-            [vehicleMods.SPOILERS] = 10,
-            [vehicleMods.WINDOWS] = 1
-        }
-    }, {
         name = 'Skyline',
         id = 'elegy',
         options = {
             drift = true
         },
         mods = {
-            [vehicleMods.ARCH_COVER] = 4,
-            [vehicleMods.EXHAUST] = 2,
-            [vehicleMods.REAR_BUMPER] = -1,
-            [vehicleMods.FRONT_BUMPER] = 2,
-            [vehicleMods.PLATEHOLDER] = 1,
-            [vehicleMods.WINDOWS] = 1
+            [constants.vehicleMods.ARCH_COVER] = 4,
+            [constants.vehicleMods.EXHAUST] = 2,
+            [constants.vehicleMods.REAR_BUMPER] = -1,
+            [constants.vehicleMods.FRONT_BUMPER] = 2,
+            [constants.vehicleMods.PLATEHOLDER] = 1,
+            [constants.vehicleMods.WINDOWS] = 1
         }
     }}
 }, {
@@ -197,11 +143,30 @@ DATA.tourStops = {{
             f1Wheels = true
         }
     }, {
+        name = 'Hot Quad',
+        id = 'blazer3'
+    }, {
         name = 'Lawnmower',
         id = 'mower'
     }}
 }, {
-    name = 'Mountain',
+    name = 'Mountain Biking',
+    description = 'Scenic mountain biking trails',
+    locations = {{
+        name = 'Gorge Trail',
+        id = 'gorgetrail',
+        coords = {
+            x = -1139.7003,
+            y = 4610.722,
+            z = 146.11864
+        }
+    }},
+    vehicles = {{
+        name = 'Mountain Bike',
+        id = 'scorcher'
+    }}
+}, {
+    name = '4WD',
     description = 'Mt Chiliad or Mt Gordo 4WD climbs and go-kart descent',
     locations = {{
         name = 'Chiliad Climb',
@@ -212,31 +177,7 @@ DATA.tourStops = {{
             z = 196.70187
         }
     }, {
-        name = 'Rocky Descent (Minis)',
-        id = 'rockydescent',
-        coords = {
-            x = 505.47202,
-            y = 5539.428,
-            z = 778.25977
-        }
-    }, {
-        name = 'Rally Descent (Karts)',
-        id = 'rallydescent',
-        coords = {
-            x = 642.8843,
-            y = 5629.7363,
-            z = 726.7645
-        }
-    }, {
-        name = 'Bike Trail -> Jetpack Bridge',
-        id = 'biketrail',
-        coords = {
-            x = -1139.7003,
-            y = 4610.722,
-            z = 146.11864
-        }
-    }, {
-        name = 'Mt. Gordo',
+        name = 'Gordo Climb',
         id = 'gordoclimb',
         coords = {
             x = 2920.821,
@@ -248,15 +189,65 @@ DATA.tourStops = {{
         name = 'Patrol',
         id = 'hellion',
         mods = {
-            [vehicleMods.EXHAUST] = 2,
-            [vehicleMods.FENDER] = 7
+            [constants.vehicleMods.EXHAUST] = 2,
+            [constants.vehicleMods.FENDER] = 7
         }
     }, {
         name = 'Hilux',
         id = 'everon'
+    }}
+}, {
+    name = 'Drag Racing',
+    description = 'Some kind of sick street race? (WIP)',
+    locations = {{
+        name = 'Drag Strip',
+        id = 'dragstrip',
+        coords = {
+            x = 1178.46,
+            y = 302.3174,
+            z = 81.98781
+        }
+    }},
+    vehicles = {{
+        name = 'Dragster',
+        id = 'deveste',
+        options = {
+            randomColour = true
+        }
     }, {
-        name = 'Mountain Bike',
-        id = 'scorcher'
+        name = 'Muscle Car',
+        id = 'dominator3',
+        options = {
+            randomColour = true
+        }
+    }}
+}, {
+    name = 'Downhill',
+    description = 'Downhill speed freak shit',
+    locations = {{
+        name = 'Chiliad South',
+        id = 'chiliadsouthdescent',
+        coords = {
+            x = 642.8843,
+            y = 5629.7363,
+            z = 726.7645
+        }
+    }, {
+        name = 'Chiliad East',
+        id = 'chiliadeastdescent',
+        coords = {
+            x = 505.47202,
+            y = 5539.428,
+            z = 778.25977
+        }
+    }},
+    vehicles = {{
+        name = 'Go-Kart (for descent)',
+        id = 'veto',
+        options = {
+            randomColour = true,
+            randomLivery = true
+        }
     }, {
         name = 'Mini (for descent)',
         id = 'issi4',
@@ -264,22 +255,15 @@ DATA.tourStops = {{
             randomLivery = true
         },
         mods = {
-            [vehicleMods.AERIALS] = -1,
-            [vehicleMods.ARCH_COVER] = -1,
-            [vehicleMods.TANK] = -1,
-            [vehicleMods.FRONT_BUMPER] = 2,
-            [vehicleMods.SIDE_SKIRT] = 1,
-            [vehicleMods.EXHAUST] = 3,
-            [vehicleMods.HOOD] = 6,
-            [vehicleMods.FENDER] = 2,
-            [vehicleMods.GRILLE] = 1
-        }
-    }, {
-        name = 'Go-Kart (for descent)',
-        id = 'veto',
-        options = {
-            randomColor = true,
-            randomLivery = true
+            [constants.vehicleMods.AERIALS] = -1,
+            [constants.vehicleMods.ARCH_COVER] = -1,
+            [constants.vehicleMods.TANK] = -1,
+            [constants.vehicleMods.FRONT_BUMPER] = 2,
+            [constants.vehicleMods.SIDE_SKIRT] = 1,
+            [constants.vehicleMods.EXHAUST] = 3,
+            [constants.vehicleMods.HOOD] = 6,
+            [constants.vehicleMods.FENDER] = 2,
+            [constants.vehicleMods.GRILLE] = 1
         }
     }}
 }, {
@@ -307,7 +291,7 @@ DATA.tourStops = {{
         id = 'openwheel2',
         options = {
             randomLivery = true,
-            randomColor = true
+            randomColour = true
         }
     }, {
         name = 'R88',
@@ -352,8 +336,8 @@ DATA.tourStops = {{
         id = 'thruster'
     }}
 }, {
-    name = 'RC Offroad',
-    description = 'Use RC cars or go-karts on this little dirt track',
+    name = 'Kart Offroad',
+    description = 'Use go-karts on this little dirt track',
     locations = {{
         name = 'Dirt Track',
         id = 'dirttrack',
@@ -364,51 +348,16 @@ DATA.tourStops = {{
         }
     }},
     vehicles = {{
-        name = 'RC (broken)',
-        id = 'rcbandito',
-        mods = {
-            [vehicleMods.FRAME] = 15
-        }
-    }, {
         name = 'Go-Kart',
         id = 'veto',
         options = {
             randomLivery = true
         }
+    }, {
+        name = 'Mountain Bike',
+        id = 'scorcher'
     }}
 }}
-
-DATA.licensePlate = 'ADVTOURS'
-
--- DATA.brandColor = { -- official AdventureTours yellow
---     r = 204,
---     g = 132,
---     b = 0
--- }
-
-DATA.brandColor = { -- official AdventureTours pink
-    r = 252,
-    g = 134,
-    b = 255
-}
-
--- These mods will be applied to all spawned vehicles
-DATA.defaultMods = {vehicleMods.TANK, vehicleMods.ARCH_COVER, vehicleMods.ARMOR, vehicleMods.TRUNK, vehicleMods.BRAKES,
-                    vehicleMods.STRUTS, vehicleMods.TRANSMISSION, vehicleMods.TRIM, vehicleMods.AERIALS,
-                    vehicleMods.AIR_FILTER, vehicleMods.ENGINE_BLOCK, vehicleMods.ENGINE, vehicleMods.GRILLE,
-                    vehicleMods.SIDE_SKIRT, vehicleMods.REAR_BUMPER, vehicleMods.FRONT_BUMPER}
-
-DATA.tourRules = {'TOUR BUS RULES:', 'No killing other passengers', 'No setting waypoints',
-                  'No shooting out of the bus windows'}
-
-DATA.welcomeMessage =
-    'Welcome to the tour! We have many fun activities planned. Please remain seated while we pick up more passengers.'
-
-DATA.callToActionMessage = 'Would anyone else like to join the tour?'
-
-DATA.thankYouMessage = 'Thank you all so much for joining the tour!'
-
-DATA.boastMessage = 'I wrote my own lua script to do these tours'
 
 -- Tour guide animations
 DATA.actions = {{
@@ -448,10 +397,6 @@ DATA.actions = {{
     name = 'Tend to dead',
     type = 'scen'
 }, {
-    id = 'playbongos',
-    name = 'Play bongos',
-    type = 'anim'
-}, {
     id = 'stretch',
     name = 'Stretch',
     type = 'anim'
@@ -460,17 +405,8 @@ DATA.actions = {{
     name = 'Sunbathe',
     type = 'scen'
 }, {
-    id = 'boxing',
-    name = 'Throw some fists',
-    type = 'anim'
-}, {
-    id = 'clap',
-    name = 'Clap',
-    type = 'anim'
-}, {
-    id = 'flip',
-    name = 'Flip',
-    variants = {'1', '2'},
+    id = 'playbongos',
+    name = 'Play bongos',
     type = 'anim'
 }, {
     id = 'lapdance',
@@ -482,10 +418,6 @@ DATA.actions = {{
     name = 'Buttwiggle dance',
     type = 'anim'
 }, {
-    id = 'pushup',
-    name = 'Pushups',
-    type = 'anim'
-}, {
     id = 'drinkbeer',
     name = 'Drink beer',
     type = 'anim'
@@ -495,6 +427,9 @@ DATA.actions = {{
     type = 'anim'
 }}
 
-DATA.vehicleMods = vehicleMods
+-- function to access colour based on key
+DATA.getColour = function(key)
+    return constants.colours[key]
+end
 
 return DATA
