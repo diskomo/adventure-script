@@ -20,31 +20,24 @@ local function setVehicleForTourStop(tourStop)
     end
 end
 
--- Function to teleport the player to the first location of the current tour stop
-local function teleportPlayerToTourStop(tourStop)
-    local firstLocation = tourStop.locations[1]
-    local playerPed = PLAYER_PED_ID()
-    SET_PED_COORDS_KEEP_VEHICLE(playerPed, firstLocation.coords.x, firstLocation.coords.y, firstLocation.coords.z)
-end
-
 -- Function to navigate to the next tour stop
 TOUR.goToNextTourStop = function()
-    state.currentTourStopIndex = state.currentTourStopIndex + 1
-    if state.currentTourStopIndex > #data.tourStops then
-        state.currentTourStopIndex = 1
+    state:set('currentTourStopIndex', state:get('currentTourStopIndex') + 1)
+    if state:get('currentTourStopIndex') > #data.tourStops then
+        state:set('currentTourStopIndex', 1)
     end
-    local currentTourStop = getCurrentTourStop(state.currentTourStopIndex)
+    local currentTourStop = getCurrentTourStop(state:get('currentTourStopIndex'))
     setVehicleForTourStop(currentTourStop)
     teleportPlayerToTourStop(currentTourStop)
 end
 
 -- Function to navigate to the previous tour stop
 TOUR.goToPreviousTourStop = function()
-    state.currentTourStopIndex = state.currentTourStopIndex - 1
-    if state.currentTourStopIndex < 1 then
-        state.currentTourStopIndex = #data.tourStops
+    state:set('currentTourStopIndex', state:get('currentTourStopIndex') - 1)
+    if state:get('currentTourStopIndex') < 1 then
+        state:set('currentTourStopIndex', #data.tourStops)
     end
-    local currentTourStop = getCurrentTourStop(state.currentTourStopIndex)
+    local currentTourStop = getCurrentTourStop(state:get('currentTourStopIndex'))
     setVehicleForTourStop(currentTourStop)
     teleportPlayerToTourStop(currentTourStop)
 end
@@ -56,7 +49,7 @@ TOUR.isDrivingBus = function()
 
     if playerVehicle ~= 0 then
         local vehicleModel = GET_ENTITY_MODEL(playerVehicle)
-        local busModelHash = GET_HASH_KEY(state.busType)
+        local busModelHash = GET_HASH_KEY(state:get('busType'))
         return vehicleModel == busModelHash
     end
 
@@ -65,9 +58,9 @@ end
 
 -- Delete the tour bus
 TOUR.deleteTourBus = function()
-    if state.theTourBus and DOES_ENTITY_EXIST(state.theTourBus) then
-        entities.delete_by_handle(state.theTourBus)
-        state.theTourBus = nil
+    if state:get('theTourBus') and DOES_ENTITY_EXIST(state:get('theTourBus')) then
+        entities.delete_by_handle(state:get('theTourBus'))
+        state:set('theTourBus', nil)
     end
 end
 

@@ -21,11 +21,11 @@ local function addEventLocation(listRef, locationName, locationCoords)
     menu.action(listRef, locationName, {}, 'Go to the location', function()
         local playerPed = PLAYER_PED_ID()
         SET_PED_COORDS_KEEP_VEHICLE(playerPed, locationCoords.x, locationCoords.y, locationCoords.z)
-        -- Set state.currentTourStopIndex
+        -- Set currentTourStopIndex
         for i, ts in pairs(data.tourStops) do
             for j, loc in pairs(ts.locations) do
                 if loc.name == locationName then
-                    state.currentTourStopIndex = i
+                    state:set('currentTourStopIndex', i)
                     return
                 end
             end
@@ -65,24 +65,24 @@ MENUHELPERS.initializeMenu = function()
 
     local colourMenu = menu.list(menu.my_root(), 'Colours', {}, 'Change the brand colour of the Adventure Tour')
     menu.toggle(colourMenu, 'Yellow', {}, 'Set the brand colour to yellow', function()
-        state.brandColour = 'yellow'
-    end, state.brandColour == 'yellow')
+        state:set('brandColour', 'yellow')
+    end, state:get('brandColour') == 'yellow')
 
     menu.toggle(colourMenu, 'White', {}, 'Set the brand colour to white', function()
-        state.brandColour = 'white'
-    end, state.brandColour == 'white')
+        state:set('brandColour', 'white')
+    end, state:get('brandColour') == 'white')
 
     menu.toggle(colourMenu, 'Pink', {}, 'Set the brand colour to pink', function()
-        state.brandColour = 'pink'
-    end, state.brandColour == 'pink')
+        state:set('brandColour', 'pink')
+    end, state:get('brandColour') == 'pink')
 
     local busMenu = menu.list(menu.my_root(), 'Bus Type', {}, 'Change the type of bus used for the Adventure Tour')
     menu.toggle(busMenu, 'Public Transport Bus', {}, 'Use the large public transport bus', function()
-        state.busType = 'bus'
-    end, state.busType == 'bus')
+        state:set('busType', 'bus')
+    end, state:get('busType') == 'bus')
     menu.toggle(busMenu, 'Tour Bus', {}, 'Use the (smaller) Vinewood tour bus', function()
-        state.busType = 'tourbus'
-    end, state.busType == 'tourbus')
+        state:set('busType', 'tourbus')
+    end, state:get('busType') == 'tourbus')
 
     local actionsMenu = menu.list(menu.my_root(), 'Actions', {}, 'Fun animations for the Tour Guide')
     menu.action(actionsMenu, 'Cancel', {},
@@ -135,8 +135,8 @@ MENUHELPERS.initializeMenu = function()
     end)
 
     menu.toggle(menu.my_root(), 'Show controls', {}, 'Show gamepad controls when holding R3', function()
-        state.show_on_screen_controls = not state.show_on_screen_controls
-    end, state.show_on_screen_controls)
+        state:set('showOnScreenControls', not state:get('showOnScreenControls'))
+    end, state:get('showOnScreenControls'))
 
     menu.toggle(menu.my_root(), 'Superdrive', {}, 'Toggle superdrive and superhandbrake', function()
         menu.trigger_commands('superdrive')

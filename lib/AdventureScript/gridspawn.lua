@@ -43,7 +43,7 @@ GRIDSPAWN.getModelDimensions = function(model)
 end
 
 GRIDSPAWN.initialize = function()
-    state.spawnTargetDimensions = GRIDSPAWN.getModelDimensions(state.spawnTargetHash)
+    state:set('spawnTargetDimensions', GRIDSPAWN.getModelDimensions(state:get('spawnTargetHash')))
 end
 
 GRIDSPAWN.arrowIndicator = function(pos, angle, size, colour)
@@ -201,7 +201,7 @@ GRIDSPAWN.handleSpawn = function(spawnTargetHash, spawnTargetDimensions, manipul
                     entities.delete_by_handle(car)
                     local newCar = CREATE_VEHICLE(spawnTargetHash, pos.x, pos.y, pos.z, camStartHeading, true, false,
                         false)
-                    table.insert(state.spawnedVehicles, newCar)
+                    table.insert(state:get('spawnedVehicles'), newCar)
                     manipulateVehicle(newCar)
                     util.yield()
                 end

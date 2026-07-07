@@ -31,7 +31,7 @@ gridSpawn.initialize()
 
 --- Tick handler for gamepad controls and grid spawn listener
 util.create_tick_handler(function()
-    if controls.r3Hold() and state.show_on_screen_controls then
+    if controls.r3Hold() and state:get('showOnScreenControls') then
         ui.showGamepadControls(tour.isDrivingBus())
     end
 
@@ -53,7 +53,7 @@ util.create_tick_handler(function()
     end
 
     if controls.r3Hold() and controls.dpadRightPress() then
-        state.spawnModeEnabled = not state.spawnModeEnabled
+        state:set('spawnModeEnabled', not state:get('spawnModeEnabled'))
     end
 
     -- Delete the tour bus (unless driving) and all spawned vehicles
@@ -69,9 +69,10 @@ util.create_tick_handler(function()
         vehicles.deleteVehiclesInArea()
     end
     -- Grid spawn handler
-    if state.spawnModeEnabled == true then
+    if state:get('spawnModeEnabled') == true then
         DISABLE_CONTROL_ACTION(0, 142, true)
-        gridSpawn.handleSpawn(state.spawnTargetHash, state.spawnTargetDimensions, vehicles.makeAdventureVehicle)
+        gridSpawn.handleSpawn(state:get('spawnTargetHash'), state:get('spawnTargetDimensions'),
+            vehicles.makeAdventureVehicle)
     end
 end)
 

@@ -22,11 +22,11 @@ local DEFAULT_VEHICLE_OPTIONS = {
 -- @param options: Options for the vehicle
 -- @param modOverrides: Explicitly set vehicle mods
 VEHICLES.setVehicle = function(hash, options, modOverrides)
-    state.spawnModeEnabled = true -- automatically enable spawn mode when a vehicle is selected
-    state.spawnTargetHash = hash
-    state.spawnTargetDimensions = gridSpawn.getModelDimensions(hash)
-    state.spawnTargetOptions = options or DEFAULT_VEHICLE_OPTIONS
-    state.spawnTargetModOverrides = modOverrides or {}
+    state:set('spawnModeEnabled', true) -- automatically enable spawn mode when a vehicle is selected
+    state:set('spawnTargetHash', hash)
+    state:set('spawnTargetDimensions', gridSpawn.getModelDimensions(hash))
+    state:set('spawnTargetOptions', options or DEFAULT_VEHICLE_OPTIONS)
+    state:set('spawnTargetModOverrides', modOverrides or {})
 end
 
 -- Converts any old vehicle into an AdventureToy
@@ -38,8 +38,8 @@ VEHICLES.makeAdventureVehicle = function(veh)
         b = math.random(0, 255)
     }
     local wheelColour = math.random(0, 80)
-    if not state.spawnTargetOptions.randomColour then
-        colour = data.getColour(state.brandColour)
+    if not state:get('spawnTargetOptions').randomColour then
+        colour = data.getColour(state:get('brandColour'))
         wheelColour = 37
     end
 
@@ -54,18 +54,18 @@ VEHICLES.makeAdventureVehicle = function(veh)
     end
 
     -- If the vehicle has explicit modifications defined
-    for type, value in pairs(state.spawnTargetModOverrides) do
+    for type, value in pairs(state:get('spawnTargetModOverrides')) do
         SET_VEHICLE_MOD(veh, type, value, true)
     end
 
     -- low-grip drift tyres
-    if state.spawnTargetOptions.drift then
+    if state:get('spawnTargetOptions').drift then
         SET_DRIFT_TYRES(veh, true)
     else
         SET_DRIFT_TYRES(veh, false)
     end
     -- set wheels to f1 wheels
-    if state.spawnTargetOptions.f1Wheels then
+    if state:get('spawnTargetOptions').f1Wheels then
         SET_VEHICLE_WHEEL_TYPE(veh, 10)
         SET_VEHICLE_MOD(veh, 23, 3, true)
         SET_VEHICLE_MOD(veh, 24, 3, true)
@@ -78,7 +78,7 @@ VEHICLES.makeAdventureVehicle = function(veh)
 
     -- set random livery
     -- local livery = -1
-    -- if state.spawnTargetOptions.randomLivery then
+    -- if state:get('spawnTargetOptions').randomLivery then
     --     livery = math.random(1, GET_VEHICLE_LIVERY_COUNT(veh) - 1)
     -- end
     -- if livery ~= -1 then
@@ -100,21 +100,21 @@ end
 -- Spawns the official Adventure Tours bus
 VEHICLES.spawnAdventureToursBus = function()
     -- Reset spawn state
-    state.spawnModeEnabled = false
-    state.spawnTargetOptions = DEFAULT_VEHICLE_OPTIONS
+    state:set('spawnModeEnabled', false)
+    state:set('spawnTargetOptions', DEFAULT_VEHICLE_OPTIONS)
     local playerPed = PLAYER_PED_ID()
     if not IS_PED_IN_ANY_VEHICLE(playerPed, false) then
 
         -- Get in old bus if it exists
-        if state.theTourBus ~= nil then
-            if DOES_ENTITY_EXIST(state.theTourBus) then
-                SET_PED_INTO_VEHICLE(playerPed, state.theTourBus, -1)
+        if state:get('theTourBus') ~= nil then
+            if DOES_ENTITY_EXIST(state:get('theTourBus')) then
+                SET_PED_INTO_VEHICLE(playerPed, state:get('theTourBus'), -1)
                 return
             end
         end
 
         -- Load a new bus
-        local busModel = util.joaat(state.busType)
+        local busModel = util.joaat(state:get('busType'))
         REQUEST_MODEL(busModel)
         while not HAS_MODEL_LOADED(busModel) do
             util.yield(1000)
@@ -124,19 +124,19 @@ VEHICLES.spawnAdventureToursBus = function()
             GET_ENTITY_HEADING(playerPed), true, false)
 
         VEHICLES.makeAdventureVehicle(bus)
-        state.theTourBus = bus
+        state:set('theTourBus', bus)
         SET_PED_INTO_VEHICLE(playerPed, bus, -1)
         util.yield(1000)
     end
 end
 
 VEHICLES.deleteSpawnedVehicles = function()
-    for _, car in pairs(state.spawnedVehicles) do
+    for _, car in pairs(state:get('spawnedVehicles')) do
         if DOES_ENTITY_EXIST(car) then
             entities.delete_by_handle(car)
         end
     end
-    state.spawnedVehicles = {}
+    state:set('spawnedVehicles', {})
 end
 
 VEHICLES.deleteVehiclesInArea = function()
