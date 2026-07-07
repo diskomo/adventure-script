@@ -1,0 +1,33 @@
+{
+	"$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+	"runtime.version": "Lua 5.4",
+	"workspace.checkThirdParty": "Ask",
+	"workspace.userThirdParty": [
+		"C:/FXServer/lua-addons"
+	],
+	"workspace.library": [
+		"./types",
+		"C:/FXServer/server-data/resources/ox_lib",
+		"C:/FXServer/lua-addons/fivem-lls-addon/library"
+	],
+	"workspace.ignoreDir": [
+		".git",
+		".github",
+		"lib",
+		"types"
+	],
+	"runtime.nonstandardSymbol": [
+		"/**/",
+		"`",
+		"+=",
+		"-=",
+		"*=",
+		"/=",
+		"<<=",
+		">>=",
+		"&=",
+		"|=",
+		"^="
+	],
+	"runtime.plugin": "C:/FXServer/lua-addons/fivem-lls-addon/plugin.lua"
+}

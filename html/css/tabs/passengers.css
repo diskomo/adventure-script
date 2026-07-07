@@ -1,0 +1,148 @@
+/* Passengers tab. */
+
+/* ── Passengers ──────────────────────────────────────── */
+
+.menu-panel .passenger-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.menu-panel .passenger-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.menu-panel .passenger-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+}
+
+.menu-panel .passenger-row-main {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.menu-panel .passenger-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+}
+
+.menu-panel .passenger-meta {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.menu-panel .passenger-badge {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--text-muted);
+}
+
+.menu-panel .passenger-badge.in_tour {
+    background: var(--success);
+}
+
+.menu-panel .passenger-badge.pending {
+    background: var(--accent);
+}
+
+.menu-panel .passenger-badge.away {
+    background: var(--danger);
+}
+
+.menu-panel .passenger-badge.guide {
+    background: var(--accent);
+}
+
+.menu-panel .passenger-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+}
+
+.menu-panel .signal-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    background: var(--bg-overlay);
+    color: var(--text-muted);
+}
+
+.menu-panel .signal-badge.ready {
+    color: var(--success);
+}
+
+.menu-panel .signal-badge.stuck,
+.menu-panel .signal-badge.injured {
+    color: var(--danger);
+}
+
+.menu-panel .signal-badge.vote {
+    color: var(--accent);
+}
+
+.menu-panel .vote-threshold-met {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.menu-panel .election-tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.menu-panel .election-stat {
+    font-weight: 600;
+}
+
+.menu-panel .election-stat.yes {
+    color: var(--success);
+}
+
+.menu-panel .election-stat.no {
+    color: var(--danger);
+}
+
+.menu-panel .election-timer {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.menu-panel .tour-status-grid {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.menu-panel .tour-status-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.menu-panel .tour-status-label {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.menu-panel .tour-status-value {
+    font-size: var(--text-base);
+    font-weight: 600;
+}

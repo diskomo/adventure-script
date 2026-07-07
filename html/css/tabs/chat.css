@@ -1,0 +1,44 @@
+/* Chat tab. */
+
+/* ── Chat tab ────────────────────────────────────────── */
+
+.menu-panel .chat-card {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    margin-bottom: var(--space-2);
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+}
+
+.menu-panel .chat-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-hover);
+}
+
+.menu-panel .chat-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.menu-panel .chat-card-icon {
+    font-size: var(--text-base);
+    color: var(--accent);
+    width: 20px;
+    text-align: center;
+}
+
+.menu-panel .chat-card-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+}
+
+.menu-panel .chat-card-preview {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.45;
+    padding-left: 32px;
+}

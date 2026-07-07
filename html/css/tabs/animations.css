@@ -1,0 +1,65 @@
+/* Animations tab. */
+
+/* ── Animations tab ──────────────────────────────────── */
+
+.menu-panel .anim-cancel-row {
+    margin-bottom: var(--space-4);
+}
+
+.menu-panel .anim-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.menu-panel .anim-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--text-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    min-height: 88px;
+}
+
+.menu-panel .anim-btn:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-hover);
+}
+
+.menu-panel .anim-btn.cancel {
+    flex-direction: row;
+    min-height: auto;
+    width: 100%;
+    border-color: rgba(224, 82, 82, 0.35);
+    color: var(--danger);
+    justify-content: flex-start;
+    padding: var(--space-3) var(--space-4);
+}
+
+.menu-panel .anim-btn.cancel:hover {
+    background: rgba(224, 82, 82, 0.1);
+    border-color: var(--danger);
+}
+
+.menu-panel .anim-icon {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+}
+
+.menu-panel .anim-btn.cancel .anim-icon {
+    color: var(--danger);
+}
+
+.menu-panel .anim-label {
+    line-height: 1.3;
+}

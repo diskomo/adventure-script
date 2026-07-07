@@ -1,0 +1,115 @@
+/* Appearance tab: brand colour, bus type, and apply controls. */
+
+/* ── Settings / brand & colour swatches ───────────────── */
+
+.menu-panel .brand-options-row {
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+
+.menu-panel .brand-actions-row {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.menu-panel .brand-apply-swatches {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.menu-panel .brand-apply-btn {
+    min-width: 72px;
+}
+
+.menu-panel .brand-apply-btn.primary .swatch-icon {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: var(--accent-dim);
+}
+
+.menu-panel .brand-apply-btn:hover {
+    border-color: var(--border-strong);
+}
+
+.menu-panel .brand-action-btn {
+    flex: 1;
+    min-width: 200px;
+}
+
+.menu-panel .brand-option-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.menu-panel .brand-option-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-3);
+}
+
+.menu-panel .colour-swatches {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.menu-panel .swatch-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.12s;
+}
+
+.menu-panel .swatch-btn:hover {
+    border-color: var(--border-strong);
+}
+
+.menu-panel .swatch-btn.active {
+    border-color: var(--accent);
+}
+
+.menu-panel .swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+}
+
+.menu-panel .swatch-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-raised);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    color: var(--text);
+}
+
+.menu-panel .swatch-btn.active .swatch-icon {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: var(--accent-dim);
+}
+
+.menu-panel .swatch-name {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: capitalize;
+    font-weight: 600;
+}

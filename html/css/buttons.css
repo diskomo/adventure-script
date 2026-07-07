@@ -1,0 +1,149 @@
+/* Shared button styles for menu and mini toolbar. */
+
+/* ── Buttons ─────────────────────────────────────────── */
+
+.menu-panel .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+}
+
+.menu-panel .btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-strong);
+}
+
+.menu-panel .btn:active {
+    background: var(--bg-active);
+}
+
+.menu-panel .btn.primary {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.menu-panel .btn.primary:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+}
+
+.menu-panel .btn.danger {
+    border-color: rgba(224, 82, 82, 0.35);
+    color: var(--danger);
+}
+
+.menu-panel .btn.danger:hover {
+    background: rgba(224, 82, 82, 0.1);
+    border-color: var(--danger);
+}
+
+.menu-panel .btn.btn-icon-only {
+    padding: 0;
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+    gap: 0;
+}
+
+.menu-panel .btn.btn-icon-only .btn-icon {
+    font-size: 14px;
+    width: auto;
+    margin: 0;
+}
+
+.menu-panel .btn.btn-play {
+    background: rgba(62, 207, 122, 0.14);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.menu-panel .btn.btn-play:hover {
+    background: rgba(62, 207, 122, 0.24);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.menu-panel .btn.btn-stop {
+    background: rgba(224, 82, 82, 0.14);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.menu-panel .btn.btn-stop:hover {
+    background: rgba(224, 82, 82, 0.24);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.menu-panel .btn.accent {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.menu-panel .btn.accent:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+}
+
+.menu-panel .btn.muted {
+    color: var(--text-muted);
+}
+
+.menu-panel .btn.muted:hover {
+    color: var(--text);
+}
+
+.menu-panel .btn.btn-rainbow.on {
+    background: linear-gradient(135deg, rgba(255, 80, 80, 0.22), rgba(255, 180, 60, 0.22), rgba(255, 230, 80, 0.22), rgba(80, 200, 120, 0.22), rgba(80, 140, 255, 0.22), rgba(200, 100, 255, 0.22));
+    border-color: rgba(255, 180, 80, 0.65);
+    color: #ffb84d;
+}
+
+.menu-panel .btn.btn-rainbow.on:hover {
+    background: linear-gradient(135deg, rgba(255, 80, 80, 0.32), rgba(255, 180, 60, 0.32), rgba(255, 230, 80, 0.32), rgba(80, 200, 120, 0.32), rgba(80, 140, 255, 0.32), rgba(200, 100, 255, 0.32));
+    border-color: rgba(255, 180, 80, 0.85);
+    color: #ffc966;
+}
+
+.menu-panel .btn .btn-icon {
+    font-size: var(--text-sm);
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.menu-panel .btn .key-hint {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1px 5px;
+    margin-left: var(--space-1);
+}
+
+.menu-panel .btn-toggle.on {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.menu-panel .btn.disabled,
+.menu-panel .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}

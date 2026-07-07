@@ -1,0 +1,79 @@
+/* Main menu quick status bar. */
+
+/* ── Quick bar ───────────────────────────────────────── */
+
+.menu-panel .quick-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+    flex-wrap: nowrap;
+}
+
+.menu-panel .quick-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    min-width: 0;
+    flex: 1;
+}
+
+.menu-panel .status-item {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.menu-panel .status-item.active {
+    color: var(--accent);
+}
+
+.menu-panel .status-label {
+    font-weight: 600;
+    color: var(--text);
+    margin-right: var(--space-1);
+}
+
+.menu-panel .status-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.menu-panel .quick-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.menu-panel .quick-action-groups {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: nowrap;
+}
+
+.menu-panel .quick-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.menu-panel .quick-group-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.menu-panel .status-item-primary {
+    color: var(--text);
+    font-weight: 500;
+}

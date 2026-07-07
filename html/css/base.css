@@ -1,0 +1,56 @@
+/* Design tokens, resets, and utility classes. */
+
+:root {
+    --accent: rgb(204, 156, 0);
+    --accent-dim: rgba(204, 132, 0, 0.12);
+    --accent-glow: rgba(204, 132, 0, 0.25);
+    --bg: #0e0e10;
+    --bg-raised: #16161a;
+    --bg-hover: #1e1e24;
+    --bg-active: #24242c;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --text: #ececf0;
+    --text-muted: #8b8b98;
+    --danger: #e05252;
+    --success: #3ecf7a;
+    --radius-sm: 6px;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --text-xs: 14px;
+    --text-sm: 16px;
+    --text-base: 18px;
+    --text-lg: 20px;
+    --text-xl: 24px;
+    --text-2xl: 28px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--font);
+    color: var(--text);
+    user-select: none;
+}
+
+.hidden {
+    display: none !important;
+}

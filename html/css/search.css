@@ -1,0 +1,28 @@
+/* Search input wrapper used in tour and animations tabs. */
+
+/* ── Search ──────────────────────────────────────────── */
+
+.search-wrap {
+    margin-bottom: var(--space-4);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-family: var(--font);
+    outline: none;
+    transition: border-color 0.12s;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-input:focus {
+    border-color: var(--accent);
+}

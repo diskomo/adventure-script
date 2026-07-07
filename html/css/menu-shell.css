@@ -1,0 +1,190 @@
+/* Main menu panel, header, backdrop, and body layout. */
+
+/* ── Menu shell ──────────────────────────────────────── */
+
+#menu {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    pointer-events: none;
+}
+
+.menu-panel {
+    position: relative;
+    width: min(1400px, 94vw);
+    height: min(900px, 92vh);
+    max-height: 92vh;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: var(--space-3);
+    animation: slideIn 0.18s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-header {
+    position: relative;
+    flex-shrink: 0;
+    height: 140px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+}
+
+.banner-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.header-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-4) var(--space-5);
+    background: linear-gradient(180deg, transparent 20%, rgba(0, 0, 0, 0.75) 100%);
+    pointer-events: none;
+}
+
+.header-text {
+    pointer-events: none;
+}
+
+.header-title {
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.header-subtitle {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.35;
+}
+
+.close-btn {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    color: var(--text);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.close-btn:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+
+/* ── Menu body ───────────────────────────────────────── */
+
+.menu-panel .menu-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    gap: var(--space-3);
+}
+
+.menu-panel .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+    background: var(--bg-raised);
+}
+
+.menu-panel .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-3) var(--space-3);
+    border: none;
+    border-left: 3px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: var(--text-base);
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.menu-panel .tab-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.menu-panel .tab-btn.active {
+    background: var(--bg-hover);
+    color: var(--accent);
+    border-left-color: var(--accent);
+}
+
+.menu-panel .tab-icon {
+    font-size: var(--text-base);
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.menu-panel .tab-label {
+    flex: 1;
+}
+
+.menu-panel .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-5);
+    font-size: var(--text-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-raised);
+}

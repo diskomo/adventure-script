@@ -1,0 +1,72 @@
+/* Card layout and empty-state placeholders. */
+
+/* ── Cards ───────────────────────────────────────────── */
+
+.menu-panel .card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.menu-panel .card {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+}
+
+.menu-panel .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.menu-panel .card-icon {
+    font-size: var(--text-lg);
+    color: var(--accent);
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.menu-panel .card-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+}
+
+.menu-panel .card-desc {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* ── Empty states ────────────────────────────────────── */
+
+.menu-panel .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    gap: var(--space-3);
+    color: var(--text-muted);
+}
+
+.menu-panel .empty-state-inline {
+    min-height: 120px;
+}
+
+.empty-state-icon {
+    font-size: var(--text-2xl);
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.empty-state-text {
+    margin: 0;
+    font-size: var(--text-base);
+    text-align: center;
+}
